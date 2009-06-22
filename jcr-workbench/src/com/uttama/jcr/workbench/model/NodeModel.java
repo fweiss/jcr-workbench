@@ -22,6 +22,9 @@ public class NodeModel {
 	public NodeModel() {
 		nodePropertiesModel = new NodePropertiesModel();
 	}
+	public NodeModel(Node node) {
+		this.node = node;
+	}
 	public void setNode(Node node) {
 		this.node = node;
 		NodeChangedEvent nce = new NodeChangedEvent(this);

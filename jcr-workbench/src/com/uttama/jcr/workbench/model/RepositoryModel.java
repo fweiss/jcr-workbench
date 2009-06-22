@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 import com.uttama.jcr.workbench.RepositoryModelException;
 /**
  * The RepositoryModel serves mainly as a wrapper for javax.jcr.Session.
- * It provides a Swing model facade providing services and notifications to
+ * It provides a Swing TreeModel for JTree an a facade providing services and notifications to
  * controllers, views and controls
  * 
  * @author frankw
@@ -107,6 +107,15 @@ implements TreeModel {
 			throw new RepositoryModelException("addNode: " + e.toString());
 		}
 	}
+	public void removeNode(TreePath treePath)
+	throws RepositoryModelException {
+		Node node = getNode(treePath);
+		try {
+			node.remove();
+		} catch (RepositoryException e) {
+			throw new RepositoryModelException("removeNode: " + e.toString());
+		}
+	}
 	public void save()
 	throws RepositoryModelException {
 		try {
@@ -117,6 +126,13 @@ implements TreeModel {
 	}
 	public Node getRootNode() {
 		return root;
+	}
+	
+	/* TreeModel-ness */
+	
+	@Override
+	public void addTreeModelListener(TreeModelListener listener) {
+		treeModelListeners.add(listener);
 	}
 	@Override
 	public Object getChild(Object n, int index) {
@@ -136,35 +152,32 @@ implements TreeModel {
 			//TODO: check long/int
 			return (int) node.getNodes().getSize();
 		} catch (RepositoryException e) {
-			throw new RuntimeException(e);
+			log.error("getChildCount: " + e.toString());
+			return 0;
 		}
 	}
-
 	@Override
 	public int getIndexOfChild(Object arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 	@Override
 	public Object getRoot() {
 		return root;
 	}
-
 	@Override
-	public boolean isLeaf(Object node) {
-		//return node instanceof String;
-		return false;
+	public boolean isLeaf(Object n) {
+		Node node = (Node) n;
+		try {
+			return node.getNodes().getSize() == 0;
+		} catch (RepositoryException e) {
+			log.error("isLeaf: " + e.toString());
+			return true;
+		}
 	}
-
 	@Override
-	public void addTreeModelListener(TreeModelListener listener) {
-		treeModelListeners.add(listener);
-	}
-	@Override
-	public void removeTreeModelListener(TreeModelListener l) {
-		// TODO Auto-generated method stub
-		
+	public void removeTreeModelListener(TreeModelListener listener) {
+		treeModelListeners.remove(listener);
 	}
 	@Override
 	public void valueForPathChanged(TreePath treePath, Object newValue) {
@@ -172,6 +185,7 @@ implements TreeModel {
 		TreeModelEvent tme = new TreeModelEvent(this, treePath);
 		fireTreeNodesChanged(tme);
 	}
+	
 	private void fireTreeNodesChanged(TreeModelEvent tme) {
 		for (TreeModelListener listener : treeModelListeners)
 			listener.treeNodesChanged(new TreeModelEvent(this, new TreePath(root)));

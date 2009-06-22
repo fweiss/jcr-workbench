@@ -17,6 +17,7 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.SimpleCredentials;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JApplet;
 import javax.swing.JMenuItem;
@@ -61,6 +62,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	
 	private NodeModel nodeModel;
 	private RepositoryModel repositoryModel = null;
+	
+	protected Action removeNodeAction;
 
 	public void init() {
 		this.setSize(defaultAppletSize);
@@ -89,7 +92,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
 		//String motif = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
 		try {
-			UIManager.setLookAndFeel(windows);
+			//UIManager.setLookAndFeel(windows);
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
 		catch (Exception e) {
 			log.error(e.toString());
@@ -111,14 +115,14 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private void createTopViews() {
 		tree = createTreePane(repositoryModel);
 		//propertyCardPanel = createPropertyPanel();
-		propertyPanel = createNPropertyPanel();
+		propertyPanel = createPropertyPanel();
     	splitPane = createSplitPane(tree, propertyPanel);
     	getContentPane().add(splitPane, BorderLayout.CENTER);
 	}
 	private JTree createTreePane(TreeModel model) {
 		tree = new JTree(model);
 		tree.setShowsRootHandles(true);
-		tree.putClientProperty("JTree.lineStyle", "Angled");
+		//tree.putClientProperty("JTree.lineStyle", "Angled");
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setRootVisible(true);
         
@@ -127,7 +131,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
         tree.setCellRenderer(new JCRTreeCellRenderer());
 		return tree;
 	}
-	public JPanel createNPropertyPanel() {
+	public JPanel createPropertyPanel() {
 		JPanel propertyPanel = new JPanel();
 		propertyCardLayout = new CardLayout();
 		propertyPanel.setLayout(propertyCardLayout);
@@ -164,14 +168,17 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		nodePanel.setSaveButtonAction(saveNodeAction);
 		newNodePanel.setSaveButtonAction(saveNodeAction);
 		
+		removeNodeAction = new RemoveNodeAction("Delete", null);
+		
 		final JPopupMenu popup = new JPopupMenu();
-	    JMenuItem menuItem = new JMenuItem("Delete");
-	    menuItem.addActionListener(this);
-	    popup.add(menuItem);
+	    //JMenuItem menuItem = new JMenuItem("Delete");
+	    //menuItem.addActionListener(this);
+	    //popup.add(menuItem);
+		popup.add(removeNodeAction);
 	    NewNodeAction newNodeAction = new NewNodeAction("New Node", null);
 	    popup.add(newNodeAction);
 	    
-	    menuItem = new JMenuItem("Save");
+	    JMenuItem menuItem = new JMenuItem("Save");
 	    menuItem.addActionListener(this);
 	    popup.add(menuItem);
 	    
@@ -225,6 +232,24 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				log.error("SaveNodeAction: " + e.toString());;
 			}
 			log.trace("saved!");		}
+	}
+	class RemoveNodeAction
+	extends AbstractAction {
+		public RemoveNodeAction(String label, Icon icon) {
+			super(label, icon);
+		}
+		public void actionPerformed(ActionEvent ae) {
+			TreePath treePath = tree.getSelectionPath();
+			try {
+				repositoryModel.removeNode(treePath);
+				//tree.setSelectionPath(treePath.pathByAddingChild(node));
+				//nodeModel.setNode(node);
+			}
+			catch (RepositoryModelException e) {
+				log.error("RemoveNodeAction: " + e.toString());
+			}
+			
+		}
 	}
 	protected void defaultConfiguration() {
 		String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
