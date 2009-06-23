@@ -10,6 +10,8 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.apache.log4j.Logger;
+
+import com.uttama.jcr.workbench.model.NodeModel;
 /**
  * A TreeCellRender customized for JCR.
  * 
@@ -22,7 +24,7 @@ import org.apache.log4j.Logger;
 public class JCRTreeCellRenderer
 extends DefaultTreeCellRenderer {
 	private static final Logger log = Logger.getLogger(JCRTreeCellRenderer.class);
-	Node value;
+	NodeModel value;
 	Icon nodeIcon;
 	Icon closedChangedNodeIcon;
 	public JCRTreeCellRenderer() {
@@ -53,9 +55,9 @@ extends DefaultTreeCellRenderer {
 	}*/
 	@Override
 	public void setText(String text) {
-		Node node = (Node) value;
+		NodeModel node = value;
 		try {
-			super.setText(node == null ? "flea" : node.getName());
+			super.setText(node == null ? "flea" : node.getNode().getName());
 		} catch (RepositoryException e) {
 			log.error("can't get node name:" + e.toString());
 		}
@@ -65,8 +67,8 @@ extends DefaultTreeCellRenderer {
 		String name = super.getText();
 		if (value != null) {
 			try {
-				Node node = (Node) value;
-				boolean isRoot = node.getPrimaryNodeType().getName().equals("rep:root");
+				NodeModel node = value;
+				boolean isRoot = node.getNode().getPrimaryNodeType().getName().equals("rep:root");
 				if (isRoot)
 					name = "jcr:root";
 			} catch (RepositoryException e) {
@@ -78,7 +80,7 @@ extends DefaultTreeCellRenderer {
 	}
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-		this.value = (Node) value;
+		this.value = (NodeModel) value;
 		return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 	}
 

@@ -43,7 +43,11 @@ implements NodeChangedListener, ActionListener, FocusListener {
 		group.addNLabeledComponent("name", name = new JTextField(10));
 		group.addNLabeledComponent("mixins", mixins = new JTextField(10));
 		group.addNLabeledComponent("uuid", uuid = new JTextField(30));
-		group.addNLabeledComponent("properties", properties = new JTable(nodeModel.getNodePropertiesModel()));
+		
+		properties = new JTable();
+		properties.setModel(nodeModel.getNodePropertiesModel());
+		group.addNLabeledComponent("properties", properties);
+		
 		addForm(group);
 		//main.add(Box.createVerticalStrut(20));
 		nodeModel.addNodeChangedListener(this);
@@ -56,6 +60,11 @@ implements NodeChangedListener, ActionListener, FocusListener {
 		name.addActionListener(this);
 		name.setActionCommand("foo");
 		name.addFocusListener(this);
+	}
+	public void setModel(NodeModel nodeModel) {
+		this.nodeModel = nodeModel;
+		this.properties.setModel(nodeModel.getNodePropertiesModel());
+		updateFields();
 	}
 	private Properties getLabels() {
 		Properties labels = new Properties();
@@ -80,6 +89,18 @@ implements NodeChangedListener, ActionListener, FocusListener {
 			e.printStackTrace();
 		}
 
+	}
+	private void updateFields() {
+		Node node = nodeModel.getNode();
+		try {
+			String nt = node.getPrimaryNodeType().getName();
+			primaryType.setText(nt);
+			name.setText(node.getName());
+			uuid.setText(node.isNodeType("mix:referenceable") ? node.getUUID() : "");
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	@Override
 	public void valueChanged(NodeChangedEvent nce) {

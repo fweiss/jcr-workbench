@@ -58,9 +58,9 @@ implements TreeModel {
 		StringBuffer sb = new StringBuffer();
 		int pathCount = treePath.getPathCount();
 		for (int i=1; i<pathCount; i++) {
-			Node node = (Node) treePath.getPathComponent(i);
+			NodeModel nodeModel = (NodeModel) treePath.getPathComponent(i);
 			try {
-				sb.append((i>1 ? "/" : "") + node.getName());
+				sb.append((i>1 ? "/" : "") + nodeModel.getNode().getName());
 			} catch (RepositoryException e) {
 				throw new RepositoryModelException("getNode: name of node: " + e.toString());
 			}
@@ -71,12 +71,12 @@ implements TreeModel {
 	throws RepositoryModelException {
 		String parts[] = path.split("/");
 		Node node = root;
-		List<Node> list = new LinkedList<Node>();
-		list.add(node);
+		List<NodeModel> list = new LinkedList<NodeModel>();
+		list.add(new NodeModel(node));
 		try {
 			for (int i=1; i<parts.length; i++) {
 				node = node.getNode(parts[i]);
-				list.add(node);
+				list.add(new NodeModel(node));
 			}
 			TreePath treePath = new TreePath(list.toArray());
 			return treePath;
@@ -136,25 +136,13 @@ implements TreeModel {
 	}
 	@Override
 	public Object getChild(Object n, int index) {
-		Node node = (Node) n;
-		try {
-			NodeIterator iterator = node.getNodes();
-			iterator.skip(index);
-			return iterator.next();
-		} catch (RepositoryException e) {
-			throw new RuntimeException(e);
-		}
+		NodeModel nodeModel = (NodeModel) n;
+		return nodeModel.getChild(nodeModel, index);
 	}
 	@Override
 	public int getChildCount(Object n) {
-		Node node = (Node) n;
-		try {
-			//TODO: check long/int
-			return (int) node.getNodes().getSize();
-		} catch (RepositoryException e) {
-			log.error("getChildCount: " + e.toString());
-			return 0;
-		}
+		NodeModel nodeModel = (NodeModel) n;
+		return nodeModel.getChildCount(nodeModel);
 	}
 	@Override
 	public int getIndexOfChild(Object arg0, Object arg1) {
@@ -163,17 +151,12 @@ implements TreeModel {
 	}
 	@Override
 	public Object getRoot() {
-		return root;
+		return root == null ? null : new NodeModel(root);
 	}
 	@Override
 	public boolean isLeaf(Object n) {
-		Node node = (Node) n;
-		try {
-			return node.getNodes().getSize() == 0;
-		} catch (RepositoryException e) {
-			log.error("isLeaf: " + e.toString());
-			return true;
-		}
+		NodeModel nodeModel = (NodeModel) n;
+		return nodeModel.isLeaf();
 	}
 	@Override
 	public void removeTreeModelListener(TreeModelListener listener) {

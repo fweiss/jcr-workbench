@@ -211,7 +211,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			String nodeName = "untitled";
 			try {
 				Node node = repositoryModel.addNode(treePath, nodeName);
-				tree.setSelectionPath(treePath.pathByAddingChild(node));
+				tree.setSelectionPath(treePath.pathByAddingChild(new NodeModel(node)));
 				//nodeModel.setNode(node);
 			}
 			catch (RepositoryModelException e) {
@@ -282,14 +282,15 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	@Override
 	public void valueChanged(TreeSelectionEvent tse) {
 		log.trace("valueChanged");
-		Node node = (Node) tse.getPath().getLastPathComponent();
+		NodeModel nodeModel = (NodeModel) tse.getPath().getLastPathComponent();
 		try {
-			String nt = node.getPrimaryNodeType().getName();
-			log.debug(node.getPrimaryNodeType().getName());
+			String nt = nodeModel.getNode().getPrimaryNodeType().getName();
+			log.debug(nodeModel.getNode().getPrimaryNodeType().getName());
 			if (nt.equals("rep:root")) {
 				propertyCardLayout.show(propertyPanel, "repository");
 			} else {
-				nodeModel.setNode(node);
+				//nodeModel.setNode(node);
+				nodePanel.setModel(nodeModel);
 				propertyCardLayout.show(propertyPanel, "node");
 			}
 		} catch (RepositoryException e) {
