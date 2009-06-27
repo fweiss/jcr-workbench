@@ -66,14 +66,18 @@ extends DefaultTreeCellRenderer {
 	public String getText() {
 		String name = super.getText();
 		if (value != null) {
-			try {
-				NodeModel node = value;
-				boolean isRoot = node.getNode().getPrimaryNodeType().getName().equals("rep:root");
-				if (isRoot)
-					name = "jcr:root";
-			} catch (RepositoryException e) {
-				log.error("getText: " + e.toString());
-				name = "(delete)";
+			if (value.isDeleted()) {
+				name = "()";
+			} else {
+				try {
+					NodeModel node = value;
+					boolean isRoot = node.getNode().getPrimaryNodeType().getName().equals("rep:root");
+					if (isRoot)
+						name = "jcr:root";
+				} catch (RepositoryException e) {
+					log.error("getText: " + e.toString());
+					name = "(delete)";
+				}
 			}
 		}
 		return name;

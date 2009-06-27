@@ -40,20 +40,20 @@ implements NodeChangedListener, ActionListener, FocusListener {
 		LabeledGrid group = new LabeledGrid();
 		group.setLabels(getLabels());
 		group.addNLabeledComponent("primaryType", primaryType = new JTextField(30));
-		group.addNLabeledComponent("name", name = new JTextField(10));
+		group.addNLabeledComponent("name", name = new JTextField(30));
 		group.addNLabeledComponent("mixins", mixins = new JTextField(10));
 		group.addNLabeledComponent("uuid", uuid = new JTextField(30));
 		
 		properties = new JTable();
 		properties.setModel(nodeModel.getNodePropertiesModel());
+		properties.getColumnModel().getColumn(0).setPreferredWidth(160);
+		properties.getColumnModel().getColumn(2).setPreferredWidth(550);
 		group.addNLabeledComponent("properties", properties);
 		
 		addForm(group);
 		//main.add(Box.createVerticalStrut(20));
 		nodeModel.addNodeChangedListener(this);
 		//this.setBackground(Color.GREEN);
-		properties.getColumnModel().getColumn(0).setPreferredWidth(160);
-		properties.getColumnModel().getColumn(2).setPreferredWidth(550);
 		saveButton = new JButton("Save");
 		addButton(saveButton);
 		
@@ -64,6 +64,8 @@ implements NodeChangedListener, ActionListener, FocusListener {
 	public void setModel(NodeModel nodeModel) {
 		this.nodeModel = nodeModel;
 		this.properties.setModel(nodeModel.getNodePropertiesModel());
+		properties.getColumnModel().getColumn(0).setPreferredWidth(160);
+		properties.getColumnModel().getColumn(2).setPreferredWidth(550);
 		updateFields();
 	}
 	private Properties getLabels() {
@@ -88,18 +90,22 @@ implements NodeChangedListener, ActionListener, FocusListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 	private void updateFields() {
-		Node node = nodeModel.getNode();
-		try {
-			String nt = node.getPrimaryNodeType().getName();
-			primaryType.setText(nt);
-			name.setText(node.getName());
-			uuid.setText(node.isNodeType("mix:referenceable") ? node.getUUID() : "");
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (nodeModel.isDeleted()) {
+			setEnabled(false);
+		} else {
+			setEnabled(true);
+			Node node = nodeModel.getNode();
+			try {
+				String nt = node.getPrimaryNodeType().getName();
+				primaryType.setText(nt);
+				name.setText(node.getName());
+				uuid.setText(node.isNodeType("mix:referenceable") ? node.getUUID() : "");
+			} catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	@Override

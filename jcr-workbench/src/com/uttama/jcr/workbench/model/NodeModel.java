@@ -1,5 +1,9 @@
 package com.uttama.jcr.workbench.model;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.jcr.AccessDeniedException;
@@ -21,8 +25,13 @@ import com.uttama.jcr.workbench.events.NodeChangedListener;
 public class NodeModel {
 	private static final Logger log = Logger.getLogger(NodeModel.class);
 	private Node node;
-	private Vector<NodeChangedListener> listeners = new Vector<NodeChangedListener>();
+	private boolean isDeleted;
+	private boolean sortChildNodes = true;
+	
 	private NodePropertiesModel nodePropertiesModel;
+
+	private Vector<NodeChangedListener> listeners = new Vector<NodeChangedListener>();
+	
 	public NodeModel() {
 		nodePropertiesModel = new NodePropertiesModel();
 	}
@@ -37,6 +46,24 @@ public class NodeModel {
 		fireNodeChangedEvent(nce);
 		nodePropertiesModel.setNode(node);
 	}
+	public void setDeleted() {
+		this.isDeleted = true;
+	}
+	public boolean isDeleted() {
+		return this.isDeleted;
+	}
+	public String getPrimaryNodeType() {
+		String primaryType = "";
+		if ( ! isDeleted) {
+			try {
+				primaryType = this.getNode().getPrimaryNodeType().getName();
+			} catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return primaryType;
+	}
 	public boolean isLeaf() {
 		try {
 			return node.getNodes().getSize() == 0;
@@ -47,9 +74,14 @@ public class NodeModel {
 	}
 	public NodeModel getChild(NodeModel nodeModel, int index) {
 		try {
-			NodeIterator iterator = node.getNodes();
-			iterator.skip(index);
-			return new NodeModel((Node) iterator.next());
+			if (sortChildNodes) {
+				List<Node> sortedNodes = sorted(node.getNodes());
+				return new NodeModel(sortedNodes.get(index));
+			} else {
+				NodeIterator iterator = node.getNodes();
+				iterator.skip(index);
+				return new NodeModel((Node) iterator.next());
+			}
 		} catch (RepositoryException e) {
 			throw new RuntimeException(e);
 		}
@@ -62,6 +94,23 @@ public class NodeModel {
 			log.error("getChildCount: " + e.toString());
 			return 0;
 		}
+	}
+	private List<Node> sorted(NodeIterator nodeIterator) {
+		List<Node> nodeList = new LinkedList<Node>();
+		while (nodeIterator.hasNext())
+			nodeList.add(nodeIterator.nextNode());
+		Collections.sort(nodeList, new Comparator<Node>() {
+			public int compare(Node n1, Node n2) {
+				try {
+					String name1 = n1.getName();
+					String name2 = n2.getName();
+					return name1.compareToIgnoreCase(name2);
+				} catch (RepositoryException e) {
+					throw new RuntimeException("NodeModel.sorted: " + e.toString());
+				}
+			}
+		});
+		return nodeList;
 	}
 	public NodePropertiesModel getNodePropertiesModel() {
 		return this.nodePropertiesModel;

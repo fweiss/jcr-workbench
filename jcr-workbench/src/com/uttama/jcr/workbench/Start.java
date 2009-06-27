@@ -3,7 +3,10 @@ package com.uttama.jcr.workbench;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -20,6 +23,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JApplet;
+import javax.swing.JDialog;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -39,9 +43,11 @@ import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
+import com.uttama.jcr.workbench.model.NewNodeParameters;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.util.JCRTreeCellRenderer;
+import com.uttama.jcr.workbench.view.NewNodeDialog;
 import com.uttama.jcr.workbench.view.properties.NodePanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
 
@@ -60,8 +66,11 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NodePanel newNodePanel;
 	private RepositoryPanel repositoryPanel;
 	
+	private NewNodeDialog newNodeDialog;
+	
 	private NodeModel nodeModel;
 	private RepositoryModel repositoryModel = null;
+	NewNodeParameters newNodeParameters;
 	
 	protected Action removeNodeAction;
 
@@ -99,9 +108,16 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			log.error(e.toString());
 		}
 	}
+	private Frame findParentFrame() {
+		Container parent = this;
+		while (parent != null && ! (parent instanceof Frame))
+			parent = parent.getParent();
+		return (Frame) parent;
+	}
 	private void createModels() {
 		nodeModel = new NodeModel();
 		repositoryModel = new RepositoryModel();
+		newNodeParameters = new NewNodeParameters();
 	}
 	/**
 	 * Create the view for the application.
@@ -118,6 +134,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		propertyPanel = createPropertyPanel();
     	splitPane = createSplitPane(tree, propertyPanel);
     	getContentPane().add(splitPane, BorderLayout.CENTER);
+    	
+    	newNodeDialog = new NewNodeDialog(findParentFrame(), newNodeParameters);
 	}
 	private JTree createTreePane(TreeModel model) {
 		tree = new JTree(model);
@@ -207,12 +225,21 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			super(label, icon);
 		}
 		public void actionPerformed(ActionEvent ae) {
+			log.trace("new node action: " + ae.getSource());
+			if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
+				newNodeDialog.show(this);
+			} else {
+				newNodeDialog.hide();
+				xactionPerformed(ae);
+			}
+		}
+		public void xactionPerformed(ActionEvent ae) {
 			TreePath treePath = tree.getSelectionPath();
-			String nodeName = "untitled";
+			String nodeName = newNodeParameters.name;
+			String primaryNodeTypeName = newNodeParameters.primaryNodeTypeName;
 			try {
-				Node node = repositoryModel.addNode(treePath, nodeName);
+				Node node = repositoryModel.addNode(treePath, nodeName, primaryNodeTypeName);
 				tree.setSelectionPath(treePath.pathByAddingChild(new NodeModel(node)));
-				//nodeModel.setNode(node);
 			}
 			catch (RepositoryModelException e) {
 				log.error("NewNodeAction: " + e.toString());
@@ -283,9 +310,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	public void valueChanged(TreeSelectionEvent tse) {
 		log.trace("valueChanged");
 		NodeModel nodeModel = (NodeModel) tse.getPath().getLastPathComponent();
-		try {
-			String nt = nodeModel.getNode().getPrimaryNodeType().getName();
-			log.debug(nodeModel.getNode().getPrimaryNodeType().getName());
+			String nt = nodeModel.getPrimaryNodeType();
+			//log.debug(nodeModel.getNode().getPrimaryNodeType().getName());
 			if (nt.equals("rep:root")) {
 				propertyCardLayout.show(propertyPanel, "repository");
 			} else {
@@ -293,10 +319,6 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				nodePanel.setModel(nodeModel);
 				propertyCardLayout.show(propertyPanel, "node");
 			}
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	@Override
 	public void valueChanged(NodeChangedEvent nce) {

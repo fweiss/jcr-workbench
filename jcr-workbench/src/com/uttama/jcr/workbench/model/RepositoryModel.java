@@ -95,12 +95,12 @@ implements TreeModel {
 		}
 		return node;
 	}
-	public Node addNode(TreePath treePath, String name)
+	public Node addNode(TreePath treePath, String name, String primaryNodeTypeName)
 	throws RepositoryModelException {
 		log.trace("newNode: " + name);
 		Node parentNode = getNode(treePath);
 		try {
-			Node newNode = parentNode.addNode(name);
+			Node newNode = parentNode.addNode(name, primaryNodeTypeName);
 			fireTreeNodesInserted(treePath);
 			return newNode;
 		} catch (RepositoryException e) {
@@ -109,9 +109,10 @@ implements TreeModel {
 	}
 	public void removeNode(TreePath treePath)
 	throws RepositoryModelException {
-		Node node = getNode(treePath);
+		NodeModel nodeModel = (NodeModel) treePath.getLastPathComponent();
 		try {
-			node.remove();
+			nodeModel.getNode().remove();
+			nodeModel.setDeleted();
 		} catch (RepositoryException e) {
 			throw new RepositoryModelException("removeNode: " + e.toString());
 		}
