@@ -51,10 +51,10 @@ import com.uttama.jcr.workbench.view.NewNodeDialog;
 import com.uttama.jcr.workbench.view.properties.NodePanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
 
-public class Start
+public class JCRWorkbench
 extends JApplet
 implements ActionListener, TreeSelectionListener, NodeChangedListener {
-	private static final Logger log = Logger.getLogger(Start.class);
+	private static final Logger log = Logger.getLogger(JCRWorkbench.class);
 	private static final long serialVersionUID = 9004058156389836075L;
 	private Dimension defaultAppletSize = new Dimension(1200, 500);
 	
