@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
+import com.uttama.jcr.workbench.ModelChangeEvent;
+import com.uttama.jcr.workbench.ModelChangeListener;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.NodeModel;
@@ -23,7 +25,7 @@ import com.uttama.jcr.workbench.view.PropertyPanel;
 
 public class NodePanel
 extends PropertyPanel
-implements NodeChangedListener, ActionListener, FocusListener {
+implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListener {
 	static Logger log = Logger.getLogger(NodePanel.class);
 	private NodeModel nodeModel;
 	JTextField primaryType;
@@ -33,6 +35,7 @@ implements NodeChangedListener, ActionListener, FocusListener {
 	JTable properties;
 	JButton saveButton;
 	public NodePanel(NodeModel nodeModel) {
+		setName("node");
 		this.nodeModel = nodeModel;
 		//JPanel main = this;
 		//main.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -134,5 +137,9 @@ implements NodeChangedListener, ActionListener, FocusListener {
 	public void focusLost(FocusEvent fe) {
 		log.trace("focus lost: " + fe.getComponent().getName());
 		nodeModel.setName(name.getText());
+	}
+	public void modelChanged(ModelChangeEvent mce) {
+		NodeModel nodeModel = (NodeModel) mce.getSource();
+		setModel(nodeModel);
 	}
 }

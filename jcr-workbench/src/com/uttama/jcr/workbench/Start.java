@@ -72,6 +72,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private RepositoryModel repositoryModel = null;
 	NewNodeParameters newNodeParameters;
 	
+	private ViewModelMap viewModelMap;
+	
 	protected Action removeNodeAction;
 
 	public void init() {
@@ -178,6 +180,11 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private void createModelListeners() {
 		tree.addTreeSelectionListener(this);
 		nodeModel.addNodeChangedListener(this);
+		
+		viewModelMap = new ViewModelMap(propertyPanel, propertyCardLayout);
+		viewModelMap.put("rep:root", repositoryModel, repositoryPanel, repositoryPanel);
+		viewModelMap.put("nt:unstructured", nodeModel, nodePanel, nodePanel);
+		viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
 	}
 	private void createListeners() {
 		repositoryPanel.openButton.addActionListener(this);
@@ -308,6 +315,10 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	}
 	@Override
 	public void valueChanged(TreeSelectionEvent tse) {
+		NodeModel nodeModel = (NodeModel) tse.getPath().getLastPathComponent();
+		viewModelMap.switchView(nodeModel);
+	}
+	public void xvalueChanged(TreeSelectionEvent tse) {
 		log.trace("valueChanged");
 		NodeModel nodeModel = (NodeModel) tse.getPath().getLastPathComponent();
 			String nt = nodeModel.getPrimaryNodeType();

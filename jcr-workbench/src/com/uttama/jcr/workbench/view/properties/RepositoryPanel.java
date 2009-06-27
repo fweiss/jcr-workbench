@@ -5,11 +5,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import com.uttama.jcr.workbench.ModelChangeEvent;
+import com.uttama.jcr.workbench.ModelChangeListener;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
 
 public class RepositoryPanel
-extends PropertyPanel {
+extends PropertyPanel
+implements ModelChangeListener {
 	private JTextField configuration;
 	private JTextField repository;
 	private JTextField username;
@@ -19,6 +22,7 @@ extends PropertyPanel {
 	
 	public RepositoryPanel() {
 		super();
+		setName("repository");
 		//main.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		LabeledGrid group = new LabeledGrid();
@@ -64,5 +68,8 @@ extends PropertyPanel {
 	}
 	public void setPassword(String password) {
 		this.password.setText(password);
+	}
+	public void modelChanged(ModelChangeEvent mce) {
+		
 	}
 }
