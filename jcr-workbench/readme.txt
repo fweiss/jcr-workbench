@@ -41,3 +41,26 @@ Jackrabbit
 ----------
 http://wiki.apache.org/jackrabbit/ExamplesPage
 
+Theory
+------
+1. A workspace is a tree of nodes.
+2. A node, formally an Item, is a composite of formal Nodes and Properties.
+3. Properties are leaf nodes.
+4. A Property has a definite type.
+5. A Property may have more than one value, even though it is a leaf.
+6. (Corollary) The values of a Property are homogenous in type.
+7. A Node has a definite type.
+8. The type of a Node is a NodeType.
+9. Inheritance of NodeType.
+10. Mixins of NodeType.
+
+Node type views
+---------------
+1. Node type Inheritance tree.
+2. Mixin inheritance tree.
+3. Search result.
+
+
+
+
+

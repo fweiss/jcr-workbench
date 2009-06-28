@@ -44,10 +44,12 @@ import org.apache.log4j.Logger;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.NewNodeParameters;
+import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.util.JCRTreeCellRenderer;
 import com.uttama.jcr.workbench.view.NewNodeDialog;
+import com.uttama.jcr.workbench.view.NodeTypePanel;
 import com.uttama.jcr.workbench.view.properties.NodePanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
 
@@ -65,12 +67,14 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NodePanel nodePanel;
 	private NodePanel newNodePanel;
 	private RepositoryPanel repositoryPanel;
+	private NodeTypePanel nodeTypePanel;
 	
 	private NewNodeDialog newNodeDialog;
 	
 	private NodeModel nodeModel;
 	private RepositoryModel repositoryModel = null;
-	NewNodeParameters newNodeParameters;
+	private NewNodeParameters newNodeParameters;
+	private NodeTypeModel nodeTypeModel;
 	
 	private ViewModelMap viewModelMap;
 	
@@ -120,6 +124,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		nodeModel = new NodeModel();
 		repositoryModel = new RepositoryModel();
 		newNodeParameters = new NewNodeParameters();
+		nodeTypeModel = new NodeTypeModel();
 	}
 	/**
 	 * Create the view for the application.
@@ -155,6 +160,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		JPanel propertyPanel = new JPanel();
 		propertyCardLayout = new CardLayout();
 		propertyPanel.setLayout(propertyCardLayout);
+		nodeTypePanel = new NodeTypePanel("nodeType");
+		nodeTypePanel.setModel(nodeTypeModel);
 		
 		repositoryPanel = new RepositoryPanel();
 		nodePanel = new NodePanel(nodeModel);
@@ -163,6 +170,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		propertyPanel.add(repositoryPanel, "repository");
 		propertyPanel.add(nodePanel, "node");
 		propertyPanel.add(newNodePanel, "newNode");
+		propertyPanel.add(nodeTypePanel, "nodeType");
 		return propertyPanel;
 	}
 	protected void showPropertyPanel(String key) {
@@ -184,6 +192,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		viewModelMap = new ViewModelMap(propertyPanel, propertyCardLayout);
 		viewModelMap.put("rep:root", repositoryModel, repositoryPanel, repositoryPanel);
 		viewModelMap.put("nt:unstructured", nodeModel, nodePanel, nodePanel);
+		// should be separate tree
+		viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
 		viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
 	}
 	private void createListeners() {
@@ -307,6 +317,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				Credentials credentials = new SimpleCredentials(username, password.toCharArray());
 				repositoryModel.openSession(repository, credentials);
 				repositoryPanel.setDescriptors(repository);
+				nodeTypeModel.setRootNode(repositoryModel.getRootNode());
 			}
 			catch (IOException ex) {
 				log.error("error with repository(): " + ex.toString());
