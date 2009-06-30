@@ -11,7 +11,11 @@ extends JPanel {
 	private JPanel buttonPane;
 	private JPanel formPane;
 	public PropertyPanel() {
+		this("");
+	}
+	public PropertyPanel(String name) {
 		super();
+		setName(name);
 		setLayout(new BorderLayout());
 		
 		buttonPane = new JPanel();

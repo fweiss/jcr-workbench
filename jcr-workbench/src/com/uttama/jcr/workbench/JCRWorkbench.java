@@ -50,6 +50,7 @@ import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.util.JCRTreeCellRenderer;
 import com.uttama.jcr.workbench.view.NewNodeDialog;
 import com.uttama.jcr.workbench.view.NodeTypePanel;
+import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
 import com.uttama.jcr.workbench.view.properties.NodePanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
 
@@ -68,6 +69,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NodePanel newNodePanel;
 	private RepositoryPanel repositoryPanel;
 	private NodeTypePanel nodeTypePanel;
+	private NodeDefinitionPanel nodeDefinitionPanel;
 	
 	private NewNodeDialog newNodeDialog;
 	
@@ -166,11 +168,13 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		repositoryPanel = new RepositoryPanel();
 		nodePanel = new NodePanel(nodeModel);
 		newNodePanel = new NodePanel(nodeModel);
+    	nodeDefinitionPanel = new NodeDefinitionPanel("nodeDefinition");
 		
 		propertyPanel.add(repositoryPanel, "repository");
 		propertyPanel.add(nodePanel, "node");
 		propertyPanel.add(newNodePanel, "newNode");
 		propertyPanel.add(nodeTypePanel, "nodeType");
+		propertyPanel.add(nodeDefinitionPanel, "nodeDefinition");
 		return propertyPanel;
 	}
 	protected void showPropertyPanel(String key) {
@@ -194,7 +198,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		viewModelMap.put("nt:unstructured", nodeModel, nodePanel, nodePanel);
 		// should be separate tree
 		viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
-		viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
+		//viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
+		viewModelMap.putDefault(nodeModel, nodeDefinitionPanel, nodeDefinitionPanel);
 	}
 	private void createListeners() {
 		repositoryPanel.openButton.addActionListener(this);
@@ -244,6 +249,9 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		public void actionPerformed(ActionEvent ae) {
 			log.trace("new node action: " + ae.getSource());
 			if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
+				//newNodeParameters.parent = tree.getSelectionPath();
+				ModelChangeEvent mce = new ModelChangeEvent(newNodeParameters);
+				newNodeDialog.modelChanged(mce);
 				newNodeDialog.show(this);
 			} else {
 				newNodeDialog.hide();

@@ -4,12 +4,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.nodetype.NodeDefinition;
+import javax.jcr.nodetype.NodeType;
+import javax.jcr.nodetype.NodeTypeManager;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -32,6 +38,7 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	JTextField name;
 	JTextField mixins;
 	JTextField uuid;
+	JList requiredList;
 	JTable properties;
 	JButton saveButton;
 	public NodePanel(NodeModel nodeModel) {
@@ -52,6 +59,9 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		properties.getColumnModel().getColumn(0).setPreferredWidth(160);
 		properties.getColumnModel().getColumn(2).setPreferredWidth(550);
 		group.addNLabeledComponent("properties", properties);
+		
+		requiredList = new JList();
+		group.addNLabeledComponent("required", requiredList);
 		
 		addForm(group);
 		//main.add(Box.createVerticalStrut(20));
@@ -111,6 +121,21 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 			}
 		}
 	}
+	public String[] getRequiredNodeTypeNames() {
+		List<String> names = new LinkedList<String>();
+		NodeDefinition nodeDefinition;
+		try {
+			nodeDefinition = nodeModel.getNode().getDefinition();
+			NodeType nodes[] = nodeDefinition.getRequiredPrimaryTypes();
+			for (NodeType node : nodes)
+				names.add(node.getName());
+			return names.toArray(new String[]{ });
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	@Override
 	public void valueChanged(NodeChangedEvent nce) {
 		Node node = nce.getNodeModel().getNode();
@@ -141,5 +166,6 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	public void modelChanged(ModelChangeEvent mce) {
 		NodeModel nodeModel = (NodeModel) mce.getSource();
 		setModel(nodeModel);
+		requiredList.setListData(getRequiredNodeTypeNames());
 	}
 }

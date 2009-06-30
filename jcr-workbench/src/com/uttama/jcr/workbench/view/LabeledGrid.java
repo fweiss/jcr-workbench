@@ -26,6 +26,10 @@ extends JPanel {
 		c1.ipadx = 5;
 		c1.insets = new Insets(0,5,8,0);
 	}
+	public LabeledGrid(Properties labels) {
+		this();
+		setLabels(labels);
+	}
 	public void addLabeledComponent(String s, Component comp) {
 		JLabel label = new JLabel(s);
 		gridbag.setConstraints(label, c0);

@@ -6,9 +6,12 @@ import java.awt.Container;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.uttama.jcr.workbench.model.NodeModel;
 
 public class ViewModelMap {
+	private final static Logger log = Logger.getLogger(ViewModelMap.class);
 	static class Link {
 		public Object model;
 		public Component view;
@@ -38,6 +41,7 @@ public class ViewModelMap {
 	}
 	public void switchView(NodeModel nodeModel) {
 		String nodeTypeName = nodeModel.getPrimaryNodeType();
+		log.trace("switch: " + nodeTypeName);
 		Link link = map.get(nodeTypeName);
 		if (link == null)
 			link = defaultLink;

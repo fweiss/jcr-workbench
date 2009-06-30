@@ -15,6 +15,7 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.version.VersionException;
 
 import org.apache.log4j.Logger;
@@ -114,6 +115,15 @@ public class NodeModel {
 	}
 	public NodePropertiesModel getNodePropertiesModel() {
 		return this.nodePropertiesModel;
+	}
+	public NodeDefinition getDefinition() {
+		try {
+			return node.getDefinition();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	public Node getNode() {
 		return this.node;

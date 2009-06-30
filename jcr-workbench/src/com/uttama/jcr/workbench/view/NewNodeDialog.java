@@ -15,12 +15,16 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
 
+import com.uttama.jcr.workbench.ModelChangeEvent;
+import com.uttama.jcr.workbench.ModelChangeListener;
 import com.uttama.jcr.workbench.model.NewNodeParameters;
 
 public class NewNodeDialog
-extends JDialog {
+extends JDialog
+implements ModelChangeListener {
 	private final Frame owner;
 	private NewNodeParameters parameters;
+	private JTextField parent = new JTextField(30);
 	private JTextField name = new JTextField(30);
 	private JTextField primaryNodeTypeName = new JTextField(30);
 	Action okAction;
@@ -48,6 +52,7 @@ extends JDialog {
 	}
 	private void addFields() {
 		LabeledGrid grid = new LabeledGrid();
+		grid.addLabeledComponent("Parent", parent);
 		grid.addLabeledComponent("Name", name);
 		grid.addLabeledComponent("Primary node type", primaryNodeTypeName);
 		this.getContentPane().add(grid, BorderLayout.CENTER);
@@ -87,5 +92,12 @@ extends JDialog {
 		public void actionPerformed(ActionEvent ae) {
 			hide();
 		}
+	}
+	@Override
+	public void modelChanged(ModelChangeEvent mce) {
+		NewNodeParameters p = (NewNodeParameters) mce.getSource();
+		parent.setText(p.parent);
+		name.setText(p.name);
+		primaryNodeTypeName.setText(p.primaryNodeTypeName);
 	}
 }
