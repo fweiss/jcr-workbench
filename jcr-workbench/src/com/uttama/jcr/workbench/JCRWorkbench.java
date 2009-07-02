@@ -51,7 +51,7 @@ import com.uttama.jcr.workbench.util.JCRTreeCellRenderer;
 import com.uttama.jcr.workbench.view.NewNodeDialog;
 import com.uttama.jcr.workbench.view.NodeTypePanel;
 import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
-import com.uttama.jcr.workbench.view.properties.NodePanel;
+import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
 
 public class JCRWorkbench
@@ -65,8 +65,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
     private JSplitPane splitPane;
 	private CardLayout propertyCardLayout;
 	private JPanel propertyPanel;
-	private NodePanel nodePanel;
-	private NodePanel newNodePanel;
+	private NodeDataPanel nodePanel;
+	private NodeDataPanel newNodePanel;
 	private RepositoryPanel repositoryPanel;
 	private NodeTypePanel nodeTypePanel;
 	private NodeDefinitionPanel nodeDefinitionPanel;
@@ -166,8 +166,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		nodeTypePanel.setModel(nodeTypeModel);
 		
 		repositoryPanel = new RepositoryPanel();
-		nodePanel = new NodePanel(nodeModel);
-		newNodePanel = new NodePanel(nodeModel);
+		nodePanel = new NodeDataPanel(nodeModel);
+		newNodePanel = new NodeDataPanel(nodeModel);
     	nodeDefinitionPanel = new NodeDefinitionPanel("nodeDefinition");
 		
 		propertyPanel.add(repositoryPanel, "repository");

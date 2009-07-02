@@ -15,7 +15,10 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -29,10 +32,10 @@ import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
 
-public class NodePanel
+public class NodeDataPanel
 extends PropertyPanel
 implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListener {
-	static Logger log = Logger.getLogger(NodePanel.class);
+	static Logger log = Logger.getLogger(NodeDataPanel.class);
 	private NodeModel nodeModel;
 	JTextField primaryType;
 	JTextField name;
@@ -41,7 +44,7 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	JList requiredList;
 	JTable properties;
 	JButton saveButton;
-	public NodePanel(NodeModel nodeModel) {
+	public NodeDataPanel(NodeModel nodeModel) {
 		setName("node");
 		this.nodeModel = nodeModel;
 		//JPanel main = this;
@@ -62,8 +65,12 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		
 		requiredList = new JList();
 		group.addNLabeledComponent("required", requiredList);
-		
+
+		group.addNLabeledComponent("tabs", createTabbedPane());
+
 		addForm(group);
+		
+		
 		//main.add(Box.createVerticalStrut(20));
 		nodeModel.addNodeChangedListener(this);
 		//this.setBackground(Color.GREEN);
@@ -73,6 +80,13 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		name.addActionListener(this);
 		name.setActionCommand("foo");
 		name.addFocusListener(this);
+	}
+	private JComponent createTabbedPane() {
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		for (int i=0; i<4; i++) {
+			tabbedPane.add(new JLabel("label " + i));
+		}
+		return tabbedPane;
 	}
 	public void setModel(NodeModel nodeModel) {
 		this.nodeModel = nodeModel;
@@ -88,6 +102,7 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		labels.put("mixins", "Mixins:");
 		labels.put("uuid", "UUID");
 		labels.put("properties", "Properties:");
+		labels.put("tabs", "tabs");
 		return labels;
 	}
 	public void setSaveButtonAction(Action action) {
