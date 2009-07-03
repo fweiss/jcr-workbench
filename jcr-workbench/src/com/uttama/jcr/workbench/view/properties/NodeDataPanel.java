@@ -1,5 +1,6 @@
 package com.uttama.jcr.workbench.view.properties;
 
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -12,15 +13,15 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
-import javax.jcr.nodetype.NodeTypeManager;
 import javax.swing.Action;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
 
@@ -39,11 +40,13 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	private NodeModel nodeModel;
 	JTextField primaryType;
 	JTextField name;
-	JTextField mixins;
 	JTextField uuid;
-	JList requiredList;
 	JTable properties;
 	JButton saveButton;
+	public NodeDataPanel(String name) {
+		this((NodeModel) null);
+		setName(name);
+	}
 	public NodeDataPanel(NodeModel nodeModel) {
 		setName("node");
 		this.nodeModel = nodeModel;
@@ -52,28 +55,15 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		//main.setLayout(new BorderLayout());
 		LabeledGrid group = new LabeledGrid();
 		group.setLabels(getLabels());
-		group.addNLabeledComponent("primaryType", primaryType = new JTextField(30));
 		group.addNLabeledComponent("name", name = new JTextField(30));
-		group.addNLabeledComponent("mixins", mixins = new JTextField(10));
+		group.addNLabeledComponent("primaryType", primaryType = new JTextField(30));
 		group.addNLabeledComponent("uuid", uuid = new JTextField(30));
-		
-		properties = new JTable();
-		properties.setModel(nodeModel.getNodePropertiesModel());
-		properties.getColumnModel().getColumn(0).setPreferredWidth(160);
-		properties.getColumnModel().getColumn(2).setPreferredWidth(550);
+
+		properties = createPropertiesTable();
 		group.addNLabeledComponent("properties", properties);
 		
-		requiredList = new JList();
-		group.addNLabeledComponent("required", requiredList);
-
-		group.addNLabeledComponent("tabs", createTabbedPane());
-
 		addForm(group);
 		
-		
-		//main.add(Box.createVerticalStrut(20));
-		nodeModel.addNodeChangedListener(this);
-		//this.setBackground(Color.GREEN);
 		saveButton = new JButton("Save");
 		addButton(saveButton);
 		
@@ -81,12 +71,20 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		name.setActionCommand("foo");
 		name.addFocusListener(this);
 	}
-	private JComponent createTabbedPane() {
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		for (int i=0; i<4; i++) {
-			tabbedPane.add(new JLabel("label " + i));
-		}
-		return tabbedPane;
+	private JTable createPropertiesTable() {
+		TableColumnModel tableColumnModel = new DefaultTableColumnModel();
+		tableColumnModel.addColumn(new TableColumn(0));
+		tableColumnModel.addColumn(new TableColumn(1));
+		tableColumnModel.addColumn(new TableColumn(2));
+		JTable table = new JTable(new DefaultTableModel(), tableColumnModel);
+		table.getColumnModel().getColumn(0).setPreferredWidth(160);
+		table.getColumnModel().getColumn(2).setPreferredWidth(550);
+		
+		BevelBorder border = new BevelBorder(BevelBorder.LOWERED);
+		border.getBorderInsets(table, new Insets(2, 2, 2, 2));
+		table.setBorder(border);
+
+		return table;
 	}
 	public void setModel(NodeModel nodeModel) {
 		this.nodeModel = nodeModel;
@@ -99,7 +97,6 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		Properties labels = new Properties();
 		labels.put("primaryType", "Primary Type:");
 		labels.put("name", "Name:");
-		labels.put("mixins", "Mixins:");
 		labels.put("uuid", "UUID");
 		labels.put("properties", "Properties:");
 		labels.put("tabs", "tabs");
@@ -181,6 +178,5 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	public void modelChanged(ModelChangeEvent mce) {
 		NodeModel nodeModel = (NodeModel) mce.getSource();
 		setModel(nodeModel);
-		requiredList.setListData(getRequiredNodeTypeNames());
 	}
 }

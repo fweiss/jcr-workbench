@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,7 +22,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JApplet;
-import javax.swing.JDialog;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -49,8 +47,8 @@ import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.util.JCRTreeCellRenderer;
 import com.uttama.jcr.workbench.view.NewNodeDialog;
+import com.uttama.jcr.workbench.view.NodeTabbedPanel;
 import com.uttama.jcr.workbench.view.NodeTypePanel;
-import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
 
@@ -69,7 +67,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NodeDataPanel newNodePanel;
 	private RepositoryPanel repositoryPanel;
 	private NodeTypePanel nodeTypePanel;
-	private NodeDefinitionPanel nodeDefinitionPanel;
+	private NodeTabbedPanel nodeTabbedPanel;
 	
 	private NewNodeDialog newNodeDialog;
 	
@@ -88,12 +86,16 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	    try {
 	        SwingUtilities.invokeAndWait(new Runnable() {
 	            public void run() {
-	            	setLookAndFeel();
-	            	createModels();
-	        	    createTopViews();
-	        	    createModelListeners();
-	        	    createListeners();
-	        	    defaultConfiguration();
+	            	try {
+		            	setLookAndFeel();
+		            	createModels();
+		        	    createTopViews();
+		        	    createModelListeners();
+		        	    createListeners();
+		        	    defaultConfiguration();
+	            	} catch (RuntimeException e) {
+	            		e.printStackTrace();
+	            	}
 	            }
 	        });
 	    } catch (Exception e) {
@@ -106,7 +108,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		}
 	}
 	protected void setLookAndFeel() {
-		String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+		//String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
 		//String motif = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
 		try {
 			//UIManager.setLookAndFeel(windows);
@@ -168,13 +170,13 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		repositoryPanel = new RepositoryPanel();
 		nodePanel = new NodeDataPanel(nodeModel);
 		newNodePanel = new NodeDataPanel(nodeModel);
-    	nodeDefinitionPanel = new NodeDefinitionPanel("nodeDefinition");
+    	nodeTabbedPanel = new NodeTabbedPanel("nodeTabbedPanel");
 		
 		propertyPanel.add(repositoryPanel, "repository");
 		propertyPanel.add(nodePanel, "node");
 		propertyPanel.add(newNodePanel, "newNode");
 		propertyPanel.add(nodeTypePanel, "nodeType");
-		propertyPanel.add(nodeDefinitionPanel, "nodeDefinition");
+		propertyPanel.add(nodeTabbedPanel, "nodeTabbedPanel");
 		return propertyPanel;
 	}
 	protected void showPropertyPanel(String key) {
@@ -199,7 +201,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		// should be separate tree
 		viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
 		//viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
-		viewModelMap.putDefault(nodeModel, nodeDefinitionPanel, nodeDefinitionPanel);
+		viewModelMap.putDefault(nodeModel, nodeTabbedPanel, nodeTabbedPanel);
 	}
 	private void createListeners() {
 		repositoryPanel.openButton.addActionListener(this);
@@ -254,7 +256,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				newNodeDialog.modelChanged(mce);
 				newNodeDialog.show(this);
 			} else {
-				newNodeDialog.hide();
+				//newNodeDialog.hide();
+				newNodeDialog.setVisible(false);
 				xactionPerformed(ae);
 			}
 		}

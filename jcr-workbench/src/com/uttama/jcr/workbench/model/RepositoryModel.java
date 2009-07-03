@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;

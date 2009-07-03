@@ -2,7 +2,6 @@ package com.uttama.jcr.workbench.util;
 
 import java.awt.Component;
 
-import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;

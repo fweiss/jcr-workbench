@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -71,7 +70,7 @@ implements ModelChangeListener {
 	public void show(Action okAction) {
 		this.okAction = okAction;
 		setSize(owner);
-		super.show();
+		super.setVisible(true);
 	}
 	class OKAction
 	extends AbstractAction {
@@ -90,7 +89,7 @@ implements ModelChangeListener {
 			super(label);
 		}
 		public void actionPerformed(ActionEvent ae) {
-			hide();
+			setVisible(false);
 		}
 	}
 	@Override
