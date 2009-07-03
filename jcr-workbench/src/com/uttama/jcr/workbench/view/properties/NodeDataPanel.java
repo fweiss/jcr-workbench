@@ -181,5 +181,6 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	public void modelChanged(ModelChangeEvent mce) {
 		NodeModel nodeModel = (NodeModel) mce.getSource();
 		setModel(nodeModel);
+		references.setListData(nodeModel.getReferencePaths());
 	}
 }

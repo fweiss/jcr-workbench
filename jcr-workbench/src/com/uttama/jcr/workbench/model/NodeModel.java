@@ -12,7 +12,10 @@ import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
+import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeDefinition;
@@ -64,6 +67,45 @@ public class NodeModel {
 			}
 		}
 		return primaryType;
+	}
+	public Vector<String> getReferencePaths() {
+		Vector<String> paths = new Vector<String>();
+		try {
+			PropertyIterator iterator = node.getReferences();
+			while (iterator.hasNext()) {
+				Property property = iterator.nextProperty();
+				String path = property.getPath();
+				paths.add(path);
+			}
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}
+		return paths;
+	}
+	public boolean isVersionable() {
+		try {
+			return node.isNodeType("mix:versionable");
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public String[] getAllVersionLabels() {
+		try {
+			if (isVersionable()) {
+				return node.getVersionHistory().getVersionLabels();
+			} else {
+				return null;
+			}
+		} catch (UnsupportedRepositoryOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	public boolean isLeaf() {
 		try {
