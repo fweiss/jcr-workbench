@@ -39,6 +39,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
 
+import com.uttama.jcr.workbench.dialogs.NewNodeDialog;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.NewNodeParameters;
@@ -46,7 +47,6 @@ import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.util.JCRTreeCellRenderer;
-import com.uttama.jcr.workbench.view.NewNodeDialog;
 import com.uttama.jcr.workbench.view.NodeTabbedPanel;
 import com.uttama.jcr.workbench.view.NodeTypePanel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;

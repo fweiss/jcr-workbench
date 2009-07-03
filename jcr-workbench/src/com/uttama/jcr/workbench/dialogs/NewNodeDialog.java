@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.view;
+package com.uttama.jcr.workbench.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import com.uttama.jcr.workbench.ModelChangeEvent;
 import com.uttama.jcr.workbench.ModelChangeListener;
 import com.uttama.jcr.workbench.model.NewNodeParameters;
+import com.uttama.jcr.workbench.view.LabeledGrid;
 
 public class NewNodeDialog
 extends JDialog
