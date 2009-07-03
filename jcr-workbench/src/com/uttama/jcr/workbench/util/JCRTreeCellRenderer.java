@@ -28,9 +28,10 @@ extends DefaultTreeCellRenderer {
 	Icon closedChangedNodeIcon;
 	public JCRTreeCellRenderer() {
 		super();
-        setLeafIcon(new ImageIcon("d:/workspace/jcr-workbench/src/leaf.gif"));
         loadIcons();
         setClosedIcon(nodeIcon);
+        setLeafIcon(nodeIcon);
+        setOpenIcon(nodeIcon);
 	}
 	protected void loadIcons() {
 		String dir = "d:/workspace/jcr-workbench/images/";
