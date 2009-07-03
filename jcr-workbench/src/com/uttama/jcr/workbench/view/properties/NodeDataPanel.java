@@ -15,6 +15,7 @@ import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
@@ -38,11 +39,21 @@ extends PropertyPanel
 implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListener {
 	static Logger log = Logger.getLogger(NodeDataPanel.class);
 	private NodeModel nodeModel;
-	JTextField primaryType;
 	JTextField name;
+	JTextField primaryType;
 	JTextField uuid;
+	JList references;
 	JTable properties;
 	JButton saveButton;
+	private static Properties getLabels() {
+		Properties labels = new Properties();
+		labels.put("name", "Name:");
+		labels.put("primaryType", "Primary Type:");
+		labels.put("uuid", "UUID");
+		labels.put("references", "References");
+		labels.put("properties", "Properties:");
+		return labels;
+	}
 	public NodeDataPanel(String name) {
 		this((NodeModel) null);
 		setName(name);
@@ -58,6 +69,7 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		group.addNLabeledComponent("name", name = new JTextField(30));
 		group.addNLabeledComponent("primaryType", primaryType = new JTextField(30));
 		group.addNLabeledComponent("uuid", uuid = new JTextField(30));
+		group.addNLabeledComponent("references", references = new JList());
 
 		properties = createPropertiesTable();
 		group.addNLabeledComponent("properties", properties);
@@ -92,15 +104,6 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		properties.getColumnModel().getColumn(0).setPreferredWidth(160);
 		properties.getColumnModel().getColumn(2).setPreferredWidth(550);
 		updateFields();
-	}
-	private Properties getLabels() {
-		Properties labels = new Properties();
-		labels.put("primaryType", "Primary Type:");
-		labels.put("name", "Name:");
-		labels.put("uuid", "UUID");
-		labels.put("properties", "Properties:");
-		labels.put("tabs", "tabs");
-		return labels;
 	}
 	public void setSaveButtonAction(Action action) {
 		saveButton.setAction(action);
