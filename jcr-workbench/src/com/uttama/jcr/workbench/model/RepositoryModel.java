@@ -1,5 +1,6 @@
 package com.uttama.jcr.workbench.model;
 
+import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -51,6 +52,18 @@ implements TreeModel {
 	public void closeSession() {
 		if (jcrSession != null)
 			jcrSession.logout();
+	}
+	public void export(ExportNodeParameters parameters) {
+		String nodePath = parameters.nodePath;
+		boolean skipBinary = ! parameters.includeBinary;
+		boolean noRecurse = ! parameters.includeSubtree;
+		try {
+			FileOutputStream os = new FileOutputStream(parameters.file);
+			jcrSession.exportSystemView(nodePath, os, skipBinary, noRecurse);
+			os.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	public static String getRelPath(TreePath treePath)
 	throws RepositoryModelException {

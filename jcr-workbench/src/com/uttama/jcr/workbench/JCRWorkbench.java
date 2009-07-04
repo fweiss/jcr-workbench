@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 
 import javax.jcr.Credentials;
@@ -39,9 +40,11 @@ import javax.swing.tree.TreeSelectionModel;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
 
+import com.uttama.jcr.workbench.dialogs.ExportDialog;
 import com.uttama.jcr.workbench.dialogs.NewNodeDialog;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
+import com.uttama.jcr.workbench.model.ExportNodeParameters;
 import com.uttama.jcr.workbench.model.NewNodeParameters;
 import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.model.RepositoryModel;
@@ -70,15 +73,19 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NodeTabbedPanel nodeTabbedPanel;
 	
 	private NewNodeDialog newNodeDialog;
+	private ExportDialog exportDialog;
 	
 	private NodeModel nodeModel;
 	private RepositoryModel repositoryModel = null;
-	private NewNodeParameters newNodeParameters;
 	private NodeTypeModel nodeTypeModel;
+	
+	private NewNodeParameters newNodeParameters;
+	private ExportNodeParameters exportNodeParameters;
 	
 	private ViewModelMap viewModelMap;
 	
 	protected Action removeNodeAction;
+	protected Action exportNodeAction;
 
 	public void init() {
 		this.setSize(defaultAppletSize);
@@ -90,6 +97,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		            	setLookAndFeel();
 		            	createModels();
 		        	    createTopViews();
+		        	    createDialogs();
 		        	    createModelListeners();
 		        	    createListeners();
 		        	    defaultConfiguration();
@@ -129,6 +137,11 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		repositoryModel = new RepositoryModel();
 		newNodeParameters = new NewNodeParameters();
 		nodeTypeModel = new NodeTypeModel();
+		exportNodeParameters = new ExportNodeParameters();
+	}
+	protected void createDialogs() {
+    	newNodeDialog = new NewNodeDialog(findParentFrame(), newNodeParameters);
+    	exportDialog = new ExportDialog(findParentFrame());
 	}
 	/**
 	 * Create the view for the application.
@@ -145,8 +158,6 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		propertyPanel = createPropertyPanel();
     	splitPane = createSplitPane(tree, propertyPanel);
     	getContentPane().add(splitPane, BorderLayout.CENTER);
-    	
-    	newNodeDialog = new NewNodeDialog(findParentFrame(), newNodeParameters);
 	}
 	private JTree createTreePane(TreeModel model) {
 		tree = new JTree(model);
@@ -210,7 +221,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		nodePanel.setSaveButtonAction(saveNodeAction);
 		newNodePanel.setSaveButtonAction(saveNodeAction);
 		
-		removeNodeAction = new RemoveNodeAction("Delete", null);
+		removeNodeAction = new RemoveNodeAction("Delete Node", null);
 		
 		final JPopupMenu popup = new JPopupMenu();
 	    //JMenuItem menuItem = new JMenuItem("Delete");
@@ -220,9 +231,11 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	    NewNodeAction newNodeAction = new NewNodeAction("New Node", null);
 	    popup.add(newNodeAction);
 	    
-	    JMenuItem menuItem = new JMenuItem("Save");
+	    JMenuItem menuItem = new JMenuItem("Save Node");
 	    menuItem.addActionListener(this);
 	    popup.add(menuItem);
+	    exportNodeAction = new ExportNodeAction("Export Node");
+	    popup.add(exportNodeAction);
 	    
 		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
@@ -303,7 +316,31 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			catch (RepositoryModelException e) {
 				log.error("RemoveNodeAction: " + e.toString());
 			}
-			
+		}
+	}
+	class ExportNodeAction
+	extends AbstractAction {
+		public ExportNodeAction(String name) {
+			super(name);
+		}
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
+				//ModelChangeEvent mce = new ModelChangeEvent(newNodeParameters);
+				//newNodeDialog.modelChanged(mce);
+				TreePath treePath = tree.getSelectionPath();
+				try {
+					exportNodeParameters.nodePath = "/" + RepositoryModel.getRelPath(treePath);
+				} catch (RepositoryModelException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				exportNodeParameters.file = new File(".");
+				exportDialog.show(this, exportNodeParameters);
+			} else {
+				exportDialog.setVisible(false);
+				repositoryModel.export(exportNodeParameters);
+			}
 		}
 	}
 	protected void defaultConfiguration() {
