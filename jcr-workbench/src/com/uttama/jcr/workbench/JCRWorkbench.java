@@ -160,7 +160,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
     	getContentPane().add(splitPane, BorderLayout.CENTER);
 	}
 	private JTree createTreePane(TreeModel model) {
-		tree = new JTree(model);
+		tree = new CustomJTree(model);
 		tree.setShowsRootHandles(true);
 		//tree.putClientProperty("JTree.lineStyle", "Angled");
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -216,19 +216,19 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	}
 	private void createListeners() {
 		repositoryPanel.openButton.addActionListener(this);
-		SaveNodeAction saveNodeAction = new SaveNodeAction("Save Node", null);
+		SaveNodeAction saveNodeAction = new SaveNodeAction("Save Node");
 		//saveNodeAction.setEnabled(false);
 		nodePanel.setSaveButtonAction(saveNodeAction);
 		newNodePanel.setSaveButtonAction(saveNodeAction);
 		
-		removeNodeAction = new RemoveNodeAction("Delete Node", null);
+		removeNodeAction = new RemoveNodeAction("Delete Node");
 		
 		final JPopupMenu popup = new JPopupMenu();
 	    //JMenuItem menuItem = new JMenuItem("Delete");
 	    //menuItem.addActionListener(this);
 	    //popup.add(menuItem);
 		popup.add(removeNodeAction);
-	    NewNodeAction newNodeAction = new NewNodeAction("New Node", null);
+	    NewNodeAction newNodeAction = new NewNodeAction("New Node");
 	    popup.add(newNodeAction);
 	    
 	    JMenuItem menuItem = new JMenuItem("Save Node");
@@ -237,29 +237,18 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	    exportNodeAction = new ExportNodeAction("Export Node");
 	    popup.add(exportNodeAction);
 	    
-		MouseListener ml = new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
-				int button = me.getButton();
-				if (button == 3) {
-				//int selRow = tree.getRowForLocation(e.getX(), e.getY());
-				TreePath selPath = tree.getPathForLocation(me.getX(), me.getY());	
-				if (selPath != null) {
-					// Bug 4196497 right click non-select, unlike Windows Explorer
-					// TODO: check current selection, if the right click is on a multi,
-					// don't change the selection.
-					tree.setSelectionPath(selPath);
-					log.trace("clicked: " + selPath.toString());
-					
+		tree.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent me) {
+				if (me.isPopupTrigger()) {
 					popup.show(me.getComponent(), me.getX(), me.getY());
 				}
-			}}
-		};
-		tree.addMouseListener(ml);
+			}
+		});
 	}
 	class NewNodeAction
 	extends AbstractAction {
-		public NewNodeAction(String label, Icon icon) {
-			super(label, icon);
+		public NewNodeAction(String label) {
+			super(label);
 		}
 		public void actionPerformed(ActionEvent ae) {
 			log.trace("new node action: " + ae.getSource());
@@ -269,7 +258,6 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				newNodeDialog.modelChanged(mce);
 				newNodeDialog.show(this);
 			} else {
-				//newNodeDialog.hide();
 				newNodeDialog.setVisible(false);
 				xactionPerformed(ae);
 			}
@@ -289,8 +277,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	}
 	class SaveNodeAction
 	extends AbstractAction {
-		public SaveNodeAction(String label, Icon icon) {
-			super(label, icon);
+		public SaveNodeAction(String label) {
+			super(label);
 		}
 		public void actionPerformed(ActionEvent ae) {
 			//TreePath selPath = tree.getPathForLocation(ae.getX(), ae.getY());
@@ -303,8 +291,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	}
 	class RemoveNodeAction
 	extends AbstractAction {
-		public RemoveNodeAction(String label, Icon icon) {
-			super(label, icon);
+		public RemoveNodeAction(String label) {
+			super(label);
 		}
 		public void actionPerformed(ActionEvent ae) {
 			TreePath treePath = tree.getSelectionPath();
@@ -326,8 +314,6 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
-				//ModelChangeEvent mce = new ModelChangeEvent(newNodeParameters);
-				//newNodeDialog.modelChanged(mce);
 				TreePath treePath = tree.getSelectionPath();
 				try {
 					exportNodeParameters.nodePath = "/" + RepositoryModel.getRelPath(treePath);
