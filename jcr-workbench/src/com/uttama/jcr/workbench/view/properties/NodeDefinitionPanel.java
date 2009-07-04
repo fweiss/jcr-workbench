@@ -29,26 +29,26 @@ implements ModelChangeListener {
 	private JList requiredPrimaryTypes = new JList();
 	public static Properties getLabels() {
 		Properties labels = new Properties();
+		labels.put("defaultPrimaryType", "Default Primary Type");
+		labels.put("requiredPrimaryTypes", "Required Primary Types");
 		labels.put("onParentVersion", "On Parent Version");
 		labels.put("isAutoCreated", "Autocreated");
 		labels.put("isMandatory", "Mandatory:");
 		labels.put("isProtected", "Protected");
 		labels.put("allowSameNameSiblings", "Allow Same Name Siblings");
-		labels.put("defaultPrimaryType", "Default Primary Type");
-		labels.put("requiredPrimaryTypes", "Required Primary Types");
 		return labels;
 	}
 	public NodeDefinitionPanel(String name) {
 		super(name);
 		
 		LabeledGrid fields = new LabeledGrid(getLabels());
+		fields.addNLabeledComponent("defaultPrimaryType", defaultPrimaryType);
+		fields.addNLabeledComponent("requiredPrimaryTypes", requiredPrimaryTypes);
 		fields.addNLabeledComponent("onParentVersion", onParentVersion);
 		fields.addNLabeledComponent("isAutoCreated", isAutoCreated);
 		fields.addNLabeledComponent("isMandatory", isMandatory);
 		fields.addNLabeledComponent("isProtected", isProtected);
 		fields.addNLabeledComponent("allowSameNameSiblings", allowSameNameSiblings);
-		fields.addNLabeledComponent("defaultPrimaryType", defaultPrimaryType);
-		fields.addNLabeledComponent("requiredPrimaryTypes", requiredPrimaryTypes);
 		addForm(fields);
 	}
 	private void updateFields(NodeDefinition nd) {
