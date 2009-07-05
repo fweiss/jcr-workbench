@@ -24,56 +24,60 @@ public class JCRTreeCellRenderer
 extends DefaultTreeCellRenderer {
 	private static final Logger log = Logger.getLogger(JCRTreeCellRenderer.class);
 	NodeModel value;
+	NodeTypeIcons nodeTypeIcons;
 	Icon nodeIcon;
 	Icon closedChangedNodeIcon;
 	public JCRTreeCellRenderer() {
 		super();
+		nodeTypeIcons = new NodeTypeIcons();
         loadIcons();
-        setClosedIcon(nodeIcon);
-        setLeafIcon(nodeIcon);
-        setOpenIcon(nodeIcon);
+        //setClosedIcon(nodeIcon);
+        //setLeafIcon(nodeIcon);
+        //setOpenIcon(nodeIcon);
 	}
 	protected void loadIcons() {
 		String dir = "d:/workspace/jcr-workbench/images/";
-        nodeIcon = new ImageIcon(dir + "node.gif");
+        nodeTypeIcons.addedIcon = new ImageIcon(dir + "node-new.gif");
+        nodeTypeIcons.defaultIcon = new ImageIcon(dir + "node.gif");
+        nodeTypeIcons.changedIcon = new ImageIcon(dir + "node-changed.gif");
+        nodeTypeIcons.deletedIcon = new ImageIcon(dir + "node-removed.gif");
         closedChangedNodeIcon = new ImageIcon(dir + "node-changed.gif");
-	}/*
+	}
 	@Override
 	public Icon getClosedIcon() {
-		if (value.isModified())
-			return this.closedChangedNodeIcon;
-		else
-			return this.closedIcon;
+		//if (value.isModified())
+		//	return this.closedChangedNodeIcon;
+		//else
+			return nodeTypeIcons.getClosedIcon(value);
 	}
 	@Override
 	public Icon getLeafIcon() {
-		return this.leafIcon;
+		return nodeTypeIcons.getLeafIcon(value);
 	}
 	@Override
 	public Icon getOpenIcon() {
-		return this.openIcon;
-	}*/
-	@Override
-	public void setText(String text) {
-		NodeModel node = value;
-		try {
-			super.setText(node == null ? "flea" : node.getNode().getName());
-		} catch (RepositoryException e) {
-			log.error("can't get node name:" + e.toString());
-		}
+		return nodeTypeIcons.getOpenIcon(value);
 	}
+//	@Override
+//	public void setText(String text) {
+//		NodeModel node = value;
+//		try {
+//			super.setText(node == null ? "flea" : node.getNode().getName());
+//		} catch (RepositoryException e) {
+//			log.error("can't get node name:" + e.toString());
+//		}
+//	}
 	@Override
 	public String getText() {
-		String name = super.getText();
+		String name = "???-???";
 		if (value != null) {
 			if (value.isDeleted()) {
-				name = "()";
+				name = value.getName();;
 			} else {
 				try {
 					NodeModel node = value;
 					boolean isRoot = node.getNode().getPrimaryNodeType().getName().equals("rep:root");
-					if (isRoot)
-						name = "jcr:root";
+					name = isRoot ? "jcr:root" : value.getName();
 				} catch (RepositoryException e) {
 					log.error("getText: " + e.toString());
 					name = "(delete)";
@@ -87,5 +91,33 @@ extends DefaultTreeCellRenderer {
 		this.value = (NodeModel) value;
 		return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 	}
-
+	static class NodeTypeIcons {
+		Icon defaultIcon;
+		Icon addedIcon;
+		Icon changedIcon;
+		Icon deletedIcon;
+		Icon getLeafIcon(NodeModel nodeModel) {
+			return getIcon(nodeModel);
+		}
+		Icon getClosedIcon(NodeModel nodeModel) {
+			return getIcon(nodeModel);
+		}
+		/**
+		 * N.B. precedence
+		 * @param nodeModel
+		 * @return
+		 */
+		Icon getIcon(NodeModel nodeModel) {
+			if (nodeModel.isDeleted())
+				return deletedIcon;
+			if (nodeModel.isModified())
+				return changedIcon;
+			if (nodeModel.isNew())
+				return addedIcon;
+			return defaultIcon;
+		}
+		Icon getOpenIcon(NodeModel nodeModel) {
+			return getIcon(nodeModel);
+		}
+	}
 }

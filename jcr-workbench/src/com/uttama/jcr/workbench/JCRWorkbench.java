@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,7 +20,6 @@ import javax.jcr.RepositoryException;
 import javax.jcr.SimpleCredentials;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.JApplet;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -162,7 +160,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private JTree createTreePane(TreeModel model) {
 		tree = new CustomJTree(model);
 		tree.setShowsRootHandles(true);
-		//tree.putClientProperty("JTree.lineStyle", "Angled");
+		tree.putClientProperty("JTree.lineStyle", "Angled");
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setRootVisible(true);
         
@@ -215,26 +213,27 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		viewModelMap.putDefault(nodeModel, nodeTabbedPanel, nodeTabbedPanel);
 	}
 	private void createListeners() {
-		repositoryPanel.openButton.addActionListener(this);
 		SaveNodeAction saveNodeAction = new SaveNodeAction("Save Node");
+		removeNodeAction = new RemoveNodeAction("Delete Node");
+	    NewNodeAction newNodeAction = new NewNodeAction("New Node");
+	    exportNodeAction = new ExportNodeAction("Export Node");
+
+		repositoryPanel.openButton.addActionListener(this);
 		//saveNodeAction.setEnabled(false);
 		nodePanel.setSaveButtonAction(saveNodeAction);
 		newNodePanel.setSaveButtonAction(saveNodeAction);
-		
-		removeNodeAction = new RemoveNodeAction("Delete Node");
 		
 		final JPopupMenu popup = new JPopupMenu();
 	    //JMenuItem menuItem = new JMenuItem("Delete");
 	    //menuItem.addActionListener(this);
 	    //popup.add(menuItem);
 		popup.add(removeNodeAction);
-	    NewNodeAction newNodeAction = new NewNodeAction("New Node");
 	    popup.add(newNodeAction);
 	    
-	    JMenuItem menuItem = new JMenuItem("Save Node");
-	    menuItem.addActionListener(this);
-	    popup.add(menuItem);
-	    exportNodeAction = new ExportNodeAction("Export Node");
+	    //JMenuItem menuItem = new JMenuItem("Save Node");
+	    //menuItem.addActionListener(this);
+	    //popup.add(menuItem);
+	    popup.add(saveNodeAction);
 	    popup.add(exportNodeAction);
 	    
 		tree.addMouseListener(new MouseAdapter() {
@@ -254,6 +253,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			log.trace("new node action: " + ae.getSource());
 			if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
 				//newNodeParameters.parent = tree.getSelectionPath();
+				newNodeParameters.primaryNodeTypeName = "nt:unstructured";
 				ModelChangeEvent mce = new ModelChangeEvent(newNodeParameters);
 				newNodeDialog.modelChanged(mce);
 				newNodeDialog.show(this);

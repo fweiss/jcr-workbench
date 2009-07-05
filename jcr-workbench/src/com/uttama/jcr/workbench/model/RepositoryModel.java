@@ -18,6 +18,8 @@ import javax.swing.tree.TreePath;
 import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.RepositoryModelException;
+import com.uttama.jcr.workbench.events.NodeChangedEvent;
+import com.uttama.jcr.workbench.events.NodeChangedListener;
 /**
  * The RepositoryModel serves mainly as a wrapper for javax.jcr.Session.
  * It provides a Swing TreeModel for JTree an a facade providing services and notifications to
@@ -27,7 +29,7 @@ import com.uttama.jcr.workbench.RepositoryModelException;
  *
  */
 public class RepositoryModel
-implements TreeModel {
+implements TreeModel, NodeChangedListener {
 	private final static Logger log = Logger.getLogger(RepositoryModel.class);
     private Session jcrSession;
 	private Repository repository;
@@ -119,12 +121,15 @@ implements TreeModel {
 			throw new RepositoryModelException("addNode: " + e.toString());
 		}
 	}
+	// FIXME: refactor to NodeModel
 	public void removeNode(TreePath treePath)
 	throws RepositoryModelException {
 		NodeModel nodeModel = (NodeModel) treePath.getLastPathComponent();
 		try {
-			nodeModel.getNode().remove();
 			nodeModel.setDeleted();
+			nodeModel.getNode().remove();
+			TreeModelEvent tme = new TreeModelEvent(this, treePath.getParentPath());
+			fireTreeNodesChanged(tme);
 		} catch (RepositoryException e) {
 			throw new RepositoryModelException("removeNode: " + e.toString());
 		}
@@ -150,7 +155,9 @@ implements TreeModel {
 	@Override
 	public Object getChild(Object n, int index) {
 		NodeModel nodeModel = (NodeModel) n;
-		return nodeModel.getChild(nodeModel, index);
+		NodeModel child = nodeModel.getChild(nodeModel, index);
+		child.addNodeChangedListener(this);
+		return child;
 	}
 	@Override
 	public int getChildCount(Object n) {
@@ -198,4 +205,15 @@ implements TreeModel {
 //		for (TreeModelListener listener : treeModelListeners)
 //			listener.treeNodesRemoved(new TreeModelEvent(this, treePath));
 //	}
+	@Override
+	public void valueChanged(NodeChangedEvent nce) {
+		NodeModel nodeModel = nce.getNodeModel();
+		try {
+			TreePath treePath = getTreePath(nodeModel.getNodePath());
+			TreeModelEvent tme = new TreeModelEvent(this, treePath);
+			fireTreeNodesChanged(tme);
+		} catch (RepositoryModelException e) {
+			e.printStackTrace();
+		}
+	}
 }

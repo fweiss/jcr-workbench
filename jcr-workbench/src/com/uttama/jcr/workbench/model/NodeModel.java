@@ -2,8 +2,10 @@ package com.uttama.jcr.workbench.model;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.jcr.AccessDeniedException;
@@ -26,6 +28,14 @@ import org.apache.log4j.Logger;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 
+/**
+ * NodeModel wraps a javax.jcr.Node by adding several aspects:
+ * 
+ * 1. MVC event model
+ * 2. Deleted node info
+ * 
+ *
+ */
 public class NodeModel {
 	private static final Logger log = Logger.getLogger(NodeModel.class);
 	private Node node;
@@ -33,8 +43,9 @@ public class NodeModel {
 	private boolean sortChildNodes = true;
 	
 	private NodePropertiesModel nodePropertiesModel;
+	DeletedNodeModel deletedNode = new DeletedNodeModel();
 
-	private Vector<NodeChangedListener> listeners = new Vector<NodeChangedListener>();
+	private Set<NodeChangedListener> listeners = new HashSet<NodeChangedListener>();
 	
 	public NodeModel() {
 		nodePropertiesModel = new NodePropertiesModel();
@@ -51,10 +62,17 @@ public class NodeModel {
 		nodePropertiesModel.setNode(node);
 	}
 	public void setDeleted() {
+		deletedNode.name = getName();
 		this.isDeleted = true;
 	}
 	public boolean isDeleted() {
 		return this.isDeleted;
+	}
+	public boolean isModified() {
+		return node.isModified();
+	}
+	public boolean isNew() {
+		return node.isNew();
 	}
 	public String getPrimaryNodeType() {
 		String primaryType = "";
@@ -67,6 +85,29 @@ public class NodeModel {
 			}
 		}
 		return primaryType;
+	}
+	public String getNodePath() {
+		try {
+			return node.getPath();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public String getName() {
+		String name = "???";
+		if (isDeleted) {
+			name = deletedNode.name;
+		} else {
+			try {
+				name = node.getName();
+			} catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return name;
 	}
 	public Vector<String> getReferencePaths() {
 		Vector<String> paths = new Vector<String>();
@@ -108,11 +149,15 @@ public class NodeModel {
 		return null;
 	}
 	public boolean isLeaf() {
-		try {
-			return node.getNodes().getSize() == 0;
-		} catch (RepositoryException e) {
-			log.error("isLeaf: " + e.toString());
+		if (isDeleted) {
 			return true;
+		} else {
+			try {
+				return node.getNodes().getSize() == 0;
+			} catch (RepositoryException e) {
+				log.error("isLeaf: " + e.toString());
+				return true;
+			}
 		}
 	}
 	public NodeModel getChild(NodeModel nodeModel, int index) {
@@ -214,5 +259,9 @@ public class NodeModel {
 	}
 	public void removeNodeChangedListener(NodeChangedListener listener) {
 		listeners.remove(listener);
+	}
+	class DeletedNodeModel {
+		public String name;
+		public boolean isLeaf;
 	}
 }
