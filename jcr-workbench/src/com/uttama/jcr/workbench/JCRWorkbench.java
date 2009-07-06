@@ -331,8 +331,12 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		}
 	}
 	protected void defaultConfiguration() {
-		String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
-		String repositoryPath = "d:/workspace/jackrabbit-app/repository";
+		log.info(System.getProperty("user.dir"));
+		File defaultRepositoryDir = new File(System.getProperty("user.dir"));
+		File configurationFile = new File(defaultRepositoryDir.getParentFile(), "repository/repository.xml");
+		File repositoryDir = new File(defaultRepositoryDir.getParentFile(), "repository");
+		String configurationPath = configurationFile.getAbsolutePath();
+		String repositoryPath = repositoryDir.getAbsolutePath();
 		//String configurationPath = "d:/workspace/jcr-workbench/repository/repository.xml";
 		//String repositoryPath = "d:/workspace/jcr-workbench/repository/jackrabbit-app/repository";
 		String username = "username";
