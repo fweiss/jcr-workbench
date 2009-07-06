@@ -207,7 +207,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		
 		viewModelMap = new ViewModelMap(propertyPanel, propertyCardLayout);
 		viewModelMap.put("rep:root", repositoryModel, repositoryPanel, repositoryPanel);
-		viewModelMap.put("nt:unstructured", nodeModel, nodePanel, nodePanel);
+		viewModelMap.put("nt:unstructured", nodeModel, nodeTabbedPanel, nodeTabbedPanel);
 		// should be separate tree
 		viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
 		//viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
@@ -253,7 +253,12 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		public void actionPerformed(ActionEvent ae) {
 			log.trace("new node action: " + ae.getSource());
 			if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
-				//newNodeParameters.parent = tree.getSelectionPath();
+				try {
+					newNodeParameters.parent = "/" + RepositoryModel.getRelPath(tree.getSelectionPath());
+				} catch (RepositoryModelException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				newNodeParameters.primaryNodeTypeName = "nt:unstructured";
 				ModelChangeEvent mce = new ModelChangeEvent(newNodeParameters);
 				newNodeDialog.modelChanged(mce);

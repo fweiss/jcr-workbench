@@ -109,7 +109,7 @@ implements TreeModel, NodeChangedListener {
 		Node node;
 		String relPath = getRelPath(treePath);
 		try {
-			node = root.getNode(relPath);
+			node = relPath.isEmpty() ? root : root.getNode(relPath);
 		} catch (RepositoryException e) {
 			throw new RepositoryModelException("getNode: " + relPath + ": " + e.toString());
 		}
@@ -121,7 +121,10 @@ implements TreeModel, NodeChangedListener {
 		Node parentNode = getNode(treePath);
 		try {
 			Node newNode = parentNode.addNode(name, primaryNodeTypeName);
-			fireTreeNodesInserted(treePath);
+			int childIndices[] = { (int) parentNode.getNodes().getSize() - 1 };
+			Object children[] = { newNode };
+			TreeModelEvent tme = new TreeModelEvent(this, treePath, childIndices, children);
+			fireTreeNodesInserted(tme);
 			return newNode;
 		} catch (RepositoryException e) {
 			throw new RepositoryModelException("addNode: " + e.toString());
@@ -217,9 +220,9 @@ implements TreeModel, NodeChangedListener {
 		for (TreeModelListener listener : treeModelListeners)
 			listener.treeStructureChanged(new TreeModelEvent(this, new TreePath(root)));
 	}
-	private void fireTreeNodesInserted(TreePath treePath) {
+	private void fireTreeNodesInserted(TreeModelEvent tme) {
 		for (TreeModelListener listener : treeModelListeners)
-			listener.treeNodesInserted(new TreeModelEvent(this, treePath));
+			listener.treeNodesInserted(tme);
 	}
 //	private void fireTreeNodesRemoved(TreePath treePath) {
 //		for (TreeModelListener listener : treeModelListeners)

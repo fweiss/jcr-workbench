@@ -12,6 +12,7 @@ import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.uttama.jcr.workbench.ModelChangeEvent;
@@ -24,7 +25,7 @@ extends JDialog
 implements ModelChangeListener {
 	private final Frame owner;
 	private NewNodeParameters parameters;
-	private JTextField parent = new JTextField(30);
+	private JLabel parent = new JLabel();
 	private JTextField name = new JTextField(30);
 	private JTextField primaryNodeTypeName = new JTextField(30);
 	Action okAction;

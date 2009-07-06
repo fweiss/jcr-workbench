@@ -1,6 +1,7 @@
 package com.uttama.jcr.workbench.util;
 
 import java.awt.Component;
+import java.net.URL;
 
 import javax.jcr.RepositoryException;
 import javax.swing.Icon;
@@ -35,13 +36,17 @@ extends DefaultTreeCellRenderer {
         //setLeafIcon(nodeIcon);
         //setOpenIcon(nodeIcon);
 	}
+	ImageIcon createImageIcon(String path, String description) {
+		URL imgURL = getClass().getResource(path);
+		return new ImageIcon(imgURL, description);
+	}
 	protected void loadIcons() {
 		String dir = "d:/workspace/jcr-workbench/images/";
-        nodeTypeIcons.addedIcon = new ImageIcon(dir + "node-new.gif");
-        nodeTypeIcons.defaultIcon = new ImageIcon(dir + "node.gif");
-        nodeTypeIcons.changedIcon = new ImageIcon(dir + "node-changed.gif");
-        nodeTypeIcons.deletedIcon = new ImageIcon(dir + "node-removed.gif");
-        closedChangedNodeIcon = new ImageIcon(dir + "node-changed.gif");
+        nodeTypeIcons.addedIcon = createImageIcon("node-new.gif", "Node has been added");
+        nodeTypeIcons.defaultIcon = createImageIcon("node.gif", "Node");
+        nodeTypeIcons.changedIcon = createImageIcon("node-changed.gif", "Node has been changed");
+        nodeTypeIcons.deletedIcon = createImageIcon("node-removed.gif", "Node has been removed");
+        closedChangedNodeIcon = createImageIcon("node-changed.gif", "Node");
 	}
 	@Override
 	public Icon getClosedIcon() {
