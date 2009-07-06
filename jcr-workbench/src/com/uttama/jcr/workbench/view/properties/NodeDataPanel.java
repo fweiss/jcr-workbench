@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.ModelChangeEvent;
 import com.uttama.jcr.workbench.ModelChangeListener;
+import com.uttama.jcr.workbench.custom.PropertyTable;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.NodeModel;
@@ -88,7 +89,7 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		tableColumnModel.addColumn(new TableColumn(0));
 		tableColumnModel.addColumn(new TableColumn(1));
 		tableColumnModel.addColumn(new TableColumn(2));
-		JTable table = new JTable(new DefaultTableModel(), tableColumnModel);
+		JTable table = new PropertyTable(new DefaultTableModel(), tableColumnModel);
 		table.getColumnModel().getColumn(0).setPreferredWidth(160);
 		table.getColumnModel().getColumn(2).setPreferredWidth(550);
 		

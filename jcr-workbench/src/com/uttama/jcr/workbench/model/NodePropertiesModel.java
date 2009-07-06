@@ -57,7 +57,10 @@ extends AbstractTableModel {
 			return 0;
 		}
 	}
-
+	@Override
+	public boolean isCellEditable(int row, int col) {
+		return col == 2;
+	}
 	@Override
 	public Object getValueAt(int row, int column) {
 		if (row == 0) {
