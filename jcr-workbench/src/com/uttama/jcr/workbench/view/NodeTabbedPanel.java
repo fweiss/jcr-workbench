@@ -1,6 +1,5 @@
 package com.uttama.jcr.workbench.view;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import com.uttama.jcr.workbench.ModelChangeEvent;

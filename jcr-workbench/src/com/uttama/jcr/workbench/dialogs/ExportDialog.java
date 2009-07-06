@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.Properties;
 
 import javax.swing.AbstractAction;

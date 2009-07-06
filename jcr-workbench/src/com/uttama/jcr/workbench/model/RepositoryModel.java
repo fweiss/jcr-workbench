@@ -33,10 +33,10 @@ public class RepositoryModel
 implements TreeModel, NodeChangedListener {
 	private final static Logger log = Logger.getLogger(RepositoryModel.class);
 	
-	private String configurationPath = "d:/workspace/jackrabbit-app/repository.xmlx";
-	private String repositoryPath = "d:/workspace/jackrabbit-app/repository";
-	private String username = "username";
-	private String password = "password";
+	private String configurationPath;
+	private String repositoryPath;
+	private String username;
+	private String password;
     private Session jcrSession;
 	private Repository repository;
 	private Vector<TreeModelListener> treeModelListeners;

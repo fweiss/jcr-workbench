@@ -21,7 +21,6 @@ import javax.jcr.SimpleCredentials;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JApplet;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -164,9 +163,6 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		tree.putClientProperty("JTree.lineStyle", "Angled");
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setRootVisible(true);
-        
-        //DefaultTreeCellRenderer r = (DefaultTreeCellRenderer) tree.getCellRenderer();
-        //r.setLeafIcon(new ImageIcon("d:/workspace/jcr-workbench/src/leaf.gif"));
         tree.setCellRenderer(new JCRTreeCellRenderer());
 		return tree;
 	}
@@ -342,8 +338,6 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		File repositoryDir = new File(defaultRepositoryDir.getParentFile(), "repository");
 		String configurationPath = configurationFile.getAbsolutePath();
 		String repositoryPath = repositoryDir.getAbsolutePath();
-		//String configurationPath = "d:/workspace/jcr-workbench/repository/repository.xml";
-		//String repositoryPath = "d:/workspace/jcr-workbench/repository/jackrabbit-app/repository";
 		String username = "username";
 		String password = "password";
 		repositoryModel.setConfigurationPath(configurationPath);

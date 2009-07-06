@@ -41,7 +41,6 @@ extends DefaultTreeCellRenderer {
 		return new ImageIcon(imgURL, description);
 	}
 	protected void loadIcons() {
-		String dir = "d:/workspace/jcr-workbench/images/";
         nodeTypeIcons.addedIcon = createImageIcon("node-new.gif", "Node has been added");
         nodeTypeIcons.defaultIcon = createImageIcon("node.gif", "Node");
         nodeTypeIcons.changedIcon = createImageIcon("node-changed.gif", "Node has been changed");
