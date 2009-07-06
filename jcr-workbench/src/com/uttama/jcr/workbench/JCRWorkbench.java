@@ -22,6 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JApplet;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -176,7 +177,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		nodeTypePanel = new NodeTypePanel("nodeType");
 		nodeTypePanel.setModel(nodeTypeModel);
 		
-		repositoryPanel = new RepositoryPanel();
+		repositoryPanel = new RepositoryPanel("repository");
 		nodePanel = new NodeDataPanel(nodeModel);
 		newNodePanel = new NodeDataPanel(nodeModel);
     	nodeTabbedPanel = new NodeTabbedPanel("nodeTabbedPanel");
@@ -332,29 +333,47 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	protected void defaultConfiguration() {
 		String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
 		String repositoryPath = "d:/workspace/jackrabbit-app/repository";
+		//String configurationPath = "d:/workspace/jcr-workbench/repository/repository.xml";
+		//String repositoryPath = "d:/workspace/jcr-workbench/repository/jackrabbit-app/repository";
 		String username = "username";
 		String password = "password";
-		repositoryPanel.setConfiguration(configurationPath);
-		repositoryPanel.setRepository(repositoryPath);
-		repositoryPanel.setUsername(username);
-		repositoryPanel.setPassword(password);
+		repositoryModel.setConfigurationPath(configurationPath);
+		repositoryModel.setRepositoryPath(repositoryPath);
+		repositoryModel.setUsername(username);
+		repositoryModel.setPassword(password);
+		
+		ModelChangeEvent mce = new ModelChangeEvent(repositoryModel);
+		repositoryPanel.modelChanged(mce);
 	}
+	// FIXME: refactor for actions
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		if (actionEvent.getActionCommand().equals("Open")) {
-			String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
-			String repositoryPath = "d:/workspace/jackrabbit-app/repository";
-			String username = "username";
-			String password = "password";
+			repositoryPanel.saveFields(repositoryModel);
+			String configurationPath = repositoryModel.getConfigurationPath();
+			String repositoryPath = repositoryModel.getRepositoryPath();
+			String username = repositoryModel.getUsername();
+			String password = repositoryModel.getPassword();
+			File configurationFile = new File(configurationPath);
+			if ( ! configurationFile.exists()) {
+				String confirmText = "A repository configuration file was not found at the given location.\n\nClick OK to initialize a new Jackrabbit repository at the given location.";
+				String confirmTitle = "No Repository Found";
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				int messageType = JOptionPane.QUESTION_MESSAGE;
+				int selectedValue = JOptionPane.showConfirmDialog(this.getContentPane(), confirmText, confirmTitle, optionType, messageType);
+				if (selectedValue != JOptionPane.OK_OPTION)
+					return;
+			}
 			try {
 				Repository repository = new TransientRepository(configurationPath, repositoryPath);
 				Credentials credentials = new SimpleCredentials(username, password.toCharArray());
 				repositoryModel.openSession(repository, credentials);
 				repositoryPanel.setDescriptors(repository);
 				nodeTypeModel.setRootNode(repositoryModel.getRootNode());
-			}
-			catch (IOException ex) {
+			} catch (IOException ex) {
 				log.error("error with repository(): " + ex.toString());
+			} catch (RepositoryModelException e) {
+				log.error("error with repository(): " + e.toString());
 			}
 		}
 	}

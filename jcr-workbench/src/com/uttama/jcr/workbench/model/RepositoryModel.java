@@ -32,6 +32,11 @@ import com.uttama.jcr.workbench.events.NodeChangedListener;
 public class RepositoryModel
 implements TreeModel, NodeChangedListener {
 	private final static Logger log = Logger.getLogger(RepositoryModel.class);
+	
+	private String configurationPath = "d:/workspace/jackrabbit-app/repository.xmlx";
+	private String repositoryPath = "d:/workspace/jackrabbit-app/repository";
+	private String username = "username";
+	private String password = "password";
     private Session jcrSession;
 	private Repository repository;
 	private Vector<TreeModelListener> treeModelListeners;
@@ -39,7 +44,8 @@ implements TreeModel, NodeChangedListener {
 	public RepositoryModel() {
 		treeModelListeners = new  Vector<TreeModelListener>();
 	}
-	public void openSession(Repository repository, Credentials credentials) {
+	public void openSession(Repository repository, Credentials credentials)
+	throws RepositoryModelException {
 		try {			
 			this.repository = repository;
 			// TODO: workspace
@@ -47,9 +53,8 @@ implements TreeModel, NodeChangedListener {
 		    root = jcrSession.getRootNode();
 		    fireTreeStructureChanged();
 		}
-		catch (Throwable ex) {
-			System.out.println(ex.toString());
-			//throw new Exception("cannot init: " + ex.toString());
+		catch (RepositoryException ex) {
+			throw new RepositoryModelException("open session: " + ex.toString());
 		}
 	}
 	public void closeSession() {
@@ -230,5 +235,29 @@ implements TreeModel, NodeChangedListener {
 		} catch (RepositoryModelException e) {
 			e.printStackTrace();
 		}
+	}
+	public String getConfigurationPath() {
+		return configurationPath;
+	}
+	public void setConfigurationPath(String configurationPath) {
+		this.configurationPath = configurationPath;
+	}
+	public String getRepositoryPath() {
+		return repositoryPath;
+	}
+	public void setRepositoryPath(String repositoryPath) {
+		this.repositoryPath = repositoryPath;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
