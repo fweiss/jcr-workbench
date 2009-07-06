@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -165,8 +166,22 @@ implements TreeModel, NodeChangedListener {
 		return nodeModel.getChildCount(nodeModel);
 	}
 	@Override
-	public int getIndexOfChild(Object arg0, Object arg1) {
-		// TODO Auto-generated method stub
+	public int getIndexOfChild(Object parent, Object child) {
+		if (parent == null || child == null)
+			return -1;
+		NodeModel nodeModel = (NodeModel) parent;
+		try {
+			NodeIterator iterator = nodeModel.getNode().getNodes();
+			int i = 0;
+			while (iterator.hasNext()) {
+				if (parent.equals(iterator.nextNode()))
+					return i;
+				i++;
+			}
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return 0;
 	}
 	@Override
