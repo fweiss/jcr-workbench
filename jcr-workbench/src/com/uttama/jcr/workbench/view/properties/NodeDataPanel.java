@@ -26,14 +26,14 @@ import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
 
-import com.uttama.jcr.workbench.ModelChangeEvent;
-import com.uttama.jcr.workbench.ModelChangeListener;
-import com.uttama.jcr.workbench.custom.PropertyTable;
+import com.uttama.jcr.workbench.events.ModelChangeEvent;
+import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
+import com.uttama.jcr.workbench.view.swing.PropertyTable;
 
 public class NodeDataPanel
 extends PropertyPanel

@@ -7,8 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.uttama.jcr.workbench.ModelChangeEvent;
-import com.uttama.jcr.workbench.ModelChangeListener;
+import com.uttama.jcr.workbench.events.ModelChangeEvent;
+import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;

@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench;
+package com.uttama.jcr.workbench.view.swing;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

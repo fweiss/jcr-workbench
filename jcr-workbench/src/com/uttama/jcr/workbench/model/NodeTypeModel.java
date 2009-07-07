@@ -16,8 +16,8 @@ import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
 
-import com.uttama.jcr.workbench.ModelChangeEvent;
-import com.uttama.jcr.workbench.ModelChangeListener;
+import com.uttama.jcr.workbench.events.ModelChangeEvent;
+import com.uttama.jcr.workbench.events.ModelChangeListener;
 
 public class NodeTypeModel
 implements TreeModel, ModelChangeListener {

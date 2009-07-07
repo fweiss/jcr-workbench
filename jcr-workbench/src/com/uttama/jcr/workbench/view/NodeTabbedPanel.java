@@ -2,8 +2,8 @@ package com.uttama.jcr.workbench.view;
 
 import javax.swing.JTabbedPane;
 
-import com.uttama.jcr.workbench.ModelChangeEvent;
-import com.uttama.jcr.workbench.ModelChangeListener;
+import com.uttama.jcr.workbench.events.ModelChangeEvent;
+import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
 import com.uttama.jcr.workbench.view.properties.NodeVersionsPanel;

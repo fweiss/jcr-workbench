@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.dialogs.ExportDialog;
 import com.uttama.jcr.workbench.dialogs.NewNodeDialog;
+import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.ExportNodeParameters;
@@ -52,6 +53,7 @@ import com.uttama.jcr.workbench.view.NodeTabbedPanel;
 import com.uttama.jcr.workbench.view.NodeTypePanel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
+import com.uttama.jcr.workbench.view.swing.CustomJTree;
 
 public class JCRWorkbench
 extends JApplet
@@ -336,8 +338,10 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		File defaultRepositoryDir = new File(System.getProperty("user.dir"));
 		File configurationFile = new File(defaultRepositoryDir.getParentFile(), "repository/repository.xml");
 		File repositoryDir = new File(defaultRepositoryDir.getParentFile(), "repository");
-		String configurationPath = configurationFile.getAbsolutePath();
-		String repositoryPath = repositoryDir.getAbsolutePath();
+		//String configurationPath = configurationFile.getAbsolutePath();
+		//String repositoryPath = repositoryDir.getAbsolutePath();
+		String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
+		String repositoryPath = "d:/workspace/jackrabbit-app/repository";
 		String username = "username";
 		String password = "password";
 		repositoryModel.setConfigurationPath(configurationPath);

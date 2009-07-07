@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.custom;
+package com.uttama.jcr.workbench.view.swing;
 
 import java.awt.Component;
 
@@ -8,6 +8,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+
 
 /**
  * Customize a JTable with per-row cell editor. The default JTable implementation only

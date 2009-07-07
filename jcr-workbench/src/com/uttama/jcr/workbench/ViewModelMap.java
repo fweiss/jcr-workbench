@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.uttama.jcr.workbench.events.ModelChangeEvent;
+import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.NodeModel;
 
 public class ViewModelMap {

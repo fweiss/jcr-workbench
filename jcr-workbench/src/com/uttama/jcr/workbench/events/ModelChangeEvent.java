@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench;
+package com.uttama.jcr.workbench.events;
 
 import javax.swing.event.ChangeEvent;
 

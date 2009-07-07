@@ -5,8 +5,8 @@ import javax.jcr.RepositoryException;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
-import com.uttama.jcr.workbench.ModelChangeEvent;
-import com.uttama.jcr.workbench.ModelChangeListener;
+import com.uttama.jcr.workbench.events.ModelChangeEvent;
+import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.model.NodeTypeModel;
 
