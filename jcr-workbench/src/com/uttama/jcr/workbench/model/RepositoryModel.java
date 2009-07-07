@@ -1,11 +1,13 @@
 package com.uttama.jcr.workbench.model;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
 import javax.jcr.Credentials;
+import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
@@ -61,7 +63,7 @@ implements TreeModel, NodeChangedListener {
 		if (jcrSession != null)
 			jcrSession.logout();
 	}
-	public void export(ExportNodeParameters parameters) {
+	public void exportNodes(ExportNodeParameters parameters) {
 		String nodePath = parameters.nodePath;
 		boolean skipBinary = ! parameters.includeBinary;
 		boolean noRecurse = ! parameters.includeSubtree;
@@ -69,6 +71,22 @@ implements TreeModel, NodeChangedListener {
 			FileOutputStream os = new FileOutputStream(parameters.file);
 			jcrSession.exportSystemView(nodePath, os, skipBinary, noRecurse);
 			os.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Import the subtree in the given XML file into the given node.
+	 * This uses the Session import. There's also a Workspace import method.
+	 * @param parameters
+	 */
+	public void importNodes(ExportNodeParameters parameters) {
+		String nodePath = parameters.nodePath;
+		int uuidBehavior = ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW;
+		try {
+			FileInputStream is = new FileInputStream(parameters.file);
+			jcrSession.importXML(nodePath, is, uuidBehavior);
+			is.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

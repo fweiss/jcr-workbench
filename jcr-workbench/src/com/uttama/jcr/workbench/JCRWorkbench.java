@@ -86,6 +86,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	
 	protected Action removeNodeAction;
 	protected Action exportNodeAction;
+	protected Action importNodeAction;
 
 	public void init() {
 		this.setSize(defaultAppletSize);
@@ -207,7 +208,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		viewModelMap.put("rep:root", repositoryModel, repositoryPanel, repositoryPanel);
 		viewModelMap.put("nt:unstructured", nodeModel, nodeTabbedPanel, nodeTabbedPanel);
 		// should be separate tree
-		viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
+		//viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
 		//viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
 		viewModelMap.putDefault(nodeModel, nodeTabbedPanel, nodeTabbedPanel);
 	}
@@ -216,6 +217,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		removeNodeAction = new RemoveNodeAction("Delete Node");
 	    NewNodeAction newNodeAction = new NewNodeAction("New Node");
 	    exportNodeAction = new ExportNodeAction("Export Node");
+	    importNodeAction = new ImportNodeAction("Import Node");
 
 		repositoryPanel.openButton.addActionListener(this);
 		//saveNodeAction.setEnabled(false);
@@ -234,6 +236,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	    //popup.add(menuItem);
 	    popup.add(saveNodeAction);
 	    popup.add(exportNodeAction);
+	    popup.add(importNodeAction);
 	    
 		tree.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent me) {
@@ -329,7 +332,30 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				exportDialog.show(this, exportNodeParameters);
 			} else {
 				exportDialog.setVisible(false);
-				repositoryModel.export(exportNodeParameters);
+				repositoryModel.exportNodes(exportNodeParameters);
+			}
+		}
+	}
+	class ImportNodeAction
+	extends AbstractAction {
+		public ImportNodeAction(String name) {
+			super(name);
+		}
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
+				TreePath treePath = tree.getSelectionPath();
+				try {
+					exportNodeParameters.nodePath = "/" + RepositoryModel.getRelPath(treePath);
+				} catch (RepositoryModelException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				exportNodeParameters.file = new File(".");
+				exportDialog.show(this, exportNodeParameters);
+			} else {
+				exportDialog.setVisible(false);
+				repositoryModel.importNodes(exportNodeParameters);
 			}
 		}
 	}
@@ -338,10 +364,10 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		File defaultRepositoryDir = new File(System.getProperty("user.dir"));
 		File configurationFile = new File(defaultRepositoryDir.getParentFile(), "repository/repository.xml");
 		File repositoryDir = new File(defaultRepositoryDir.getParentFile(), "repository");
-		//String configurationPath = configurationFile.getAbsolutePath();
-		//String repositoryPath = repositoryDir.getAbsolutePath();
-		String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
-		String repositoryPath = "d:/workspace/jackrabbit-app/repository";
+		String configurationPath = configurationFile.getAbsolutePath();
+		String repositoryPath = repositoryDir.getAbsolutePath();
+		//String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
+		//String repositoryPath = "d:/workspace/jackrabbit-app/repository";
 		String username = "username";
 		String password = "password";
 		repositoryModel.setConfigurationPath(configurationPath);
