@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.util;
+package com.uttama.jcr.workbench.view.swing;
 
 import java.awt.Component;
 import java.net.URL;
@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.model.NodeModel;
+import com.uttama.jcr.workbench.resources.Resource;
 /**
  * A TreeCellRender customized for JCR.
  * 
@@ -41,11 +42,11 @@ extends DefaultTreeCellRenderer {
 		return new ImageIcon(imgURL, description);
 	}
 	protected void loadIcons() {
-        nodeTypeIcons.addedIcon = createImageIcon("node-new.gif", "Node has been added");
-        nodeTypeIcons.defaultIcon = createImageIcon("node.gif", "Node");
-        nodeTypeIcons.changedIcon = createImageIcon("node-changed.gif", "Node has been changed");
-        nodeTypeIcons.deletedIcon = createImageIcon("node-removed.gif", "Node has been removed");
-        closedChangedNodeIcon = createImageIcon("node-changed.gif", "Node");
+        nodeTypeIcons.addedIcon = Resource.createImageIcon("node-new.gif", "Node has been added");
+        nodeTypeIcons.defaultIcon = Resource.createImageIcon("node.gif", "Node");
+        nodeTypeIcons.changedIcon = Resource.createImageIcon("node-changed.gif", "Node has been changed");
+        nodeTypeIcons.deletedIcon = Resource.createImageIcon("node-removed.gif", "Node has been removed");
+        closedChangedNodeIcon = Resource.createImageIcon("node-changed.gif", "Node");
 	}
 	@Override
 	public Icon getClosedIcon() {

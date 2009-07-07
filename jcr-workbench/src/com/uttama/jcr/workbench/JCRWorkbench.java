@@ -48,12 +48,12 @@ import com.uttama.jcr.workbench.model.NewNodeParameters;
 import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
-import com.uttama.jcr.workbench.util.JCRTreeCellRenderer;
 import com.uttama.jcr.workbench.view.NodeTabbedPanel;
 import com.uttama.jcr.workbench.view.NodeTypePanel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
 import com.uttama.jcr.workbench.view.swing.CustomJTree;
+import com.uttama.jcr.workbench.view.swing.JCRTreeCellRenderer;
 
 public class JCRWorkbench
 extends JApplet
