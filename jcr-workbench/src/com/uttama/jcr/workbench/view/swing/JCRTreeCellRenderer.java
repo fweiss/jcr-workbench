@@ -1,11 +1,9 @@
 package com.uttama.jcr.workbench.view.swing;
 
 import java.awt.Component;
-import java.net.URL;
 
 import javax.jcr.RepositoryException;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
@@ -36,10 +34,6 @@ extends DefaultTreeCellRenderer {
         //setClosedIcon(nodeIcon);
         //setLeafIcon(nodeIcon);
         //setOpenIcon(nodeIcon);
-	}
-	ImageIcon createImageIcon(String path, String description) {
-		URL imgURL = getClass().getResource(path);
-		return new ImageIcon(imgURL, description);
 	}
 	protected void loadIcons() {
         nodeTypeIcons.addedIcon = Resource.createImageIcon("node-new.gif", "Node has been added");

@@ -1,8 +1,5 @@
 package com.uttama.jcr.workbench.view.swing;
 
-import java.awt.Component;
-
-import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
