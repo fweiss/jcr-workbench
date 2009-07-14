@@ -339,7 +339,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			NodeModel nodeModel = (NodeModel) treePath.getLastPathComponent();
 			String name = nodePropertyParameters.name;
 			String value = nodePropertyParameters.value;
-			nodeModel.setProperty(name, value, PropertyType.STRING);
+			int propertyType = nodePropertyParameters.propertyType;
+			nodeModel.setProperty(name, value, propertyType);
 			nodePropertyDialog.setVisible(false);
 		}
 	}

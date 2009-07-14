@@ -5,9 +5,11 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.Properties;
 
+import javax.jcr.PropertyType;
 import javax.swing.Action;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.uttama.jcr.workbench.model.NodePropertyParameters;
@@ -18,7 +20,7 @@ public class NodePropertyDialog
 extends CustomJDialog {
 	NodePropertyParameters nodePropertyParameters;
 	private JTextField name;
-	private JComboBox type;
+	private JList type;
 	private JTextField value;
 	public Action okAction;
 	private static Properties getLabels() {
@@ -34,13 +36,15 @@ extends CustomJDialog {
 	}
 	protected void addFields() {
 		name = new JTextField(30);
-		type = new JComboBox(getPropertyTypes());
+		type = new JList(getPropertyTypes());
+		type.setSelectedIndex(0);
 		value = new JTextField(30);
 		LabeledGrid grid = new LabeledGrid(getLabels());
 		grid.addNLabeledComponent("name", name);
-		grid.addNLabeledComponent("type", type);
+		//grid.addNLabeledComponent("type", type);
 		grid.addNLabeledComponent("value", value);
 		this.getContentPane().add(grid, BorderLayout.CENTER);
+		getContentPane().add(new JScrollPane(type), BorderLayout.WEST);
 	}
 	protected void okAction(ActionEvent ae) {
 		saveFields();
@@ -49,18 +53,19 @@ extends CustomJDialog {
 	private void saveFields() {
 		nodePropertyParameters.name = name.getText();
 		nodePropertyParameters.value = value.getText();
+		nodePropertyParameters.propertyType = PropertyType.valueFromName((String) type.getSelectedValue());
 	}
 	public String[] getPropertyTypes() {
 		return new String[] {
-			"BINARY",
-			"BOOLEAN",
-			"DATE",
-			"DOUBLE",
-			"LONG",
-			"NAME",
-			"PATH",
-			"REFERENCE",
-			"STRING"
+			"String",
+			"Double",
+			"Long",
+			"Boolean",
+			"Date",
+			"Name",
+			"Binary",
+			"Path",
+			"Reference"
 		};
 	}
 }

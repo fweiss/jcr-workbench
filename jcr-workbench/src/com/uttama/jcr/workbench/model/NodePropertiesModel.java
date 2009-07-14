@@ -89,7 +89,7 @@ extends AbstractTableModel {
 			case VALUE_COLUMN:
 				PropertyDefinition definition = property.getDefinition();
 				boolean isMultiple = definition.isMultiple();
-				return isMultiple ? getValues(property) : getValue(property.getValue());
+				return isMultiple ? getValues(property) : getValue(property.getValue(), property);
 			default:
 				return null;
 			}
@@ -99,7 +99,7 @@ extends AbstractTableModel {
 			return null;
 		}
 	}
-	public static String getValue(Value value)
+	public static String getValue(Value value, Property property)
 	throws RepositoryException {
 		int type = value.getType();
 		switch (type) {
@@ -109,12 +109,16 @@ extends AbstractTableModel {
 			//return DateFormat.getDateInstance().format(value.getDate().getTime());
 			return dateFormat.format(value.getDate().getTime());
 		case PropertyType.DOUBLE:
-			return "double";
+			return "" + value.getDouble();
 		case PropertyType.LONG:
 			return Long.toString(value.getLong());
 		case PropertyType.STRING:
 			return value.getString();
 		case PropertyType.NAME:
+			return value.getString();
+		case PropertyType.BINARY:
+			return "length: " + property.getLength();
+		case PropertyType.PATH:
 			return value.getString();
 		case PropertyType.REFERENCE:
 			return value.getString();
@@ -129,7 +133,7 @@ extends AbstractTableModel {
 		for (Value value : values) {
 			if (sb.length() > 0)
 				sb.append(" ");
-			sb.append(getValue(value));
+			sb.append(getValue(value, property));
 		}
 		return sb.toString();
 	}
