@@ -18,6 +18,7 @@ extends JDialog {
 	final static Dialog.ModalityType modal = Dialog.ModalityType.APPLICATION_MODAL;
 	private Action dialogOkAction;
 	private Action dialogCancelAction;
+	protected Box buttonBox;
 	public CustomJDialog(Frame owner, String title, ModalityType modal) {
 		super(owner, title, modal);
 		addFields();
@@ -29,7 +30,8 @@ extends JDialog {
 	}
 	protected abstract void addFields();
 	protected void setSize(Frame frame) {
-		setSize(500, 150);
+		//setSize(500, 150);
+		setSize(getPreferredSize());
 		Dimension dd = getSize();
 		Dimension fd = frame.getSize();
 		Dimension sd = getToolkit().getScreenSize();
@@ -40,12 +42,15 @@ extends JDialog {
 		setLocation(l.x, l.y);
 	}
 	protected void addButtons() {
-		Box box = Box.createHorizontalBox();
+		buttonBox = Box.createHorizontalBox();
 		dialogOkAction = new DialogOkAction("OK");
 		dialogCancelAction = new DialogCancelAction("Cancel");
-		box.add(new JButton(dialogOkAction));
-		box.add(new JButton(dialogCancelAction));
-		this.getContentPane().add(box, BorderLayout.SOUTH);
+		buttonBox.add(new JButton(dialogOkAction));
+		buttonBox.add(new JButton(dialogCancelAction));
+		this.getContentPane().add(buttonBox, BorderLayout.SOUTH);
+	}
+	public Dimension getPreferredSize() {
+		return new Dimension(500, 150);
 	}
 	protected abstract void okAction(ActionEvent ae);
 	class DialogOkAction

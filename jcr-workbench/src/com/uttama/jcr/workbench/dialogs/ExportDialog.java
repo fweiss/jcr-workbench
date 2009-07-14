@@ -22,20 +22,19 @@ import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.ExportNodeParameters;
 import com.uttama.jcr.workbench.model.NewNodeParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
+import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 
 public class ExportDialog
-extends JDialog
+extends CustomJDialog
 implements ModelChangeListener {
 	private final Frame owner;
 	private ExportNodeParameters parameters;
-	private JTextField nodePath = new JTextField(40);
-	private JCheckBox includeSubtree = new JCheckBox();
-	private JCheckBox includeBinary = new JCheckBox();
-	private JTextField filePath = new JTextField(40);
-	private JFileChooser fileChooser = new JFileChooser();
+	private JTextField nodePath;
+	private JCheckBox includeSubtree;
+	private JCheckBox includeBinary;
+	private JTextField filePath;
+	private JFileChooser fileChooser;
 	Action okAction;
-	Action localOkAction;
-	Action cancelAction;
 	Action browseAction;
 	final static String title = "Export Tree";
 	final static Dialog.ModalityType modal = Dialog.ModalityType.APPLICATION_MODAL;
@@ -56,6 +55,11 @@ implements ModelChangeListener {
 		setSize(owner);
 	}
 	protected void addFields() {
+		nodePath = new JTextField(40);
+		includeSubtree = new JCheckBox();
+		includeBinary = new JCheckBox();
+		filePath = new JTextField(40);
+		fileChooser = new JFileChooser();
 		LabeledGrid grid = new LabeledGrid(getLabels());
 		grid.addNLabeledComponent("nodePath", nodePath);
 		grid.addNLabeledComponent("includeSubtree", includeSubtree);
@@ -63,29 +67,13 @@ implements ModelChangeListener {
 		grid.addNLabeledComponent("filePath", filePath);
 		this.getContentPane().add(grid, BorderLayout.CENTER);
 	}
-	private void addButtons() {
-		Box box = Box.createHorizontalBox();
-		localOkAction = new OKAction("OK");
-		cancelAction = new CancelAction("Cancel");
+	public void addButtons() {
+		super.addButtons();
 		browseAction = new BrowseAction("Browse");
-		JButton okButton = new JButton(localOkAction);
-		box.add(okButton);
-		JButton cancelButton = new JButton(cancelAction);
-		box.add(cancelButton);
-		box.add(new JButton(browseAction));
-		this.getContentPane().add(box, BorderLayout.SOUTH);
+		buttonBox.add(new JButton(browseAction));
 	}
-	// TODO: refactor to base class
-	private void setSize(Frame frame) {
-		setSize(500, 250);
-		Dimension dd = getSize();
-		Dimension fd = frame.getSize();
-		Dimension sd = getToolkit().getScreenSize();
-		Point l = frame.getLocation();
-		l.translate((fd.width-dd.width)/2, (fd.height-dd.height)/2);
-		l.x = Math.max(0, Math.min(l.x, sd.width-dd.width));
-		l.y = Math.max(0, Math.min(l.y, sd.height-dd.height));
-		setLocation(l.x, l.y);
+	public Dimension getPreferredSize() {
+		return new Dimension(500, 250);
 	}
 	public void show(Action okAction, ExportNodeParameters parameters) {
 		this.okAction = okAction;
@@ -106,6 +94,10 @@ implements ModelChangeListener {
 		parameters.includeBinary = includeBinary.isSelected();
 		parameters.file = fileChooser.getSelectedFile();
 	}
+	protected void okAction(ActionEvent ae) {
+		saveFields();
+		okAction.actionPerformed(ae);
+	}
 	class BrowseAction
 	extends AbstractAction {
 		public BrowseAction(String label) {
@@ -120,25 +112,6 @@ implements ModelChangeListener {
 				parameters.file = fileChooser.getSelectedFile();
 				updateFields();
 			}
-		}
-	}
-	class OKAction
-	extends AbstractAction {
-		public OKAction(String label) {
-			super(label);
-		}
-		public void actionPerformed(ActionEvent ae) {
-			saveFields();
-			okAction.actionPerformed(ae);
-		}
-	}
-	class CancelAction
-	extends AbstractAction {
-		public CancelAction(String label) {
-			super(label);
-		}
-		public void actionPerformed(ActionEvent ae) {
-			setVisible(false);
 		}
 	}
 	@Override
