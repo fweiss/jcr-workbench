@@ -88,6 +88,7 @@ implements TreeModel, NodeChangedListener {
 			FileInputStream is = new FileInputStream(parameters.file);
 			jcrSession.importXML(nodePath, is, uuidBehavior);
 			is.close();
+			fireTreeStructureChanged();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
