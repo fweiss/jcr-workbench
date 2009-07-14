@@ -1,6 +1,7 @@
 package com.uttama.jcr.workbench.view.swing;
 
 import javax.swing.JTable;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -14,7 +15,8 @@ import javax.swing.table.TableModel;
  *
  */
 public class PropertyTable
-extends JTable {
+extends JTable
+implements TableModelListener {
 	private final static PropertyTableCellRenderer tableCellRenderer = new PropertyTableCellRenderer();
 	public PropertyTable(TableModel dataModel, TableColumnModel columnModel) {
 		super(dataModel, columnModel);

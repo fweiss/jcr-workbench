@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
+import javax.jcr.PropertyType;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.SimpleCredentials;
@@ -40,11 +41,13 @@ import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.dialogs.ExportDialog;
 import com.uttama.jcr.workbench.dialogs.NewNodeDialog;
+import com.uttama.jcr.workbench.dialogs.NodePropertyDialog;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.ExportNodeParameters;
 import com.uttama.jcr.workbench.model.NewNodeParameters;
+import com.uttama.jcr.workbench.model.NodePropertyParameters;
 import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
@@ -74,6 +77,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	
 	private NewNodeDialog newNodeDialog;
 	private ExportDialog exportDialog;
+	private NodePropertyDialog nodePropertyDialog;
 	
 	private NodeModel nodeModel;
 	private RepositoryModel repositoryModel = null;
@@ -81,6 +85,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	
 	private NewNodeParameters newNodeParameters;
 	private ExportNodeParameters exportNodeParameters;
+	private NodePropertyParameters nodePropertyParameters;
 	
 	private ViewModelMap viewModelMap;
 	
@@ -97,8 +102,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	            	try {
 		            	setLookAndFeel();
 		            	createModels();
-		        	    createTopViews();
 		        	    createDialogs();
+		        	    createTopViews();
 		        	    createModelListeners();
 		        	    createListeners();
 		        	    defaultConfiguration();
@@ -139,10 +144,16 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		newNodeParameters = new NewNodeParameters();
 		nodeTypeModel = new NodeTypeModel();
 		exportNodeParameters = new ExportNodeParameters();
+		nodePropertyParameters = new NodePropertyParameters();
 	}
 	protected void createDialogs() {
-    	newNodeDialog = new NewNodeDialog(findParentFrame(), newNodeParameters);
-    	exportDialog = new ExportDialog(findParentFrame());
+		Frame owner = findParentFrame();
+    	newNodeDialog = new NewNodeDialog(owner, newNodeParameters);
+    	exportDialog = new ExportDialog(owner);
+    	
+    	Action setNodePropertyAction = new SetNodePropertyAction("Set Property");
+    	nodePropertyDialog = new NodePropertyDialog(owner, nodePropertyParameters);
+    	nodePropertyDialog.okAction = setNodePropertyAction;
 	}
 	/**
 	 * Create the view for the application.
@@ -177,14 +188,19 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		nodeTypePanel.setModel(nodeTypeModel);
 		
 		repositoryPanel = new RepositoryPanel("repository");
+		
+		// FIXME: these are all in nodetabbedpanel
 		nodePanel = new NodeDataPanel(nodeModel);
 		newNodePanel = new NodeDataPanel(nodeModel);
+		
     	nodeTabbedPanel = new NodeTabbedPanel("nodeTabbedPanel");
+    	nodeTabbedPanel.nodeDataPanel.nodePropertyDialog = nodePropertyDialog;
 		
 		propertyPanel.add(repositoryPanel, "repository");
 		propertyPanel.add(nodePanel, "node");
 		propertyPanel.add(newNodePanel, "newNode");
 		propertyPanel.add(nodeTypePanel, "nodeType");
+		
 		propertyPanel.add(nodeTabbedPanel, "nodeTabbedPanel");
 		return propertyPanel;
 	}
@@ -208,7 +224,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		viewModelMap.put("rep:root", repositoryModel, repositoryPanel, repositoryPanel);
 		viewModelMap.put("nt:unstructured", nodeModel, nodeTabbedPanel, nodeTabbedPanel);
 		// should be separate tree
-		//viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
+		viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
 		//viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
 		viewModelMap.putDefault(nodeModel, nodeTabbedPanel, nodeTabbedPanel);
 	}
@@ -311,6 +327,20 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			catch (RepositoryModelException e) {
 				log.error("RemoveNodeAction: " + e.toString());
 			}
+		}
+	}
+	class SetNodePropertyAction
+	extends AbstractAction {
+		public SetNodePropertyAction(String label) {
+			super(label);
+		}
+		public void actionPerformed(ActionEvent ae) {
+			TreePath treePath = tree.getSelectionPath();
+			NodeModel nodeModel = (NodeModel) treePath.getLastPathComponent();
+			String name = nodePropertyParameters.name;
+			String value = nodePropertyParameters.value;
+			nodeModel.setProperty(name, value, PropertyType.STRING);
+			nodePropertyDialog.setVisible(false);
 		}
 	}
 	class ExportNodeAction

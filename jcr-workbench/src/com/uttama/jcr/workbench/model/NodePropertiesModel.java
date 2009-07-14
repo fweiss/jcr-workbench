@@ -12,15 +12,27 @@ import javax.jcr.Value;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 public class NodePropertiesModel
 extends AbstractTableModel {
 	private final static int NAME_COLUMN = 0;
 	private final static int TYPE_COLUMN = 1;
 	private final static int VALUE_COLUMN = 2;
-	String columnNames[] = { "Name", "Type", "Value" };
+	static String columnNames[] = { "Name", "Type", "Value" };
 	Node node;
 	Vector<Property> properties;
+	public static TableColumnModel getTableColumnModel() {
+		TableColumnModel tableColumnModel = new DefaultTableColumnModel();
+		for (int i=0; i<columnNames.length; i++) {
+			TableColumn column = new TableColumn(i);
+			column.setHeaderValue(columnNames[i]);
+			tableColumnModel.addColumn(column);
+		}
+		return tableColumnModel;
+	}
 	public final static SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	public void setNode(Node node) {
 		this.node = node;
@@ -63,32 +75,28 @@ extends AbstractTableModel {
 	}
 	@Override
 	public Object getValueAt(int row, int column) {
-		if (row == 0) {
-			return columnNames[column];
-		} else {
-			PropertyIterator iterator;
-			try {
-				iterator = node.getProperties();
-				iterator.skip(row);
-				//Property property = iterator.nextProperty();
-				Property property = properties.get(row);
-				switch (column) {
-				case NAME_COLUMN:
-					return property.getName();
-				case TYPE_COLUMN:
-					return PropertyType.nameFromValue(property.getType());
-				case VALUE_COLUMN:
-					PropertyDefinition definition = property.getDefinition();
-					boolean isMultiple = definition.isMultiple();
-					return isMultiple ? getValues(property) : getValue(property.getValue());
-				default:
-					return null;
-				}
-			} catch (RepositoryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		PropertyIterator iterator;
+		try {
+			iterator = node.getProperties();
+			iterator.skip(row);
+			//Property property = iterator.nextProperty();
+			Property property = properties.get(row);
+			switch (column) {
+			case NAME_COLUMN:
+				return property.getName();
+			case TYPE_COLUMN:
+				return PropertyType.nameFromValue(property.getType());
+			case VALUE_COLUMN:
+				PropertyDefinition definition = property.getDefinition();
+				boolean isMultiple = definition.isMultiple();
+				return isMultiple ? getValues(property) : getValue(property.getValue());
+			default:
 				return null;
 			}
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
 	}
 	public static String getValue(Value value)
@@ -124,5 +132,14 @@ extends AbstractTableModel {
 			sb.append(getValue(value));
 		}
 		return sb.toString();
+	}
+	public void fireTableDataChanged() {
+		try {
+			this.properties = filterProperties(node);
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		super.fireTableDataChanged();
 	}
 }

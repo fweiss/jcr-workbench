@@ -1,3 +1,9 @@
+Problem running on new machine
+java.lang.ClassNotFoundException
+Fix: enable project specifi setting under 
+Java Compiler + Building
+
+
 JCR libraries:
 
 jcr-1.0.jar
@@ -36,6 +42,17 @@ Swing
 -----
 http://www.softwarereality.com/soapbox/swing.jsp
 
+
+Annotaions Idea
+---------------
+Annotations could be used to simplify programming:
+
+For panels and dialogs, annotate fields with the control type, and have a framework
+that creates the controls.
+
+Panels and dialogs often need to communicate with other objects whose visibility is
+in the main controller. Declare the references in the panels and dialogs, annotate
+them and then let an framework set them via injection.
 
 Jackrabbit
 ----------

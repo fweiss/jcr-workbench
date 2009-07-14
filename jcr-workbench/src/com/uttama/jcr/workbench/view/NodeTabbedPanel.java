@@ -4,6 +4,7 @@ import javax.swing.JTabbedPane;
 
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
 import com.uttama.jcr.workbench.view.properties.NodeVersionsPanel;
@@ -11,7 +12,7 @@ import com.uttama.jcr.workbench.view.properties.NodeVersionsPanel;
 public class NodeTabbedPanel
 extends JTabbedPane
 implements ModelChangeListener {
-	private NodeDataPanel nodeDataPanel;
+	public NodeDataPanel nodeDataPanel;
 	private NodeDefinitionPanel nodeDefinitionPanel;
 	private NodeVersionsPanel nodeVersionsPanel;
 	public NodeTabbedPanel(String name) {

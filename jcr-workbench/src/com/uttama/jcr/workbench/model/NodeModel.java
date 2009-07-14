@@ -18,10 +18,12 @@ import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.version.VersionException;
+import javax.swing.event.TableModelEvent;
 
 import org.apache.log4j.Logger;
 
@@ -50,6 +52,10 @@ public class NodeModel {
 	public NodeModel() {
 		nodePropertiesModel = new NodePropertiesModel();
 	}
+	/**
+	 * Constructor for wrapping a javax.jcr.Node with a NodeModel.
+	 * @param node
+	 */
 	public NodeModel(Node node) {
 		this.node = node;
 		this.nodePropertiesModel = new NodePropertiesModel();
@@ -86,6 +92,31 @@ public class NodeModel {
 		}
 		return primaryType;
 	}
+	public void setProperty(String name, String value, int type) {
+		try {
+			node.setProperty(name, value, type);
+			NodeChangedEvent nce = new NodeChangedEvent(this);
+			fireNodeChangedEvent(nce);
+			//TableModelEvent tme = new TableModelEvent(nodePropertiesModel);
+			nodePropertiesModel.fireTableDataChanged();
+			
+		} catch (ValueFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (VersionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LockException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ConstraintViolationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public String getNodePath() {
 		try {
 			return node.getPath();
@@ -95,19 +126,29 @@ public class NodeModel {
 		}
 		return null;
 	}
+	/**
+	 * Get the name of the node, depending on its type.
+	 * @return
+	 */
 	public String getName() {
-		String name = "???";
+		final String wildcard = "*";
 		if (isDeleted) {
-			name = deletedNode.name;
-		} else {
-			try {
-				name = node.getName();
-			} catch (RepositoryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			return deletedNode.name;
 		}
-		return name;
+		try {
+			String nodeTypeName = node.getPrimaryNodeType().getName();
+			if (nodeTypeName.equals("nt:propertyDefinition")) {
+				if (node.hasProperty("jcr:name"))
+					return node.getProperty("jcr:name").getValue().getString();
+				else
+					return wildcard;
+			}
+			return node.getName();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "???";
 	}
 	public Vector<String> getReferencePaths() {
 		Vector<String> paths = new Vector<String>();

@@ -27,15 +27,17 @@ implements ModelChangeListener {
 	private JCheckBox allowSameNameSiblings = new JCheckBox();
 	private JTextField defaultPrimaryType = new JTextField(30);
 	private JList requiredPrimaryTypes = new JList();
+	private JTextField requiredPropertyType = new JTextField(10);
 	public static Properties getLabels() {
 		Properties labels = new Properties();
-		labels.put("defaultPrimaryType", "Default Primary Type");
-		labels.put("requiredPrimaryTypes", "Required Primary Types");
+		labels.put("defaultPrimaryType", "Default Primary Node Type");
+		labels.put("requiredPrimaryTypes", "Required Primary Node Types");
 		labels.put("onParentVersion", "On Parent Version");
 		labels.put("isAutoCreated", "Autocreated");
 		labels.put("isMandatory", "Mandatory:");
 		labels.put("isProtected", "Protected");
 		labels.put("allowSameNameSiblings", "Allow Same Name Siblings");
+		labels.put("requiredPropertyType", "Required Property Type");
 		return labels;
 	}
 	public NodeDefinitionPanel(String name) {
@@ -49,6 +51,7 @@ implements ModelChangeListener {
 		fields.addNLabeledComponent("isMandatory", isMandatory);
 		fields.addNLabeledComponent("isProtected", isProtected);
 		fields.addNLabeledComponent("allowSameNameSiblings", allowSameNameSiblings);
+		fields.addNLabeledComponent("requiredPropertyType", requiredPropertyType);
 		addForm(fields);
 	}
 	private void updateFields(NodeDefinition nd) {
@@ -60,6 +63,7 @@ implements ModelChangeListener {
 		NodeType dpt = nd.getDefaultPrimaryType();
 		defaultPrimaryType.setText(dpt == null ? "" : dpt.getName());
 		requiredPrimaryTypes.setListData(toNodeTypeNames(nd.getRequiredPrimaryTypes()));
+		//requiredPropertType.setText(nd.getRequiredType() + "");
 	}
 	private String[] toNodeTypeNames(NodeType[] nodeTypes) {
 		List<String> names = new LinkedList<String>();

@@ -1,5 +1,6 @@
 package com.uttama.jcr.workbench.view.properties;
 
+import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,24 +14,30 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
 
+import com.uttama.jcr.workbench.dialogs.NodePropertyDialog;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.NodeModel;
+import com.uttama.jcr.workbench.model.NodePropertiesModel;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
 import com.uttama.jcr.workbench.view.swing.PropertyTable;
@@ -38,14 +45,20 @@ import com.uttama.jcr.workbench.view.swing.PropertyTable;
 public class NodeDataPanel
 extends PropertyPanel
 implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListener {
+	private static final TableCellRenderer defaultTableCellRenderer = null;
 	static Logger log = Logger.getLogger(NodeDataPanel.class);
 	private NodeModel nodeModel;
 	JTextField name;
 	JTextField primaryType;
 	JTextField uuid;
 	JList references;
-	JTable properties;
+	PropertyTable properties;
+	
+	public NodePropertyDialog nodePropertyDialog;
+	
 	JButton saveButton;
+	Action panelAddPropertyAction;
+	Action panelDeletePropertyAction;
 	private static Properties getLabels() {
 		Properties labels = new Properties();
 		labels.put("name", "Name:");
@@ -59,6 +72,7 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		this((NodeModel) null);
 		setName(name);
 	}
+	// FIXME: remove model from constructor
 	public NodeDataPanel(NodeModel nodeModel) {
 		setName("node");
 		this.nodeModel = nodeModel;
@@ -73,41 +87,53 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		group.addNLabeledComponent("references", references = new JList());
 
 		properties = createPropertiesTable();
-		group.addNLabeledComponent("properties", properties);
+		JPanel tableContainer = new JPanel(new BorderLayout());
+		tableContainer.add(properties.getTableHeader(), BorderLayout.PAGE_START);
+		tableContainer.add(properties, BorderLayout.CENTER);
+		BevelBorder border = new BevelBorder(BevelBorder.LOWERED);
+		border.getBorderInsets(tableContainer, new Insets(2, 2, 2, 2));
+		//tableContainer.setBorder(border);
+		group.addNLabeledComponent("properties", tableContainer);
 		
 		addForm(group);
-		
+
+		createActions();
 		saveButton = new JButton("Save");
 		addButton(saveButton);
+		createButtons();
 		
 		name.addActionListener(this);
 		name.setActionCommand("foo");
 		name.addFocusListener(this);
 	}
-	private JTable createPropertiesTable() {
-		TableColumnModel tableColumnModel = new DefaultTableColumnModel();
-		tableColumnModel.addColumn(new TableColumn(0));
-		tableColumnModel.addColumn(new TableColumn(1));
-		tableColumnModel.addColumn(new TableColumn(2));
-		JTable table = new PropertyTable(new DefaultTableModel(), tableColumnModel);
+	private PropertyTable createPropertiesTable() {
+		TableColumnModel tableColumnModel = NodePropertiesModel.getTableColumnModel();
+		PropertyTable table = new PropertyTable(new DefaultTableModel(), tableColumnModel);
 		table.getColumnModel().getColumn(0).setPreferredWidth(160);
 		table.getColumnModel().getColumn(2).setPreferredWidth(550);
-		
-		BevelBorder border = new BevelBorder(BevelBorder.LOWERED);
-		border.getBorderInsets(table, new Insets(2, 2, 2, 2));
-		table.setBorder(border);
-
 		return table;
 	}
 	public void setModel(NodeModel nodeModel) {
 		this.nodeModel = nodeModel;
 		this.properties.setModel(nodeModel.getNodePropertiesModel());
-		properties.getColumnModel().getColumn(0).setPreferredWidth(160);
-		properties.getColumnModel().getColumn(2).setPreferredWidth(550);
+		nodeModel.getNodePropertiesModel().addTableModelListener(this.properties);
+		//properties.getColumnModel().getColumn(0).setPreferredWidth(160);
+		//properties.getColumnModel().getColumn(2).setPreferredWidth(550);
 		updateFields();
 	}
 	public void setSaveButtonAction(Action action) {
 		saveButton.setAction(action);
+	}
+	private void createActions() {
+		panelAddPropertyAction = new AbstractAction("Add Property") {
+			public void actionPerformed(ActionEvent ae) {
+				if (nodePropertyDialog != null)
+				nodePropertyDialog.setVisible(true);
+			}
+		}; 
+	}
+	private void createButtons() {
+		addButton(new JButton(panelAddPropertyAction));
 	}
 	public void setNode(Node node) {
 		try {

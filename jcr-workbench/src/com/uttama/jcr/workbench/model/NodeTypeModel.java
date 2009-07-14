@@ -138,7 +138,8 @@ implements TreeModel, ModelChangeListener {
 	}
 	@Override
 	public void modelChanged(ModelChangeEvent mce) {
-		// TODO Auto-generated method stub
+		NodeModel nodeModel = (NodeModel) mce.getSource();
+		setRootNode(nodeModel.getNode());
 		
 	}
 
