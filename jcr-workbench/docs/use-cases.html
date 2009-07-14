@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>JCRWorkBench - Use Cases</title>
+</head>
+<body>
+<h1>JCRWorkbench Use Cases</h1>
+<p>The uses cases for JCRWorkbench are deliberated elaborated in the code than in this
+document. However, to remain sane, it is intended that this document cover at least the less 
+obvious ones.
+<h2>General</h2>
+<p>General use cases</p>
+
+<h3>Add node and property</h3>
+<p>This applies only to non-multi properties an the property type STRING.</p>
+<ul>
+<li>Navigate to and select the parent node.</li>
+<li>Right click it and choose "Add Node".</li>
+<li>Enter node name and value (implict type is nt:unstructured).</li>
+<li>Click OK.</li>
+<li>Click "Add Property".</li>
+<li>Enter node name and value (implict type is STRING).</li>
+<li>Click OK.</li>
+<li>Handle error reponses.</li>
+</ul>
+</p>
+
+<p>Effects</p>
+<ul>
+<li>Given node and property displayed.</li>
+<li>Given node and property tagged as new.</li>
+<li>When saved, new node and property are persisted.</li>
+</ul>
+
+<h3>Create a new repository</h3>
+<p>This is a default behavior for a new workspace.
+<ul>
+<li>Start JCRW.</li>
+<li>Enter a non-existent configuration (the default for clean build).</li>
+<li>Click "Open".</li>
+<li>The dialog box explains that a new repository is going to be created.</li>
+<li>Click OK.</li>
+<li>The default repository workspace is displayed.</li>
+<li>The created repository can be opened</li>
+</ul>
+</p>
+
+</body>
+</html>
