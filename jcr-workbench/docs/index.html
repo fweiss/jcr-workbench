@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>General JCRWorkbench Discussion</h1>
+<p>This is a general discussion of JCRWorkbench. Other specific subsection TBD:
+
+<ul>
+<li>Tutorials - which gets into the specifics</li>
+<li>Archecture - for what it's worth, since this is still an agile undertaking</li>
+<li>UI Design - user experience</li>
+<li>...</li>
+</ul>
+</p>
+
+<h2>View Layering</h2>
+<p>The basic layers are (bottom-up):
+
+<ul>
+<li>Storage</li>
+<li>Jackrabbit API</li>
+<li>Delegates</li>
+<li>Java 6 Swing MVC</li>
+<li>Swing Customization</li>
+<li>Swing PLAF (very basic)</li>
+<li>Custom UI</li>
+</ul>
+</p>
+
+<h3>Node Type Views</h3>
+<p>The UI provides as complete JCR functionality as possible. The ifs and buts are another issue.
+The issue is how the UI can provide node type-specific use cases. The base level is the JCR API.
+Anything done in a higher layer can be seen at the JCR level. What this means is that if 
+a use case were added, its complete effects must be visible at the JCR level. For exmaple,
+a use case for a user node type may be be very difficult (for the user) at the JCR level, but 
+simple and intuitive at, say a form level.
+</p>
+<p>
+Another example is the use case of how to display property definition nodes in the jcr:nodeTypes
+subtree. By default, their names would be displayed as "nt:propertyDefinition". For the
+purpose of node type definition, it would clearer to see the jcr:name property of the property
+node instead of its name (which appears as the primary type name). The solution is implemented
+in the javax.jcr.Node delegate. It returns a node name based on the jcr:primaryType of the node.
+</p>
+<p>It looks like this issue should be elaborated in the architecture. In effect, this means the a penciled-in
+uses case, "Extend the UI based on a node's type, using a plug-in".
+</p>
+
+
+</body>
+</html>
