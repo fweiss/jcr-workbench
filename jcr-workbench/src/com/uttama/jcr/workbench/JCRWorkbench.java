@@ -431,7 +431,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				Repository repository = new TransientRepository(configurationPath, repositoryPath);
 				Credentials credentials = new SimpleCredentials(username, password.toCharArray());
 				repositoryModel.openSession(repository, credentials);
-				repositoryPanel.setDescriptors(repository);
+				//repositoryPanel.setDescriptors(repository);
 				nodeTypeModel.setRootNode(repositoryModel.getRootNode());
 			} catch (IOException ex) {
 				log.error("error with repository(): " + ex.toString());

@@ -15,6 +15,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
@@ -281,5 +283,22 @@ implements TreeModel, NodeChangedListener {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public TableModel getNamespaceTableModel() {
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnCount(2);
+		if (jcrSession == null)
+			return model;
+		try {
+			String prefixes[] = jcrSession.getNamespacePrefixes();
+			for (String prefix : prefixes) {
+				String uri = jcrSession.getNamespaceURI(prefix);
+				model.addRow(new Object[] { prefix, uri.isEmpty() ? "(default namespace)" : uri });
+			}
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return model;
 	}
 }
