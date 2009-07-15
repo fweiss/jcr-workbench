@@ -23,7 +23,6 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.version.VersionException;
-import javax.swing.event.TableModelEvent;
 
 import org.apache.log4j.Logger;
 

@@ -37,15 +37,6 @@ implements TreeModel, ModelChangeListener {
 			e.printStackTrace();
 		}
 	}
-	private List<Node> xgetDerived(Node node)
-	throws RepositoryException {
-		List<Node> list = new LinkedList<Node>();
-		if (node.getName().equals("nt:base")) {
-			Node ntBase = jcrNodeTypes.getNode("nt:base");
-			list.add(ntBase);
-		}
-		return list;
-	}
 	private List<Node> getDerived(Node node)
 	throws RepositoryException {
 		List<Node> list = new LinkedList<Node>();

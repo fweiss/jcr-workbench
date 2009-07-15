@@ -19,14 +19,9 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
@@ -45,7 +40,6 @@ import com.uttama.jcr.workbench.view.swing.PropertyTable;
 public class NodeDataPanel
 extends PropertyPanel
 implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListener {
-	private static final TableCellRenderer defaultTableCellRenderer = null;
 	static Logger log = Logger.getLogger(NodeDataPanel.class);
 	private NodeModel nodeModel;
 	JTextField name;

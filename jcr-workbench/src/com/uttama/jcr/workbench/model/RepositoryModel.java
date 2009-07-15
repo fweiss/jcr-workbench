@@ -10,7 +10,6 @@ import javax.jcr.Credentials;
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PropertyType;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;

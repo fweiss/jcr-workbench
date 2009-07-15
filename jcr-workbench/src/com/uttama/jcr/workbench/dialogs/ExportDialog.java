@@ -4,29 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.ExportNodeParameters;
-import com.uttama.jcr.workbench.model.NewNodeParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 
 public class ExportDialog
-extends CustomJDialog
-implements ModelChangeListener {
+extends CustomJDialog {
 	private final Frame owner;
 	private ExportNodeParameters parameters;
 	private JTextField nodePath;
@@ -113,12 +106,5 @@ implements ModelChangeListener {
 				updateFields();
 			}
 		}
-	}
-	@Override
-	public void modelChanged(ModelChangeEvent mce) {
-		NewNodeParameters p = (NewNodeParameters) mce.getSource();
-		//parent.setText(p.parent);
-		//name.setText(p.name);
-		//primaryNodeTypeName.setText(p.primaryNodeTypeName);
 	}
 }

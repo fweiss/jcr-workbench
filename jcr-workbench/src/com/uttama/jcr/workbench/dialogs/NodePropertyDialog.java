@@ -7,7 +7,6 @@ import java.util.Properties;
 
 import javax.jcr.PropertyType;
 import javax.swing.Action;
-import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;

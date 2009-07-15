@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
-import javax.jcr.PropertyType;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.SimpleCredentials;
