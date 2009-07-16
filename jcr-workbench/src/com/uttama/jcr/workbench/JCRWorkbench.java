@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import com.uttama.jcr.workbench.dialogs.ExportDialog;
 import com.uttama.jcr.workbench.dialogs.NewNodeDialog;
 import com.uttama.jcr.workbench.dialogs.NodePropertyDialog;
+import com.uttama.jcr.workbench.dialogs.SearchNodeDialog;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
@@ -50,6 +51,7 @@ import com.uttama.jcr.workbench.model.NodePropertyParameters;
 import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
+import com.uttama.jcr.workbench.model.SearchNodeParameters;
 import com.uttama.jcr.workbench.view.NodeTabbedPanel;
 import com.uttama.jcr.workbench.view.NodeTypePanel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
@@ -77,6 +79,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NewNodeDialog newNodeDialog;
 	private ExportDialog exportDialog;
 	private NodePropertyDialog nodePropertyDialog;
+	private SearchNodeDialog searchNodeDialog;
 	
 	private NodeModel nodeModel;
 	private RepositoryModel repositoryModel = null;
@@ -85,13 +88,17 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NewNodeParameters newNodeParameters;
 	private ExportNodeParameters exportNodeParameters;
 	private NodePropertyParameters nodePropertyParameters;
+	private SearchNodeParameters searchNodeParameters;
 	
 	private ViewModelMap viewModelMap;
 	
 	protected Action removeNodeAction;
 	protected Action exportNodeAction;
 	protected Action importNodeAction;
-
+	protected Action saveNodeAction;
+	protected Action newNodeAction;
+	protected Action searchNodeAction;
+	
 	public void init() {
 		this.setSize(defaultAppletSize);
 		this.setName("JCR Workbench");
@@ -104,6 +111,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		        	    createDialogs();
 		        	    createTopViews();
 		        	    createModelListeners();
+		        	    createActions();
+		        	    createNodeContextMenu();
 		        	    createListeners();
 		        	    defaultConfiguration();
 	            	} catch (RuntimeException e) {
@@ -142,13 +151,16 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		repositoryModel = new RepositoryModel();
 		newNodeParameters = new NewNodeParameters();
 		nodeTypeModel = new NodeTypeModel();
+		
 		exportNodeParameters = new ExportNodeParameters();
 		nodePropertyParameters = new NodePropertyParameters();
+		searchNodeParameters = new SearchNodeParameters();
 	}
 	protected void createDialogs() {
 		Frame owner = findParentFrame();
     	newNodeDialog = new NewNodeDialog(owner, newNodeParameters);
     	exportDialog = new ExportDialog(owner);
+    	searchNodeDialog = new SearchNodeDialog(owner, searchNodeParameters);
     	
     	Action setNodePropertyAction = new SetNodePropertyAction("Set Property");
     	nodePropertyDialog = new NodePropertyDialog(owner, nodePropertyParameters);
@@ -227,31 +239,22 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		//viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
 		viewModelMap.putDefault(nodeModel, nodeTabbedPanel, nodeTabbedPanel);
 	}
-	private void createListeners() {
-		SaveNodeAction saveNodeAction = new SaveNodeAction("Save Node");
+	private void createActions() {
+		saveNodeAction = new SaveNodeAction("Save Node");
 		removeNodeAction = new RemoveNodeAction("Delete Node");
-	    NewNodeAction newNodeAction = new NewNodeAction("New Node");
+	    newNodeAction = new NewNodeAction("New Node");
 	    exportNodeAction = new ExportNodeAction("Export Node");
 	    importNodeAction = new ImportNodeAction("Import Node");
-
-		repositoryPanel.openButton.addActionListener(this);
-		//saveNodeAction.setEnabled(false);
-		nodePanel.setSaveButtonAction(saveNodeAction);
-		newNodePanel.setSaveButtonAction(saveNodeAction);
-		
+	    searchNodeAction = new SearchNodeAction("Search Node");
+	}
+	private void createNodeContextMenu() {
 		final JPopupMenu popup = new JPopupMenu();
-	    //JMenuItem menuItem = new JMenuItem("Delete");
-	    //menuItem.addActionListener(this);
-	    //popup.add(menuItem);
 		popup.add(removeNodeAction);
 	    popup.add(newNodeAction);
-	    
-	    //JMenuItem menuItem = new JMenuItem("Save Node");
-	    //menuItem.addActionListener(this);
-	    //popup.add(menuItem);
 	    popup.add(saveNodeAction);
 	    popup.add(exportNodeAction);
 	    popup.add(importNodeAction);
+	    popup.add(searchNodeAction);
 	    
 		tree.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent me) {
@@ -260,6 +263,32 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				}
 			}
 		});
+	}
+	private void createListeners() {
+		repositoryPanel.openButton.addActionListener(this);
+		//saveNodeAction.setEnabled(false);
+		nodePanel.setSaveButtonAction(saveNodeAction);
+		newNodePanel.setSaveButtonAction(saveNodeAction);
+	}
+	// FIXME: pull up the popup menu launching or refactor the popup
+	// menu to implicitly show a dialg instead of having the Action do both that
+	// and actually performing the action.
+	class SearchNodeAction
+	extends AbstractAction {
+		public SearchNodeAction(String name) {
+			super(name);
+		}
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
+				TreePath treePath = tree.getSelectionPath();
+				NodeModel nodeModel = (NodeModel) treePath.getLastPathComponent();
+				searchNodeParameters.contextNodeModel = nodeModel;
+				searchNodeDialog.setVisible(true);
+			} else {
+				searchNodeDialog.setVisible(false);
+			}
+		}
 	}
 	class NewNodeAction
 	extends AbstractAction {
