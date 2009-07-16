@@ -8,7 +8,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 /**
- * The CustomJTree fixes a controversial defect refarding right click selection behavior.
+ * The CustomJTree fixes a controversial defect regarding right click selection behavior.
  *
  */
 public class CustomJTree
