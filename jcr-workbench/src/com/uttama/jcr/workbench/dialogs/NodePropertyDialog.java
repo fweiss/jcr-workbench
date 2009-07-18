@@ -19,12 +19,13 @@ import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 
 public class NodePropertyDialog
 extends CustomJDialog {
-	static final Dimension preferredSize = new Dimension(500, 250);
+	static final Dimension preferredSize = new Dimension(800, 250);
 	NodePropertyParameters nodePropertyParameters;
 	private JTextField name;
 	private JCheckBox isMulti;
 	private JList type;
 	private JTextField value;
+	private JTextField errorValueFormat;
 	public Action okAction;
 	private static Properties getLabels() {
 		Properties labels = new Properties();
@@ -32,6 +33,7 @@ extends CustomJDialog {
 		labels.put("multi", "Multi");
 		labels.put("type", "Type");
 		labels.put("value", "Value");
+		labels.put("error", "Error");
 		return labels;
 	}
 	@Override
@@ -48,6 +50,7 @@ extends CustomJDialog {
 		type = new JList(getPropertyTypes());
 		type.setSelectedIndex(0);
 		value = new JTextField(30);
+		errorValueFormat = new JTextField(60);
 		
 		LabeledGrid grid1 = new LabeledGrid(getLabels());
 		grid1.addNLabeledComponent("name", name);
@@ -56,6 +59,7 @@ extends CustomJDialog {
 		
 		LabeledGrid grid2 = new LabeledGrid(getLabels());
 		grid2.addNLabeledComponent("value", value);
+		grid2.addNLabeledComponent("error", errorValueFormat);
 		getContentPane().add(grid2, BorderLayout.CENTER);
 
 		getContentPane().add(new JScrollPane(type), BorderLayout.WEST);
@@ -68,6 +72,14 @@ extends CustomJDialog {
 		nodePropertyParameters.name = name.getText();
 		nodePropertyParameters.value = value.getText();
 		nodePropertyParameters.propertyType = PropertyType.valueFromName((String) type.getSelectedValue());
+	}
+	private void updateFields() {
+		errorValueFormat.setText(nodePropertyParameters.errorMessage);
+	}
+	@Override
+	public void setVisible(boolean visible) {
+		updateFields();
+		super.setVisible(visible);
 	}
 	public String[] getPropertyTypes() {
 		return new String[] {

@@ -98,6 +98,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	protected Action saveNodeAction;
 	protected Action newNodeAction;
 	protected Action searchNodeAction;
+	protected Action openSessionAction;
+	protected Action closeSessionAction;
 	
 	public void init() {
 		this.setSize(defaultAppletSize);
@@ -246,6 +248,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	    exportNodeAction = new ExportNodeAction("Export Node");
 	    importNodeAction = new ImportNodeAction("Import Node");
 	    searchNodeAction = new SearchNodeAction("Search Node");
+	    openSessionAction = new OpenSessionAction("Open");
 	}
 	private void createNodeContextMenu() {
 		final JPopupMenu popup = new JPopupMenu();
@@ -265,7 +268,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		});
 	}
 	private void createListeners() {
-		repositoryPanel.openButton.addActionListener(this);
+		//repositoryPanel.openButton.addActionListener(this);
+		repositoryPanel.openButton.setAction(openSessionAction);
 		//saveNodeAction.setEnabled(false);
 		nodePanel.setSaveButtonAction(saveNodeAction);
 		newNodePanel.setSaveButtonAction(saveNodeAction);
@@ -368,8 +372,13 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			String name = nodePropertyParameters.name;
 			String value = nodePropertyParameters.value;
 			int propertyType = nodePropertyParameters.propertyType;
-			nodeModel.setProperty(name, value, propertyType);
-			nodePropertyDialog.setVisible(false);
+			try {
+				nodeModel.setProperty(name, value, propertyType);
+				nodePropertyDialog.setVisible(false);
+			} catch (Exception e) {
+				nodePropertyParameters.errorMessage = e.toString();
+				nodePropertyDialog.setVisible(true);
+			}
 		}
 	}
 	class ExportNodeAction
@@ -418,6 +427,44 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			}
 		}
 	}
+	class OpenSessionAction
+	extends AbstractAction {
+		public OpenSessionAction(String name) {
+			super(name);
+		}
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			repositoryPanel.saveFields(repositoryModel);
+			String configurationPath = repositoryModel.getConfigurationPath();
+			String repositoryPath = repositoryModel.getRepositoryPath();
+			String username = repositoryModel.getUsername();
+			String password = repositoryModel.getPassword();
+			File configurationFile = new File(configurationPath);
+			if ( ! configurationFile.exists()) {
+				String confirmText = "A repository configuration file was not found at the given location.\n\nClick OK to initialize a new Jackrabbit repository at the given location.";
+				String confirmTitle = "No Repository Found";
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				int messageType = JOptionPane.QUESTION_MESSAGE;
+				int selectedValue = JOptionPane.showConfirmDialog(getContentPane(), confirmText, confirmTitle, optionType, messageType);
+				if (selectedValue != JOptionPane.OK_OPTION)
+					return;
+			}
+			try {
+				Repository repository = new TransientRepository(configurationPath, repositoryPath);
+				Credentials credentials = new SimpleCredentials(username, password.toCharArray());
+				repositoryModel.openSession(repository, credentials);
+				//repositoryPanel.setDescriptors(repository);
+				nodeTypeModel.setRootNode(repositoryModel.getRootNode());
+			} catch (IOException ex) {
+				log.error("error with repository(): " + ex.toString());
+			} catch (RepositoryModelException e) {
+				log.error("error with repository(): " + e.toString());
+				String message = "Open session failed.\n\n" + e.getMessage();
+				JOptionPane.showMessageDialog(getContentPane(), message);
+				return;
+			}
+		}
+	}
 	protected void defaultConfiguration() {
 		log.info(System.getProperty("user.dir"));
 		File defaultRepositoryDir = new File(System.getProperty("user.dir"));
@@ -440,7 +487,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	// FIXME: refactor for actions
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		if (actionEvent.getActionCommand().equals("Open")) {
+		if (actionEvent.getActionCommand().equals("xOpen")) {
 			repositoryPanel.saveFields(repositoryModel);
 			String configurationPath = repositoryModel.getConfigurationPath();
 			String repositoryPath = repositoryModel.getRepositoryPath();

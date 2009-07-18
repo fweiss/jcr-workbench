@@ -26,6 +26,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.log4j.Logger;
 
+import com.uttama.jcr.workbench.RepositoryModelException;
 import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 
@@ -91,7 +92,8 @@ public class NodeModel {
 		}
 		return primaryType;
 	}
-	public void setProperty(String name, String value, int type) {
+	public void setProperty(String name, String value, int type)
+	throws RepositoryModelException {
 		try {
 			node.setProperty(name, value, type);
 			NodeChangedEvent nce = new NodeChangedEvent(this);
@@ -99,21 +101,20 @@ public class NodeModel {
 			//TableModelEvent tme = new TableModelEvent(nodePropertiesModel);
 			nodePropertiesModel.fireTableDataChanged();
 			
-		} catch (ValueFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (VersionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LockException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ConstraintViolationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//		} catch (ValueFormatException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (VersionException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (LockException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (ConstraintViolationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RepositoryModelException("set property:" + e.toString());
 		}
 	}
 	public String getNodePath() {
