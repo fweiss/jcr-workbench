@@ -1,8 +1,10 @@
 package com.uttama.jcr.workbench.view.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -11,16 +13,33 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.border.MatteBorder;
 
 public abstract class CustomJDialog
 extends JDialog {
 	final static Dialog.ModalityType modal = Dialog.ModalityType.APPLICATION_MODAL;
+	protected JPanel buttonPanel;
 	private Action dialogOkAction;
 	private Action dialogCancelAction;
-	protected Box buttonBox;
 	public CustomJDialog(Frame owner, String title, ModalityType modal) {
 		super(owner, title, modal);
+		
+		JPanel contentPanel = new JPanel();
+		BorderLayout layout = new BorderLayout();
+		layout.setVgap(8);
+		contentPanel.setLayout(layout);
+		Color background = UIManager.getColor("Panel.background");
+		contentPanel.setBorder(new MatteBorder(8, 8, 8, 8, background));
+		setContentPane(contentPanel);
+
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
 		addFields();
 		addButtons();
 		setSize(owner);
@@ -42,12 +61,10 @@ extends JDialog {
 		setLocation(l.x, l.y);
 	}
 	protected void addButtons() {
-		buttonBox = Box.createHorizontalBox();
 		dialogOkAction = new DialogOkAction("OK");
 		dialogCancelAction = new DialogCancelAction("Cancel");
-		buttonBox.add(new JButton(dialogOkAction));
-		buttonBox.add(new JButton(dialogCancelAction));
-		this.getContentPane().add(buttonBox, BorderLayout.SOUTH);
+		buttonPanel.add(new JButton(dialogOkAction));
+		buttonPanel.add(new JButton(dialogCancelAction));
 	}
 	public Dimension getPreferredSize() {
 		return new Dimension(500, 150);

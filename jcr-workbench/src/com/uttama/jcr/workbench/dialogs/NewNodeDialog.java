@@ -2,6 +2,7 @@ package com.uttama.jcr.workbench.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
@@ -18,7 +19,6 @@ import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 public class NewNodeDialog
 extends CustomJDialog
 implements ModelChangeListener {
-	private final Frame owner;
 	private NewNodeParameters parameters;
 	private JLabel parent;
 	private JTextField name;
@@ -30,9 +30,7 @@ implements ModelChangeListener {
 	final static Dialog.ModalityType modal = Dialog.ModalityType.APPLICATION_MODAL;
 	public NewNodeDialog(Frame owner, NewNodeParameters parameters) {
 		super(owner, title, modal);
-		this.owner = owner;
 		this.parameters = parameters;
-		addButtons();
 	}
 	// FIXME: use addNLabeledComponent
 	protected void addFields() {
@@ -47,7 +45,6 @@ implements ModelChangeListener {
 	}
 	public void show(Action okAction) {
 		this.okAction = okAction;
-		setSize(owner);
 		super.setVisible(true);
 	}
 	@Override
@@ -61,5 +58,9 @@ implements ModelChangeListener {
 		parameters.name = name.getText();
 		parameters.primaryNodeTypeName = primaryNodeTypeName.getText();
 		okAction.actionPerformed(ae);
+	}
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(350, 180);
 	}
 }

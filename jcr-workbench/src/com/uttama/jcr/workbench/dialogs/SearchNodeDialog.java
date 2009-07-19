@@ -42,7 +42,7 @@ extends CustomJDialog {
 	}
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(500, 400);
+		return new Dimension(600, 300);
 	}
 	private Properties getLabels() {
 		Properties labels = new Properties();
@@ -67,7 +67,7 @@ extends CustomJDialog {
 	public void addButtons() {
 		super.addButtons();
 		searchAction = new SearchAction("Search");
-		buttonBox.add(new JButton(searchAction));
+		buttonPanel.add(new JButton(searchAction));
 	}
 	@Override
 	public void setVisible(boolean visible) {

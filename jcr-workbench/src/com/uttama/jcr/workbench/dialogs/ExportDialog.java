@@ -20,7 +20,6 @@ import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 
 public class ExportDialog
 extends CustomJDialog {
-	private final Frame owner;
 	private ExportNodeParameters parameters;
 	private JTextField nodePath;
 	private JCheckBox includeSubtree;
@@ -41,11 +40,7 @@ extends CustomJDialog {
 	}
 	public ExportDialog(Frame owner) {
 		super(owner, title, modal);
-		this.owner = owner;
 		this.parameters = null;
-		addFields();
-		addButtons();
-		setSize(owner);
 	}
 	protected void addFields() {
 		nodePath = new JTextField(40);
@@ -63,7 +58,7 @@ extends CustomJDialog {
 	public void addButtons() {
 		super.addButtons();
 		browseAction = new BrowseAction("Browse");
-		buttonBox.add(new JButton(browseAction));
+		buttonPanel.add(new JButton(browseAction));
 	}
 	public Dimension getPreferredSize() {
 		return new Dimension(500, 250);
@@ -72,7 +67,6 @@ extends CustomJDialog {
 		this.okAction = okAction;
 		this.parameters = parameters;
 		updateFields();
-		setSize(owner);
 		super.setVisible(true);
 	}
 	protected void updateFields() {
