@@ -54,9 +54,11 @@ Panels and dialogs often need to communicate with other objects whose visibility
 in the main controller. Declare the references in the panels and dialogs, annotate
 them and then let an framework set them via injection.
 
+
 Jackrabbit
 ----------
 http://wiki.apache.org/jackrabbit/ExamplesPage
+
 
 Theory
 ------
@@ -71,12 +73,17 @@ Theory
 9. Inheritance of NodeType.
 10. Mixins of NodeType.
 
+
 Node type views
 ---------------
 1. Node type Inheritance tree.
 2. Mixin inheritance tree.
 3. Search result.
 
+
+UIManager Keys
+--------------
+http://www.duncanjauncey.com/java/ui/
 
 
 
