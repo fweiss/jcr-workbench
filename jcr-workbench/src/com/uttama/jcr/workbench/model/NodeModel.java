@@ -113,7 +113,7 @@ public class NodeModel {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		} catch (RepositoryException e) {
-			throw new RepositoryModelException("set property:" + e.toString());
+			throw new RepositoryModelException("error setting property " + name + ":", e);
 		}
 	}
 	public String getNodePath() {

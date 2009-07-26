@@ -379,7 +379,14 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				nodeModel.setProperty(name, value, propertyType);
 				nodePropertyDialog.setVisible(false);
 			} catch (Exception e) {
-				nodePropertyParameters.errorMessage = e.toString();
+				Throwable t = e;
+				nodePropertyParameters.errorMessage = "";
+				while (t != null) {
+					nodePropertyParameters.errorMessage += t.getClass().getName() + ": ";
+					nodePropertyParameters.errorMessage += t.getMessage() + "\n";
+					t = t.getCause();
+				}
+				//nodePropertyParameters.errorMessage = e.toString();
 				nodePropertyDialog.setVisible(true);
 			}
 		}

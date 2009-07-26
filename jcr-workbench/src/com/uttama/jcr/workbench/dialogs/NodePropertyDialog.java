@@ -1,6 +1,7 @@
 package com.uttama.jcr.workbench.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -16,6 +17,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.uttama.jcr.workbench.model.NodePropertyParameters;
@@ -31,7 +34,7 @@ implements ActionListener {
 	private JCheckBox isMulti;
 	private JList type;
 	private JTextField value;
-	private JTextField errorValueFormat;
+	private JTextArea errorValueFormat;
 	public Action okAction;
 	ButtonGroup group;
 	private static Properties getLabels() {
@@ -50,6 +53,7 @@ implements ActionListener {
 	public NodePropertyDialog(Frame owner, NodePropertyParameters nodePropertyParameters) {
 		super(owner, "Node Property");
 		this.nodePropertyParameters = nodePropertyParameters;
+		
 	}
 	@Override
 	protected void addFields() {
@@ -57,7 +61,7 @@ implements ActionListener {
 		isMulti = new JCheckBox();
 		createPropertyTypeList();
 		value = new JTextField(30);
-		errorValueFormat = new JTextField(60);
+		errorValueFormat = new JTextArea(); //JTextField(60);
 		
 		LabeledGrid grid1 = new LabeledGrid(getLabels());
 		grid1.addNLabeledComponent("name", name);
@@ -65,14 +69,28 @@ implements ActionListener {
 		//grid1.addNLabeledComponent("type", createPropertyTypePanel());
 		grid1.addNLabeledComponent("value", value);
 		grid1.addNLabeledComponent("multi", isMulti);
-		getContentPane().add(grid1, BorderLayout.NORTH);
+		//getContentPane().add(grid1, BorderLayout.NORTH);
 		
-		LabeledGrid grid2 = new LabeledGrid(getLabels());
-		grid2.addNLabeledComponent("error", errorValueFormat);
-		getContentPane().add(grid2, BorderLayout.CENTER);
+		//LabeledGrid grid2 = new LabeledGrid(getLabels());
+		//grid2.addNLabeledComponent("error", errorValueFormat);
+		//getContentPane().add(grid2, BorderLayout.CENTER);
 
 		//getContentPane().add(new JScrollPane(type), BorderLayout.WEST);
+		getContentPane().add(createSplitPane(grid1, errorValueFormat), BorderLayout.CENTER);
+
+		
 	}
+	private JSplitPane createSplitPane(Component leftPane, Component rightPane) {
+		JSplitPane splitPane;
+        int orientation = JSplitPane.VERTICAL_SPLIT;
+        boolean continuousLayout = true;
+        Component left = new JScrollPane(leftPane);
+        Component right = new JScrollPane(rightPane);
+        splitPane = new JSplitPane(orientation, continuousLayout, left, right);
+    	splitPane.setDividerLocation(260);
+		return splitPane;
+	}
+
 	/**
 	 * Create a radio button-type list with a compact layout.
 	 */
