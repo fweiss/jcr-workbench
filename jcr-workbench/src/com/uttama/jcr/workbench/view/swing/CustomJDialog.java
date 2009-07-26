@@ -61,10 +61,12 @@ extends JDialog {
 		setLocation(l.x, l.y);
 	}
 	protected void addButtons() {
+		JButton defaultButton;
 		dialogOkAction = new DialogOkAction("OK");
 		dialogCancelAction = new DialogCancelAction("Cancel");
-		buttonPanel.add(new JButton(dialogOkAction));
+		buttonPanel.add(defaultButton = new JButton(dialogOkAction));
 		buttonPanel.add(new JButton(dialogCancelAction));
+		getRootPane().setDefaultButton(defaultButton);
 	}
 	public Dimension getPreferredSize() {
 		return new Dimension(500, 150);
