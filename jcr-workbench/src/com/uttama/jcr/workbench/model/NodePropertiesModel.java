@@ -137,6 +137,7 @@ extends AbstractTableModel {
 		}
 		return sb.toString();
 	}
+	@Override
 	public void fireTableDataChanged() {
 		try {
 			this.properties = filterProperties(node);

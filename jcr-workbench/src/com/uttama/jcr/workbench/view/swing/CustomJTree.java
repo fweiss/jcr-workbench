@@ -22,6 +22,7 @@ extends JTree {
 		 * the object, while right click selects and opens a menu.
 		 */
 		addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent me) {
 				int button = me.getButton();
 				if (button == 3) {

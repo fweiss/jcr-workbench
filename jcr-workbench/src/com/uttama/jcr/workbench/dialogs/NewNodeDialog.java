@@ -33,6 +33,7 @@ implements ModelChangeListener {
 		this.parameters = parameters;
 	}
 	// FIXME: use addNLabeledComponent
+	@Override
 	protected void addFields() {
 		parent = new JLabel();
 		name = new JTextField(30);
@@ -54,6 +55,7 @@ implements ModelChangeListener {
 		name.setText(p.name);
 		primaryNodeTypeName.setText(p.primaryNodeTypeName);
 	}
+	@Override
 	protected void okAction(ActionEvent ae) {
 		parameters.name = name.getText();
 		parameters.primaryNodeTypeName = primaryNodeTypeName.getText();

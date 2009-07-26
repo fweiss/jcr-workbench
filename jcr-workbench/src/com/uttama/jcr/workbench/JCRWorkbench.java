@@ -100,7 +100,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	protected Action searchNodeAction;
 	protected Action openSessionAction;
 	protected Action closeSessionAction;
-	
+
+	@Override
 	public void init() {
 		this.setSize(defaultAppletSize);
 		this.setName("JCR Workbench");
@@ -126,6 +127,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	        log.error("init: " + e.toString());
 	    }
 	}
+	@Override
 	public void destroy() {
 		if (repositoryModel != null) {
 			repositoryModel.closeSession();
@@ -260,6 +262,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	    popup.add(searchNodeAction);
 	    
 		tree.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseReleased(MouseEvent me) {
 				if (me.isPopupTrigger()) {
 					popup.show(me.getComponent(), me.getX(), me.getY());

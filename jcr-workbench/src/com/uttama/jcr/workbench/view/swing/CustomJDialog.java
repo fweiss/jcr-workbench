@@ -11,9 +11,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -68,6 +66,7 @@ extends JDialog {
 		buttonPanel.add(new JButton(dialogCancelAction));
 		getRootPane().setDefaultButton(defaultButton);
 	}
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(500, 150);
 	}

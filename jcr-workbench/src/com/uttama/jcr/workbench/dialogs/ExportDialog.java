@@ -42,6 +42,7 @@ extends CustomJDialog {
 		super(owner, title, modal);
 		this.parameters = null;
 	}
+	@Override
 	protected void addFields() {
 		nodePath = new JTextField(40);
 		includeSubtree = new JCheckBox();
@@ -55,11 +56,13 @@ extends CustomJDialog {
 		grid.addNLabeledComponent("filePath", filePath);
 		this.getContentPane().add(grid, BorderLayout.CENTER);
 	}
+	@Override
 	public void addButtons() {
 		super.addButtons();
 		browseAction = new BrowseAction("Browse");
 		buttonPanel.add(new JButton(browseAction));
 	}
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(500, 250);
 	}
@@ -81,6 +84,7 @@ extends CustomJDialog {
 		parameters.includeBinary = includeBinary.isSelected();
 		parameters.file = fileChooser.getSelectedFile();
 	}
+	@Override
 	protected void okAction(ActionEvent ae) {
 		saveFields();
 		okAction.actionPerformed(ae);

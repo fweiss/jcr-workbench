@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -23,7 +21,6 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
-import com.uttama.jcr.workbench.dialogs.ExportDialog.BrowseAction;
 import com.uttama.jcr.workbench.model.SearchNodeParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;

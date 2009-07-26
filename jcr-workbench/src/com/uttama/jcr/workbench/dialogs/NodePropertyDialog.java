@@ -51,6 +51,7 @@ implements ActionListener {
 		super(owner, "Node Property");
 		this.nodePropertyParameters = nodePropertyParameters;
 	}
+	@Override
 	protected void addFields() {
 		name = new JTextField(30);
 		isMulti = new JCheckBox();
@@ -97,6 +98,7 @@ implements ActionListener {
 		}
 		return panel;
 	}
+	@Override
 	protected void okAction(ActionEvent ae) {
 		saveFields();
 		okAction.actionPerformed(ae);
