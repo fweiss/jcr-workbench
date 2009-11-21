@@ -86,5 +86,25 @@ UIManager Keys
 http://www.duncanjauncey.com/java/ui/
 
 
+UI Editors
+----------
+STRING inline
+BINARY dialog/browse
+DATE inline/+
+BOOLEAN inline/dropdown
+REFERENCE dialog/search/browse
+PATH inline/browse/search
+DOUBLE inline
+
+
+Clipboard/Context Menu
+----------------------
+Copy
+Paste
+Paste Path
+Paste Reference
+
+Also consider Drag and Drop
+
 
 
