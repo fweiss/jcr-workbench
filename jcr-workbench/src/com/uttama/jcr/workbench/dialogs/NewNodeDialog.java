@@ -63,6 +63,6 @@ implements ModelChangeListener {
 	}
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(350, 180);
+		return new Dimension(390, 180);
 	}
 }

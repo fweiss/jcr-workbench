@@ -12,12 +12,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
+import javax.jcr.PropertyType;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.SimpleCredentials;
+import javax.jcr.Value;
+import javax.jcr.ValueFactory;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JApplet;
@@ -364,6 +369,10 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			}
 		}
 	}
+	/**
+	 * Action performed for the NodePropertyDialog.
+	 * Validates the input and sets the property.
+	 */
 	class SetNodePropertyAction
 	extends AbstractAction {
 		public SetNodePropertyAction(String label) {
@@ -373,9 +382,42 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			TreePath treePath = tree.getSelectionPath();
 			NodeModel nodeModel = (NodeModel) treePath.getLastPathComponent();
 			String name = nodePropertyParameters.name;
-			String value = nodePropertyParameters.value;
+			//Object value = nodePropertyParameters.value;
 			int propertyType = nodePropertyParameters.propertyType;
+			
 			try {
+				ValueFactory valueFactory = repositoryModel.getValueFactory();
+				Value value = null;
+				switch (nodePropertyParameters.propertyType) {
+					case PropertyType.BINARY:
+						value = valueFactory.createValue((InputStream) nodePropertyParameters.value);
+						break;
+					case PropertyType.BOOLEAN:
+						value = valueFactory.createValue((Boolean) nodePropertyParameters.value);
+						break;
+					case PropertyType.DATE:
+						value = valueFactory.createValue((Calendar) nodePropertyParameters.value);
+						break;
+					case PropertyType.DOUBLE:
+						value = valueFactory.createValue((Double) nodePropertyParameters.value);
+						break;
+					case PropertyType.LONG:
+						value = valueFactory.createValue((Long) nodePropertyParameters.value);
+						break;
+					case PropertyType.NAME:
+						value = valueFactory.createValue((String) nodePropertyParameters.value, PropertyType.NAME);
+						break;
+					case PropertyType.PATH:
+						value = valueFactory.createValue((String) nodePropertyParameters.value, PropertyType.PATH);
+						break;
+					case PropertyType.REFERENCE:
+						value = valueFactory.createValue((String) nodePropertyParameters.value, PropertyType.REFERENCE);
+						break;
+					case PropertyType.STRING:
+						value = valueFactory.createValue((String) nodePropertyParameters.value);
+						break;
+					
+				}
 				nodeModel.setProperty(name, value, propertyType);
 				nodePropertyDialog.setVisible(false);
 			} catch (Exception e) {

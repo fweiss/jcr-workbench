@@ -13,6 +13,8 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.ValueFactory;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -162,6 +164,14 @@ implements TreeModel, NodeChangedListener {
 			fireTreeNodesChanged(tme);
 		} catch (RepositoryException e) {
 			throw new RepositoryModelException("removeNode: " + e.toString());
+		}
+	}
+	public ValueFactory getValueFactory()
+	throws RepositoryModelException{
+		try {
+			return jcrSession.getValueFactory();
+		} catch (RepositoryException e) {
+			throw new RepositoryModelException("getValueFactory: " + e.toString());
 		}
 	}
 	public void save()

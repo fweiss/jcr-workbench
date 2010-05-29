@@ -121,8 +121,10 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	private void createActions() {
 		panelAddPropertyAction = new AbstractAction("Add Property") {
 			public void actionPerformed(ActionEvent ae) {
-				if (nodePropertyDialog != null)
-				nodePropertyDialog.setVisible(true);
+				if (nodePropertyDialog != null) {
+					nodePropertyDialog.clearErrors();
+					nodePropertyDialog.setVisible(true);
+				}
 			}
 		}; 
 	}

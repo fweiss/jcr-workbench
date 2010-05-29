@@ -18,6 +18,8 @@ import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.Value;
+import javax.jcr.ValueFactory;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeDefinition;
@@ -91,10 +93,10 @@ public class NodeModel {
 		}
 		return primaryType;
 	}
-	public void setProperty(String name, String value, int type)
+	public void setProperty(String name, Value value, int type)
 	throws RepositoryModelException {
 		try {
-			node.setProperty(name, value, type);
+			node.setProperty(name, value);
 			NodeChangedEvent nce = new NodeChangedEvent(this);
 			fireNodeChangedEvent(nce);
 			//TableModelEvent tme = new TableModelEvent(nodePropertiesModel);
