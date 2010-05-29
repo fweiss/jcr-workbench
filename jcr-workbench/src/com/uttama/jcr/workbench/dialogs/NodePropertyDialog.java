@@ -104,7 +104,10 @@ implements ActionListener, ListSelectionListener {
 		//getContentPane().add(grid2, BorderLayout.CENTER);
 
 		//getContentPane().add(new JScrollPane(type), BorderLayout.WEST);
-		getContentPane().add(createSplitPane(grid1, errorValueFormat), BorderLayout.CENTER);
+		JPanel leftJustify = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		leftJustify.add(grid1);
+		JSplitPane splitPane = createSplitPane(leftJustify, errorValueFormat);
+		getContentPane().add(splitPane, BorderLayout.CENTER);
 
 		
 	}
