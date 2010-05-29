@@ -17,6 +17,19 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 
+/**
+ * Customize JDialog with features common to the application:
+ * 
+ * borders, backgrounds, styling
+ * a button pane
+ * common OK and Cancel button actions
+ * 
+ * Subclasses should override the addFields() method to add populate the dialog-specific
+ * labelled fields.
+ * 
+ * Override actionPerformed() to handle the OK click event.
+ * 
+ */
 public abstract class CustomJDialog
 extends JDialog {
 	final static Dialog.ModalityType modal = Dialog.ModalityType.APPLICATION_MODAL;
