@@ -106,5 +106,23 @@ Paste Reference
 
 Also consider Drag and Drop
 
+Properties
+----------
+
+|| e              || wb ||
+requiredType      | -
+autoCreated       | autoCreated
+multiple          | multiple
+protected         | protected
+name              | name
+mandatory         | mandatory
+primaryType       | primaryType
+onParentVersion   | onParentVersion
+-                 | mixinTypes
+-                 | defaultValues
+-                 | valueConstraints
+supertype?        |
+
+
 
 
