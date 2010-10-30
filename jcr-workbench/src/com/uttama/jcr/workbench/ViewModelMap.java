@@ -73,7 +73,7 @@ public class ViewModelMap {
 		} else {
 			mce = new ModelChangeEvent(nodeModel);
 		}
-		link.modelChangeListener.modelChanged(mce);
 		cardLayout.show(parent, viewName);
+		link.modelChangeListener.modelChanged(mce);
 	}
 }

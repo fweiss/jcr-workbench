@@ -306,4 +306,15 @@ public class NodeModel {
 		public String name;
 		public boolean isLeaf;
 	}
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			result = this.node.getName();
+		}
+		catch (RepositoryException e) {
+			log.warn("toString: cannot access name: " + e.toString());
+		}
+		return result;
+	}
 }

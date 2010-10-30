@@ -48,8 +48,9 @@ implements TreeModel, ModelChangeListener {
 	 * @return list for matching jcr:nodeType nodes, if any
 	 * @throws RepositoryException
 	 */
-	private List<Node> getDerived(Node node)
+	private List<Node> getDerived(NodeModel nodeModel)
 	throws RepositoryException {
+		Node node = nodeModel.getNode();
 		List<Node> list = new LinkedList<Node>();
 		//if (node.getName().equals("nt:base")) {
 			String nodeType = node.getName();
@@ -71,13 +72,16 @@ implements TreeModel, ModelChangeListener {
 		// TODO Auto-generated method stub
 		
 	}
-
+	/**
+	 * TreeModel must return the given node's child at the given index.
+	 * See also getChildCount.
+	 */
 	@Override
-	public Object getChild(Object obj, int index) {
-		Node node = (Node) obj;
+	public Object getChild(Object nodeModel, int index) {
 		try {
-			List<Node> derived = getDerived(node);
-			return derived.get(index);
+			List<Node> derived = getDerived((NodeModel) nodeModel);
+			//return derived.get(index);
+			return new NodeModel(derived.get(index));
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,11 +90,10 @@ implements TreeModel, ModelChangeListener {
 	}
 
 	@Override
-	public int getChildCount(Object obj) {
-		Node node = (Node) obj;
+	public int getChildCount(Object nodeModel) {
 		try {
 			//if (node.getName().equals("nt:base")) {
-				return getDerived(node).size();
+				return getDerived((NodeModel) nodeModel).size();
 			//}
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
@@ -110,7 +113,7 @@ implements TreeModel, ModelChangeListener {
 	public Object getRoot() {
 		try {
 			Node ntBase = jcrNodeTypes.getNode("nt:base");
-			return ntBase;
+			return new NodeModel(ntBase);
 		} catch (PathNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,9 +125,9 @@ implements TreeModel, ModelChangeListener {
 	}
 
 	@Override
-	public boolean isLeaf(Object arg0) {
+	public boolean isLeaf(Object nodeModel) {
 		// TODO Auto-generated method stub
-		return false;
+		return getChildCount(nodeModel) == 0;
 	}
 
 	@Override
