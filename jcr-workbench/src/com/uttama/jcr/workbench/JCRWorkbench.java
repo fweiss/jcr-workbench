@@ -121,6 +121,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		            	createModels();
 		        	    createDialogs();
 		        	    createTopViews();
+		        	    createViewListeners();
 		        	    createModelListeners();
 		        	    createActions();
 		        	    createNodeContextMenu();
@@ -249,10 +250,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
     	splitPane.setDividerLocation(260);
 		return splitPane;
 	}
-	private void createModelListeners() {
+	private void createViewListeners() {
 		tree.addTreeSelectionListener(this);
-		nodeModel.addNodeChangedListener(this);
-		
 		viewModelMap = new ViewModelMap(propertyPanel, propertyCardLayout);
 		viewModelMap.put("rep:root", repositoryModel, repositoryPanel, repositoryPanel);
 		viewModelMap.put("nt:unstructured", nodeModel, nodeTabbedPanel, nodeTabbedPanel);
@@ -260,6 +259,12 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		viewModelMap.put("rep:nodeTypes", nodeTypeModel, nodeTypePanel, nodeTypePanel);
 		//viewModelMap.putDefault(nodeModel, nodePanel, nodePanel);
 		viewModelMap.putDefault(nodeModel, nodeTabbedPanel, nodeTabbedPanel);
+	}
+	/**
+	 * Register the model events that this controller will listen for.
+	 */
+	private void createModelListeners() {
+		nodeModel.addNodeChangedListener(this);
 	}
 	private void createActions() {
 		saveNodeAction = new SaveNodeAction("Save Node");
