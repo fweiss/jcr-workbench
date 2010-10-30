@@ -216,4 +216,17 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		if ( ! nodeModel.isDeleted())
 			references.setListData(nodeModel.getReferencePaths());
 	}
+	/**
+	 * Request the panel to stop any editing in progress, such as when a different node
+	 * is selected.
+	 * 
+	 * @return true iff the editing was stopped
+	 */
+	public boolean stopEditing() {
+		if (properties.isEditing()) {
+			log.trace("stop editing requested");
+			return properties.getCellEditor().stopCellEditing();
+		}
+		return true;
+	}
 }

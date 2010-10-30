@@ -28,9 +28,13 @@ implements ModelChangeListener {
 
 	@Override
 	public void modelChanged(ModelChangeEvent mce) {
+		stopEditing();
 		nodeDataPanel.modelChanged(mce);
 		nodeDefinitionPanel.modelChanged(mce);
 		nodeVersionsPanel.modelChanged(mce);
 	}
-
+	protected void stopEditing() {
+		// TODO: fallback if editing cannot be stopped
+		nodeDataPanel.stopEditing();
+	}
 }
