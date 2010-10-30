@@ -112,6 +112,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	public void init() {
 		this.setSize(defaultAppletSize);
 		this.setName("JCR Workbench");
+		findParentFrame().setTitle("JCR Workbench");
 	    try {
 	        SwingUtilities.invokeAndWait(new Runnable() {
 	            public void run() {
@@ -541,7 +542,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		}
 	}
 	protected void defaultConfiguration() {
-		log.info(System.getProperty("user.dir"));
+		log.info("user.dir: " + System.getProperty("user.dir"));
 		File defaultRepositoryDir = new File(System.getProperty("user.dir"));
 		File configurationFile = new File(defaultRepositoryDir.getParentFile(), "repository/repository.xml");
 		File repositoryDir = new File(defaultRepositoryDir.getParentFile(), "repository");
