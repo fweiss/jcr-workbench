@@ -59,7 +59,7 @@ import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.model.SearchNodeParameters;
-import com.uttama.jcr.workbench.view.NodeTabbedPanel;
+import com.uttama.jcr.workbench.view.NodePanel;
 import com.uttama.jcr.workbench.view.NodeTypeHierarchyPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
@@ -81,7 +81,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NodeDataPanel newNodePanel;
 	private RepositoryPanel repositoryPanel;
 	private NodeTypeHierarchyPanel nodeTypePanel;
-	private NodeTabbedPanel nodeTabbedPanel;
+	private NodePanel nodeTabbedPanel;
 	
 	private NewNodeDialog newNodeDialog;
 	private ExportDialog exportDialog;
@@ -227,7 +227,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		nodePanel = new NodeDataPanel(nodeModel);
 		newNodePanel = new NodeDataPanel(nodeModel);
 		
-    	nodeTabbedPanel = new NodeTabbedPanel("nodeTabbedPanel");
+    	nodeTabbedPanel = new NodePanel("nodeTabbedPanel");
     	nodeTabbedPanel.nodeDataPanel.nodePropertyDialog = nodePropertyDialog;
 		
 		propertyPanel.add(repositoryPanel, "repository");

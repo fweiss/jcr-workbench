@@ -8,13 +8,13 @@ import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
 import com.uttama.jcr.workbench.view.properties.NodeVersionsPanel;
 
-public class NodeTabbedPanel
+public class NodePanel
 extends JTabbedPane
 implements ModelChangeListener {
 	public NodeDataPanel nodeDataPanel;
 	private NodeDefinitionPanel nodeDefinitionPanel;
 	private NodeVersionsPanel nodeVersionsPanel;
-	public NodeTabbedPanel(String name) {
+	public NodePanel(String name) {
 		super();
 		setName(name);
 		nodeDataPanel = new NodeDataPanel("nodeDataPanel");
