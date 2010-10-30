@@ -10,12 +10,12 @@ import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.model.NodeTypeModel;
 
-public class NodeTypePanel
+public class NodeTypeHierarchyPanel
 extends JPanel
 implements ModelChangeListener {
 	private JTree typeTree;
 	NodeTypeModel nodeTypeModel;
-	public NodeTypePanel(String name) {
+	public NodeTypeHierarchyPanel(String name) {
 		super();
 		setName(name);
 		createViews();

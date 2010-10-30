@@ -60,7 +60,7 @@ import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.model.SearchNodeParameters;
 import com.uttama.jcr.workbench.view.NodeTabbedPanel;
-import com.uttama.jcr.workbench.view.NodeTypePanel;
+import com.uttama.jcr.workbench.view.NodeTypeHierarchyPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
 import com.uttama.jcr.workbench.view.swing.CustomJTree;
@@ -80,7 +80,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private NodeDataPanel nodePanel;
 	private NodeDataPanel newNodePanel;
 	private RepositoryPanel repositoryPanel;
-	private NodeTypePanel nodeTypePanel;
+	private NodeTypeHierarchyPanel nodeTypePanel;
 	private NodeTabbedPanel nodeTabbedPanel;
 	
 	private NewNodeDialog newNodeDialog;
@@ -218,7 +218,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		JPanel propertyPanel = new JPanel();
 		propertyCardLayout = new CardLayout();
 		propertyPanel.setLayout(propertyCardLayout);
-		nodeTypePanel = new NodeTypePanel("nodeType");
+		nodeTypePanel = new NodeTypeHierarchyPanel("nodeType");
 		nodeTypePanel.setModel(nodeTypeModel);
 		
 		repositoryPanel = new RepositoryPanel("repository");
@@ -250,6 +250,11 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
     	splitPane.setDividerLocation(260);
 		return splitPane;
 	}
+	/**
+	 * Currently, this controller only listens for view events from the navigator tree.
+	 * It uses the ViewModelMap to delegate the dispatching of these events to open the
+	 * corresponding view in the data panel.
+	 */
 	private void createViewListeners() {
 		tree.addTreeSelectionListener(this);
 		viewModelMap = new ViewModelMap(propertyPanel, propertyCardLayout);
