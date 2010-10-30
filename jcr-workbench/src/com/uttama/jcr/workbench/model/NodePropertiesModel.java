@@ -16,6 +16,13 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+/**
+ * Node properties are modelled as a table with three columns for name, type, and value.
+ * The type of value column is polymorphic. The type of a value can be a String, InputStream, etc.
+ * 
+ * @author frankw
+ *
+ */
 public class NodePropertiesModel
 extends AbstractTableModel {
 	private final static int NAME_COLUMN = 0;

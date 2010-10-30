@@ -26,6 +26,8 @@ import javax.jcr.ValueFactory;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JApplet;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -115,6 +117,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	            public void run() {
 	            	try {
 		            	setLookAndFeel();
+		            	createMenus();
 		            	createModels();
 		        	    createDialogs();
 		        	    createTopViews();
@@ -154,6 +157,12 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		while (parent != null && ! (parent instanceof Frame))
 			parent = parent.getParent();
 		return (Frame) parent;
+	}
+	private void createMenus() {
+		JMenu helpMenu = new JMenu("Help");
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.add(helpMenu);
+		setJMenuBar(menuBar);
 	}
 	private void createModels() {
 		nodeModel = new NodeModel();
@@ -200,6 +209,10 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
         tree.setCellRenderer(new JCRTreeCellRenderer());
 		return tree;
 	}
+	/**
+	 * Create the stack of property panels and teir associated models.
+	 * @return a JPanel with the stack of property panels.
+	 */
 	public JPanel createPropertyPanel() {
 		JPanel propertyPanel = new JPanel();
 		propertyCardLayout = new CardLayout();

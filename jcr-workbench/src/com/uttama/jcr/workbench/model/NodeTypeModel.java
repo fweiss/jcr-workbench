@@ -37,6 +37,17 @@ implements TreeModel, ModelChangeListener {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Find all the nodetypes that are dsrived (subclassed) from the given nodetype.
+	 * A derived nodetype has a jcr:supertype property whose value matches the given nodetype's
+	 * name. This relationship is executed as a XPath-type query. It is assumed the given node
+	 * is actually a nodetype node.
+	 * // TODO: why?
+	 * 
+	 * @param node the parent node
+	 * @return list for matching jcr:nodeType nodes, if any
+	 * @throws RepositoryException
+	 */
 	private List<Node> getDerived(Node node)
 	throws RepositoryException {
 		List<Node> list = new LinkedList<Node>();

@@ -37,9 +37,18 @@ import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
 import com.uttama.jcr.workbench.view.swing.PropertyTable;
 
+/**
+ * The node data panel provides read/write access to a node's data. The data is divided into
+ * the nodes's principal data, references, and properties.
+ * 
+ * The node's properties are displayed via a table and backed by a NodePropertiesModel object.
+ * @author frankw
+ *
+ */
 public class NodeDataPanel
 extends PropertyPanel
 implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListener {
+	private static final long serialVersionUID = 1L;
 	static Logger log = Logger.getLogger(NodeDataPanel.class);
 	private NodeModel nodeModel;
 	JTextField name;
