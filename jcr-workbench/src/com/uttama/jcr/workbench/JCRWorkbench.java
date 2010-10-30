@@ -108,6 +108,12 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	protected Action openSessionAction;
 	protected Action closeSessionAction;
 
+	/**
+	 * Init the JApplet. Note that the widnow size reaslly needs to be set in the launcher,
+	 * not in init(), otherwise, the window size changes as the applet is launched. Of course
+	 * perhaps it should be written as an application instead. Not sure why I chose JApplet, probable
+	 * becaaue it was a handy way to launch in it Eclipse.
+	 */
 	@Override
 	public void init() {
 		this.setSize(defaultAppletSize);
