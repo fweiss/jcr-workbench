@@ -80,6 +80,13 @@ extends AbstractTableModel {
 	public boolean isCellEditable(int row, int col) {
 		return col == 2;
 	}
+	public Property getNodeProperty(int row) throws RepositoryException {
+		PropertyIterator iterator;
+		iterator = node.getProperties();
+		iterator.skip(row);
+		Property property = properties.get(row);
+		return property;
+	}
 	@Override
 	public Object getValueAt(int row, int column) {
 		PropertyIterator iterator;

@@ -2,15 +2,19 @@ package com.uttama.jcr.workbench.view.properties;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
@@ -33,6 +37,7 @@ import com.uttama.jcr.workbench.events.NodeChangedEvent;
 import com.uttama.jcr.workbench.events.NodeChangedListener;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.model.NodePropertiesModel;
+import com.uttama.jcr.workbench.model.NodePropertyParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
 import com.uttama.jcr.workbench.view.swing.PropertyTable;
@@ -62,6 +67,8 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	JButton saveButton;
 	Action panelAddPropertyAction;
 	Action panelDeletePropertyAction;
+	Action editPropertyAction;
+	
 	private static Properties getLabels() {
 		Properties labels = new Properties();
 		labels.put("name", "Name:");
@@ -108,6 +115,31 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 		name.addActionListener(this);
 		name.setActionCommand("foo");
 		name.addFocusListener(this);
+		properties.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if (me.getComponent().isEnabled() && me.getButton() == MouseEvent.BUTTON1 && me.getClickCount() == 2) {
+					Point point = me.getPoint();
+					int row = properties.rowAtPoint(point);
+					int column = properties.columnAtPoint(point);
+					if (column != 2) {
+						log.trace("row default action");
+						try {
+							Property property = ((NodePropertiesModel) properties.getModel()).getNodeProperty(row);
+							nodePropertyDialog.clearErrors();
+							NodePropertyParameters parameters = new NodePropertyParameters();
+							parameters.name = property.getName();
+							parameters.propertyType = property.getType();
+							nodePropertyDialog.valueChanged(parameters);
+							nodePropertyDialog.setVisible(true);
+						} catch (RepositoryException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
 	}
 	private PropertyTable createPropertiesTable() {
 		TableColumnModel tableColumnModel = NodePropertiesModel.getTableColumnModel();
@@ -135,7 +167,16 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 					nodePropertyDialog.setVisible(true);
 				}
 			}
+		};
+		editPropertyAction = new AbstractAction("Edit Property") {
+			public void actionPerformed(ActionEvent ae) {
+				if (nodePropertyDialog != null) {
+					nodePropertyDialog.clearErrors();
+					nodePropertyDialog.setVisible(true);
+				}
+			}
 		}; 
+
 	}
 	private void createButtons() {
 		addButton(new JButton(panelAddPropertyAction));

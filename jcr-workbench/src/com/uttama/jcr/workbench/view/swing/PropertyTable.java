@@ -7,6 +7,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import org.apache.log4j.Logger;
 
 /**
  * Customize a JTable with per-row cell editor. The default JTable implementation only
@@ -17,7 +18,9 @@ import javax.swing.table.TableModel;
 public class PropertyTable
 extends JTable
 implements TableModelListener {
+	private final static Logger log = Logger.getLogger(PropertyTable.class);
 	private final static PropertyTableCellRenderer tableCellRenderer = new PropertyTableCellRenderer();
+
 	public PropertyTable(TableModel dataModel, TableColumnModel columnModel) {
 		super(dataModel, columnModel);
 	}

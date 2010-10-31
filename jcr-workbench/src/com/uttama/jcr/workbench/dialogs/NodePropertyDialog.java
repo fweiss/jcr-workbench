@@ -11,7 +11,10 @@ import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.jcr.PropertyType;
@@ -28,6 +31,9 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.log4j.Logger;
+
+import com.uttama.jcr.workbench.JCRWorkbench;
 import com.uttama.jcr.workbench.model.NodePropertyParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;
@@ -42,7 +48,7 @@ import com.uttama.jcr.workbench.view.swing.CustomJDialog;
  * 
  * The type field is a closed enumeration. To save space and clicks, this is implemented as a
  * two-line select list. A drop-down list would require an additional click, a vertical select
- * list would use more space, and a radio button set would be 
+ * list would use more space, and a radio button set would be fussy.
  * 
  * The value field adjusts depending on the type that is selected. For the boolean type, it
  * is a checkbox. The different value fields are displayed via CardLayout.
@@ -51,6 +57,7 @@ import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 public class NodePropertyDialog
 extends CustomJDialog
 implements ActionListener, ListSelectionListener {
+	private static final Logger log = Logger.getLogger(NodePropertyDialog.class);
 	static final Dimension preferredSize = new Dimension(800, 450);
 	NodePropertyParameters nodePropertyParameters;
 	private JTextField name;
@@ -168,6 +175,13 @@ implements ActionListener, ListSelectionListener {
 //		}
 	}
 	private void updateFields() {
+		name.setText(nodePropertyParameters.name);
+		String propertyTypeName = PropertyType.nameFromValue(nodePropertyParameters.propertyType);
+		List<String> typeNames = Arrays.asList(getPropertyTypes());
+		int index = typeNames.indexOf(propertyTypeName);
+		log.trace("property type: " + propertyTypeName + " index: " + index);
+		type.setSelectedIndex(index);
+		valueCardPanel.show(propertyTypeName);
 		errorValueFormat.setText(nodePropertyParameters.errorMessage);
 	}
 	@Override
@@ -266,5 +280,8 @@ implements ActionListener, ListSelectionListener {
 			valueCardPanel.show(typeName);
 		}
 	}
-
+	public void valueChanged(NodePropertyParameters parameters) {
+		nodePropertyParameters = parameters;
+		updateFields();
+	}
 }
