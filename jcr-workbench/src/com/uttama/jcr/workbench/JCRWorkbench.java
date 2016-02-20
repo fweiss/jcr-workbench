@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -531,21 +532,29 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				if (selectedValue != JOptionPane.OK_OPTION)
 					return;
 			}
-			try {
-				Repository repository = new TransientRepository(configurationPath, repositoryPath);
-				Credentials credentials = new SimpleCredentials(username, password.toCharArray());
-				repositoryModel.openSession(repository, credentials);
-				//repositoryPanel.setDescriptors(repository);
-				nodeTypeModel.setRootNode(repositoryModel.getRootNode());
-				setEnabled(false);
-			} catch (IOException ex) {
-				log.error("error with repository(): " + ex.toString());
-			} catch (RepositoryModelException e) {
-				log.error("error with repository(): " + e.toString());
-				String message = "Open session failed.\n\n" + e.getMessage();
-				JOptionPane.showMessageDialog(getContentPane(), message);
-				return;
-			}
+			SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
+
+				@Override
+				protected Void doInBackground() throws Exception {
+					try {
+						Repository repository = new TransientRepository(configurationPath, repositoryPath);
+						Credentials credentials = new SimpleCredentials(username, password.toCharArray());
+						repositoryModel.openSession(repository, credentials);
+						//repositoryPanel.setDescriptors(repository);
+						nodeTypeModel.setRootNode(repositoryModel.getRootNode());
+						setEnabled(false);
+					} catch (IOException ex) {
+						log.error("error with repository(): " + ex.toString());
+					} catch (RepositoryModelException e) {
+						log.error("error with repository(): " + e.toString());
+						String message = "Open session failed.\n\n" + e.getMessage();
+						JOptionPane.showMessageDialog(getContentPane(), message);
+						return null;
+					}
+					return null;
+				}
+			};
+			worker.execute();
 		}
 	}
 	protected void defaultConfiguration() {
