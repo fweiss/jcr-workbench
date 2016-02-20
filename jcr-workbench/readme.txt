@@ -3,6 +3,11 @@ java.lang.ClassNotFoundException
 Fix: enable project specifi setting under 
 Java Compiler + Building
 
+Running
+Run JCRWorkbench as an applet
+
+rest the database by deleting the directories under repository
+
 
 JCR libraries:
 

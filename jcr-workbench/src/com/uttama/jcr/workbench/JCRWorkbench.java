@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,8 @@ import javax.jcr.ValueFactory;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JApplet;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -532,6 +535,11 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				if (selectedValue != JOptionPane.OK_OPTION)
 					return;
 			}
+			JDialog modalDialog = new JDialog(findParentFrame(), "Opening Repository Session", ModalityType.DOCUMENT_MODAL);
+			modalDialog.setSize(300, 75);
+			modalDialog.setLocationRelativeTo(findParentFrame());
+			modalDialog.add(BorderLayout.CENTER, new JLabel("This may take several seconds.\n\nPlease wait."));
+			
 			SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
 
 				@Override
@@ -551,10 +559,14 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 						JOptionPane.showMessageDialog(getContentPane(), message);
 						return null;
 					}
+					finally {
+						modalDialog.dispose();
+					}
 					return null;
 				}
 			};
 			worker.execute();
+			modalDialog.setVisible(true);
 		}
 	}
 	protected void defaultConfiguration() {

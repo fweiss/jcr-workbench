@@ -1,0 +1,12 @@
+open
+failed, create new
+open
+then .lock is already locked by the current process
+Two issues were resolved. The Open button now gets disabled when session is already open.
+A busy wait dialog appears, since creating a new repository can take several seconds.
+
+select jcr:root
+new node
+name content
+then duplicates jcr:system
+
