@@ -537,6 +537,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				repositoryModel.openSession(repository, credentials);
 				//repositoryPanel.setDescriptors(repository);
 				nodeTypeModel.setRootNode(repositoryModel.getRootNode());
+				setEnabled(false);
 			} catch (IOException ex) {
 				log.error("error with repository(): " + ex.toString());
 			} catch (RepositoryModelException e) {
