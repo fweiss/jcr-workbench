@@ -21,6 +21,8 @@ import javax.swing.table.TableModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import com.uttama.jcr.workbench.events.RepositoryModelEvent;
+import com.uttama.jcr.workbench.events.RepositoryModelListener;
 import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.RepositoryModelException;
@@ -57,6 +59,7 @@ implements TreeModel, NodeChangedListener {
 		    jcrSession = this.repository.login(credentials);
 		    root = jcrSession.getRootNode();
 		    fireTreeStructureChanged();
+            fireNamespacesChanged();
 		}
 		catch (RepositoryException ex) {
 			throw new RepositoryModelException("open session: " + ex.toString());
@@ -260,6 +263,20 @@ implements TreeModel, NodeChangedListener {
 //		for (TreeModelListener listener : treeModelListeners)
 //			listener.treeNodesRemoved(new TreeModelEvent(this, treePath));
 //	}
+
+    // RepositoryModelEvent
+
+    List<RepositoryModelListener> repositoryModelListeners = new LinkedList<RepositoryModelListener>();
+    public void addRepositoryModelListener(RepositoryModelListener rml) {
+        repositoryModelListeners.add(rml);
+    }
+    private void fireNamespacesChanged() {
+        for (RepositoryModelListener listener : repositoryModelListeners) {
+            listener.namespacesChanged(new RepositoryModelEvent(this));
+        }
+    }
+    // TODO remove listener
+
 	@Override
 	public void valueChanged(NodeChangedEvent nce) {
 		NodeModel nodeModel = nce.getNodeModel();

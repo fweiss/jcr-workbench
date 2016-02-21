@@ -1,6 +1,8 @@
 2016-02-21
 open repository
 then namespaces panel is not updated
+2016-02-21
+fixed, added MVC for repository model event
 
 20160221
 select a node, add property

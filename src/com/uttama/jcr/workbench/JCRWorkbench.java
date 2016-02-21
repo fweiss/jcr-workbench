@@ -108,7 +108,6 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
                 JCRWorkbench applet = new JCRWorkbench();
                 frame.getContentPane().add(applet);
                 applet.buildGui();
-                frame.pack();
                 frame.setVisible(true);
             }
         });
@@ -285,6 +284,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	 * Register the model events that this controller will listen for.
 	 */
 	private void createModelListeners() {
+        repositoryModel.addRepositoryModelListener(repositoryPanel);
 		nodeModel.addNodeChangedListener(this);
 	}
 	private void createActions() {

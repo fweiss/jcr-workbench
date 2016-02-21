@@ -16,13 +16,15 @@ import javax.swing.table.TableColumnModel;
 
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.events.RepositoryModelEvent;
+import com.uttama.jcr.workbench.events.RepositoryModelListener;
 import com.uttama.jcr.workbench.model.RepositoryModel;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
 
 public class RepositoryPanel
 extends PropertyPanel
-implements ModelChangeListener {
+implements ModelChangeListener, RepositoryModelListener {
 	private RepositoryModel repositoryModel;
 	private JTextField configuration;
 	private JTextField repository;
@@ -94,11 +96,10 @@ implements ModelChangeListener {
 		repository.setText(repositoryModel.getRepositoryPath());
 		username.setText(repositoryModel.getUsername());
 		password.setText(repositoryModel.getPassword());
-		updateNamespacesField();
+		updateNamespacesField(repositoryModel);
 	}
-	// FIXME: use MVC
-	private void updateNamespacesField() {
-		namespaces.setModel(repositoryModel.getNamespaceTableModel());
+	private void updateNamespacesField(RepositoryModel model) {
+		namespaces.setModel(model.getNamespaceTableModel());
 		namespaces.getColumnModel().getColumn(1).setPreferredWidth(480);
 	}
 	public void saveFields(RepositoryModel repositoryModel) {
@@ -111,4 +112,15 @@ implements ModelChangeListener {
 		this.repositoryModel = (RepositoryModel) mce.getSource();
 		updateFields();
 	}
+
+    // RepositoryModelListener
+
+    @Override
+    public void namespacesChanged(RepositoryModelEvent rme) {
+        updateNamespacesField(rme.getModel());
+    }
+    @Override
+    public void nodeStatusChanged(RepositoryModelEvent rpe) {
+        /* ignored */
+    }
 }
