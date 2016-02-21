@@ -1,5 +1,5 @@
 /.idea
 /.settings
-/repository
+/repository/*
 /out
 /*.iml

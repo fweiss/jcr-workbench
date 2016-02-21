@@ -24,22 +24,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JApplet;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeModel;
@@ -75,7 +60,7 @@ extends JApplet
 implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	private static final Logger log = Logger.getLogger(JCRWorkbench.class);
 	private static final long serialVersionUID = 9004058156389836075L;
-	private Dimension defaultAppletSize = new Dimension(1200, 500);
+	private static Dimension defaultAppletSize = new Dimension(1200, 500);
 	
 	private JTree tree;
     private JSplitPane splitPane;
@@ -112,7 +97,24 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	protected Action openSessionAction;
 	protected Action closeSessionAction;
 
-	/**
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                JFrame frame = new JFrame("JCR Workbench");
+                frame.setSize(defaultAppletSize);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                JCRWorkbench applet = new JCRWorkbench();
+                frame.getContentPane().add(applet);
+                applet.buildGui();
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
+    }
+
+    /**
 	 * Init the JApplet. Note that the widnow size reaslly needs to be set in the launcher,
 	 * not in init(), otherwise, the window size changes as the applet is launched. Of course
 	 * perhaps it should be written as an application instead. Not sure why I chose JApplet, probable
@@ -126,21 +128,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	    try {
 	        SwingUtilities.invokeAndWait(new Runnable() {
 	            public void run() {
-	            	try {
-		            	setLookAndFeel();
-		            	createMenus();
-		            	createModels();
-		        	    createDialogs();
-		        	    createTopViews();
-		        	    createViewListeners();
-		        	    createModelListeners();
-		        	    createActions();
-		        	    createNodeContextMenu();
-		        	    createListeners();
-		        	    defaultConfiguration();
-	            	} catch (RuntimeException e) {
-	            		e.printStackTrace();
-	            	}
+                    buildGui();
 	            }
 	        });
 	    } catch (Exception e) {
@@ -153,6 +141,23 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			repositoryModel.closeSession();
 		}
 	}
+    public void buildGui() {
+        try {
+            setLookAndFeel();
+            createMenus();
+            createModels();
+            createDialogs();
+            createTopViews();
+            createViewListeners();
+            createModelListeners();
+            createActions();
+            createNodeContextMenu();
+            createListeners();
+            defaultConfiguration();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+    }
 	protected void setLookAndFeel() {
 		//String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
 		//String motif = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
@@ -572,8 +577,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 	protected void defaultConfiguration() {
 		log.info("user.dir: " + System.getProperty("user.dir"));
 		File defaultRepositoryDir = new File(System.getProperty("user.dir"));
-		File configurationFile = new File(defaultRepositoryDir.getParentFile(), "repository/repository.xml");
-		File repositoryDir = new File(defaultRepositoryDir.getParentFile(), "repository");
+		File configurationFile = new File(defaultRepositoryDir, "repository/repository.xml");
+		File repositoryDir = new File(defaultRepositoryDir, "repository");
 		String configurationPath = configurationFile.getAbsolutePath();
 		String repositoryPath = repositoryDir.getAbsolutePath();
 		//String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
