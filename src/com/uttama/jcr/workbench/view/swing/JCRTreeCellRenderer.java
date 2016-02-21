@@ -9,7 +9,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.apache.log4j.Logger;
 
-import com.uttama.jcr.workbench.model.NodeModel;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.NodeModel;
 import com.uttama.jcr.workbench.resources.Resource;
 /**
  * A TreeCellRender customized for JCR.

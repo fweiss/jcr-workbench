@@ -30,7 +30,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
 
-import com.uttama.jcr.workbench.model.NodePropertyParameters;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.NodePropertyParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 

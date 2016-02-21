@@ -21,13 +21,13 @@ import javax.swing.table.TableModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import com.uttama.jcr.workbench.model.ExportNodeParameters;
-import com.uttama.jcr.workbench.model.NodeModel;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.ExportNodeParameters;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.NodeModel;
 import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.RepositoryModelException;
-import com.uttama.jcr.workbench.events.NodeChangedEvent;
-import com.uttama.jcr.workbench.events.NodeChangedListener;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.NodeChangedEvent;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.NodeChangedListener;
 /**
  * The RepositoryModel serves mainly as a wrapper for javax.jcr.Session.
  * It provides a Swing TreeModel for JTree an a facade providing services and notifications to

@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.model;
+package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,7 +19,6 @@ import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Value;
-import javax.jcr.ValueFactory;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeDefinition;
@@ -28,8 +27,6 @@ import javax.jcr.version.VersionException;
 import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.RepositoryModelException;
-import com.uttama.jcr.workbench.events.NodeChangedEvent;
-import com.uttama.jcr.workbench.events.NodeChangedListener;
 
 /**
  * NodeModel wraps a javax.jcr.Node by adding several aspects:

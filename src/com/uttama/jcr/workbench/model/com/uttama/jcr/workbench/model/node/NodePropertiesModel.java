@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.model;
+package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node;
 
 import java.text.SimpleDateFormat;
 import java.util.Vector;

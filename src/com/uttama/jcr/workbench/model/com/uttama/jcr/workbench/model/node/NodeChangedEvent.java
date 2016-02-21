@@ -1,6 +1,4 @@
-package com.uttama.jcr.workbench.events;
-
-import com.uttama.jcr.workbench.model.NodeModel;
+package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node;
 
 public class NodeChangedEvent {
 	private final NodeModel nodeModel;
