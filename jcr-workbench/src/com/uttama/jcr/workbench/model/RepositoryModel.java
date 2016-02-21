@@ -145,8 +145,9 @@ implements TreeModel, NodeChangedListener {
 		try {
 			Node newNode = parentNode.addNode(name, primaryNodeTypeName);
 			int childIndices[] = { (int) parentNode.getNodes().getSize() - 1 };
-			Object children[] = { newNode };
+			Node children[] = { newNode };
 			TreeModelEvent tme = new TreeModelEvent(this, treePath, childIndices, children);
+			log.trace("treePath: " + treePath.toString() + " index: " + childIndices[0] + " new: " + children[0].getName());
 			fireTreeNodesInserted(tme);
 			return newNode;
 		} catch (RepositoryException e) {
@@ -197,6 +198,7 @@ implements TreeModel, NodeChangedListener {
 		NodeModel nodeModel = (NodeModel) n;
 		NodeModel child = nodeModel.getChild(nodeModel, index);
 		child.addNodeChangedListener(this);
+		log.trace("getChild: " + child.getName());
 		return child;
 	}
 	@Override

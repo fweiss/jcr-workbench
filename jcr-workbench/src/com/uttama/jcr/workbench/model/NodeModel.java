@@ -43,7 +43,8 @@ public class NodeModel {
 	private static final Logger log = Logger.getLogger(NodeModel.class);
 	private Node node;
 	private boolean isDeleted;
-	private boolean sortChildNodes = true;
+	// N.B. sorting causes issue with insertion
+	private boolean sortChildNodes = false;
 	
 	private NodePropertiesModel nodePropertiesModel;
 	DeletedNodeModel deletedNode = new DeletedNodeModel();
