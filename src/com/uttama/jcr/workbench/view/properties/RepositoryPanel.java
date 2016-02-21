@@ -16,9 +16,9 @@ import javax.swing.table.TableColumnModel;
 
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
-import com.uttama.jcr.workbench.events.RepositoryModelEvent;
-import com.uttama.jcr.workbench.events.RepositoryModelListener;
-import com.uttama.jcr.workbench.model.RepositoryModel;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.repository.RepositoryModelEvent;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.repository.RepositoryModelListener;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.repository.RepositoryModel;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
 

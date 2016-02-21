@@ -45,7 +45,7 @@ import com.uttama.jcr.workbench.model.ExportNodeParameters;
 import com.uttama.jcr.workbench.model.NewNodeParameters;
 import com.uttama.jcr.workbench.model.NodePropertyParameters;
 import com.uttama.jcr.workbench.model.NodeTypeModel;
-import com.uttama.jcr.workbench.model.RepositoryModel;
+import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.repository.RepositoryModel;
 import com.uttama.jcr.workbench.model.NodeModel;
 import com.uttama.jcr.workbench.model.SearchNodeParameters;
 import com.uttama.jcr.workbench.view.NodePanel;
