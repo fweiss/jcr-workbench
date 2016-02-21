@@ -20,7 +20,7 @@ The current capabilities are:
 * Import a node from a file
 
 Future work is intended to: version nodes, manage users, use backing stores other than Derby, add richer
-UI components, such as a date picker, and add users, groups and ACLs.
+UI components, such as a date picker, and add users, groups and ACLs, upgrade to JCR 2.0.
 
 ## Runtime requirements
 
@@ -31,7 +31,7 @@ This is a pure Java application, however, it currently requires a Java IDE to ru
 
 It has been developed and tested with the following IDEs:
 
-* Eclipse Matrs 4.5.0
+* Eclipse Mars 4.5.0
 * IntelliJ 14.0.3
 
 ## Running
@@ -45,8 +45,8 @@ The initial UI selects the location of the JCR repository. It will initialize a 
 
 Unfortunately, this application was not developed with TDD or BDD. Is is currently manually tested.
 
-There were several challenges: learning JCR and Swing, and not having a suitable Swing UI testing framework at the
-beginning, and - admittedly - wanting something that worked.
+There were several challenges: learning JCR and Swing, not having a suitable Swing UI testing framework at the
+beginning, and - admittedly - wanting something quickly that worked.
 
 ## Background information
 
@@ -61,5 +61,13 @@ it's been modified to run as a Java application that launches a Swing UI.
 If I were to start now (early 2016), I'd use an HTML front end and a REST service. The Apache Sling project is a
 possible candidate, but I think it has a weird REST API, kind of crappy UI, and seems to lack support for
 some JCR features such as versioning and ACLs.
+
+## Links and references
+
+[Apache Jackrabbit home page](http://jackrabbit.apache.org/jcr/index.html)
+
+[Wikipedia JCR](https://en.wikipedia.org/wiki/Content_repository_API_for_Java)
+
+
 
 
