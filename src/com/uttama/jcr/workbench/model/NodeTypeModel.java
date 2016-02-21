@@ -38,13 +38,13 @@ implements TreeModel, ModelChangeListener {
 		}
 	}
 	/**
-	 * Find all the nodetypes that are dsrived (subclassed) from the given nodetype.
+	 * Find all the nodetypes that are derived (subclassed) from the given nodetype.
 	 * A derived nodetype has a jcr:supertype property whose value matches the given nodetype's
 	 * name. This relationship is executed as a XPath-type query. It is assumed the given node
 	 * is actually a nodetype node.
 	 * // TODO: why?
 	 * 
-	 * @param node the parent node
+	 * @param nodeModel the parent node
 	 * @return list for matching jcr:nodeType nodes, if any
 	 * @throws RepositoryException
 	 */

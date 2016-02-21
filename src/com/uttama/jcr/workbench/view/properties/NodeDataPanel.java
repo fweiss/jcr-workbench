@@ -86,9 +86,6 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
 	public NodeDataPanel(NodeModel nodeModel) {
 		setName("node");
 		this.nodeModel = nodeModel;
-		//JPanel main = this;
-		//main.setLayout(new FlowLayout(FlowLayout.LEFT));
-		//main.setLayout(new BorderLayout());
 		LabeledGrid group = new LabeledGrid();
 		group.setLabels(getLabels());
 		group.addNLabeledComponent("name", name = new JTextField(30));

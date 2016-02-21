@@ -13,6 +13,9 @@ import com.uttama.jcr.workbench.model.NodeTypeModel;
 import com.uttama.jcr.workbench.view.swing.CustomJTree;
 import com.uttama.jcr.workbench.view.swing.JCRTreeCellRenderer;
 
+/**
+ * This is a somewhat experimental view to show the node type hierarchy as a collapsible tree.
+ */
 public class NodeTypeHierarchyPanel
 extends JPanel
 implements ModelChangeListener {
@@ -27,16 +30,12 @@ implements ModelChangeListener {
 		this.nodeTypeModel = nodeTypeModel;
 	}
 	private void createViews() {
-		//typeTree = new JTree();
-		
 		typeTree = new CustomJTree(null);
 		typeTree.setShowsRootHandles(true);
 		typeTree.putClientProperty("JTree.lineStyle", "Angled");
 		typeTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		typeTree.setRootVisible(true);
 		typeTree.setCellRenderer(new JCRTreeCellRenderer());
-
-        
 		add(typeTree);
 	}
 	@Override

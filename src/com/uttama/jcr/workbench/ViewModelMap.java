@@ -66,7 +66,7 @@ public class ViewModelMap {
 			link = defaultLink;
 		Component view = link.view;
 		String viewName = view.getName();
-		// FIXME: awkward, rep:root is repositoryMode, others are the selection's nodeModel
+		// FIXME: awkward, rep:root is repositoryModel, others are the selection's nodeModel
 		ModelChangeEvent mce;
 		if (nodeTypeName.equals("rep:root")) {
 			mce = new ModelChangeEvent(link.model);

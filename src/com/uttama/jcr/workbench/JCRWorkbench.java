@@ -322,7 +322,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		newNodePanel.setSaveButtonAction(saveNodeAction);
 	}
 	// FIXME: pull up the popup menu launching or refactor the popup
-	// menu to implicitly show a dialg instead of having the Action do both that
+	// menu to implicitly show a dialog instead of having the Action do both that
 	// and actually performing the action.
 	class SearchNodeAction
 	extends AbstractAction {
@@ -387,7 +387,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			try {
 				repositoryModel.save();
 			} catch (RepositoryModelException e) {
-				log.error("SaveNodeAction: " + e.toString());;
+				log.error("SaveNodeAction: " + e.toString());
 			}
 			log.trace("saved!");		}
 	}
@@ -581,8 +581,6 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		File repositoryDir = new File(defaultRepositoryDir, "repository");
 		String configurationPath = configurationFile.getAbsolutePath();
 		String repositoryPath = repositoryDir.getAbsolutePath();
-		//String configurationPath = "d:/workspace/jackrabbit-app/repository.xml";
-		//String repositoryPath = "d:/workspace/jackrabbit-app/repository";
 		String username = "username";
 		String password = "password";
 		repositoryModel.setConfigurationPath(configurationPath);

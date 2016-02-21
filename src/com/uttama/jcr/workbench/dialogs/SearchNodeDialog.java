@@ -111,8 +111,9 @@ extends CustomJDialog {
 		Query query = queryManager.createQuery(xpathQuery, Query.XPATH);
 		QueryResult queryResult = query.execute();
 		NodeIterator nodes = queryResult.getNodes();
-		while (nodes.hasNext())
-			list.add(nodes.nextNode());
+		while (nodes.hasNext()) {
+            list.add(nodes.nextNode());
+        }
 		return list;
 	}
 

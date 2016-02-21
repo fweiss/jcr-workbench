@@ -8,6 +8,9 @@ import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
 import com.uttama.jcr.workbench.view.properties.NodeVersionsPanel;
 
+/**
+ * The NodePanel composes the node's data into tabbed panels to reduce UI clutter.
+ */
 public class NodePanel
 extends JTabbedPane
 implements ModelChangeListener {

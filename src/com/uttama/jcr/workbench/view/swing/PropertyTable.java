@@ -12,7 +12,9 @@ import org.apache.log4j.Logger;
 /**
  * Customize a JTable with per-row cell editor. The default JTable implementation only
  * permits per-column cell renderer and editor types. For JCR properties, we'll need a cell editor
- * based the property type (STRING, BOOLEAN, DATE, etc).
+ * based on the property type (STRING, BOOLEAN, DATE, etc).
+ *
+ * Alternately, this could be done with a popup instead of in-line.
  *
  */
 public class PropertyTable

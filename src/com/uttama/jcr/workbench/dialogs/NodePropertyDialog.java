@@ -8,12 +8,9 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -33,7 +30,6 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
 
-import com.uttama.jcr.workbench.JCRWorkbench;
 import com.uttama.jcr.workbench.model.NodePropertyParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;
@@ -100,8 +96,7 @@ implements ActionListener, ListSelectionListener {
 		LabeledGrid grid1 = new LabeledGrid(getLabels());
 		grid1.addNLabeledComponent("name", name);
 		grid1.addNLabeledComponent("type", new JScrollPane(type));
-		//grid1.addNLabeledComponent("type", createPropertyTypePanel());
-		//grid1.addNLabeledComponent("value", value);
+//		grid1.addNLabeledComponent("type", createPropertyTypePanel());
 		grid1.addNLabeledComponent("value", valueCardPanel);
 		grid1.addNLabeledComponent("multi", isMulti);
 		//getContentPane().add(grid1, BorderLayout.NORTH);
@@ -168,11 +163,6 @@ implements ActionListener, ListSelectionListener {
 		nodePropertyParameters.name = name.getText();
 		nodePropertyParameters.propertyType = PropertyType.valueFromName((String) type.getSelectedValue());
 		nodePropertyParameters.value = valueCardPanel.getValueFromField(nodePropertyParameters.propertyType);
-//		Object rbs[] = group.getSelection().getSelectedObjects();
-//		if (rbs != null && rbs.length > 0) {
-//			JRadioButton rb = (JRadioButton) rbs[0];
-//			nodePropertyParameters.propertyType = PropertyType.valueFromName(rb.getText());
-//		}
 	}
 	private void updateFields() {
 		name.setText(nodePropertyParameters.name);
@@ -220,7 +210,7 @@ implements ActionListener, ListSelectionListener {
 		private JTextArea stringValue = new JTextArea();
 		private JTextField longValue = new JTextField(40);
 		private JTextField doubleValue = new JTextField(40);
-		private JCheckBox booleanValue = new JCheckBox();;
+		private JCheckBox booleanValue = new JCheckBox();
 		private JTextField dateValue = new JTextField(40);
 		private JTextField nameValue = new JTextField(40);
 		private JTextField binaryValue = new JTextField(40);

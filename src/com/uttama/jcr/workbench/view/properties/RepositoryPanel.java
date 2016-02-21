@@ -34,7 +34,6 @@ implements ModelChangeListener {
 	
 	public RepositoryPanel(String name) {
 		super(name);
-		//main.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		LabeledGrid group = new LabeledGrid(getLabels());
 		group.addNLabeledComponent("configuration", configuration = new JTextField(40));
@@ -44,8 +43,7 @@ implements ModelChangeListener {
 		group.addNLabeledComponent("namespaces", createTableWrapper(namespaces = createNamespacesTable()));
 
 		addForm(group);
-		//main.add(Box.createVerticalStrut(20));
-		
+
 		openButton = new JButton("Open");
 		addButton(openButton);
 	}
@@ -64,8 +62,8 @@ implements ModelChangeListener {
 	/**
 	 * Wrap the JTable with a JPanel with column headers.
 	 * FIXME: refactor to utility/factory class
-	 * @param table
-	 * @return
+	 * @param table the table to be wrapped
+	 * @return the wrapped table with column headers
 	 */
 	static JPanel createTableWrapper(JTable table) {
 		JPanel tableContainer = new JPanel(new BorderLayout());

@@ -24,7 +24,7 @@ import javax.swing.border.MatteBorder;
  * a button pane
  * common OK and Cancel button actions
  * 
- * Subclasses should override the addFields() method to add populate the dialog-specific
+ * Subclasses should override the addFields() method to add the dialog-specific
  * labelled fields.
  * 
  * Override actionPerformed() to handle the OK click event.

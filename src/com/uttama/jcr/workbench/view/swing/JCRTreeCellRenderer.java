@@ -71,7 +71,7 @@ extends DefaultTreeCellRenderer {
 		String name = "???-???";
 		if (value != null) {
 			if (value.isDeleted()) {
-				name = value.getName();;
+				name = value.getName();
 			} else {
 				try {
 					NodeModel node = value;

@@ -71,7 +71,7 @@ extends AbstractTableModel {
 	@Override
 	public int getRowCount() {
 		try {
-			return (int) properties.size();
+			return properties.size();
 		} catch (NullPointerException e) {
 			return 0;
 		}
