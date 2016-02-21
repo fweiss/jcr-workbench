@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node;
+package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.com.uttama.jcr.workbench.model.node.properties;
 
 public class NodePropertyParameters {
 	public String errorMessage;
