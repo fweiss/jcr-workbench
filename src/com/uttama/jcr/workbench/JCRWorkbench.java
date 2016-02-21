@@ -521,10 +521,10 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			repositoryPanel.saveFields(repositoryModel);
-			String configurationPath = repositoryModel.getConfigurationPath();
-			String repositoryPath = repositoryModel.getRepositoryPath();
-			String username = repositoryModel.getUsername();
-			String password = repositoryModel.getPassword();
+			final String configurationPath = repositoryModel.getConfigurationPath();
+			final String repositoryPath = repositoryModel.getRepositoryPath();
+			final String username = repositoryModel.getUsername();
+			final String password = repositoryModel.getPassword();
 			File configurationFile = new File(configurationPath);
 			if ( ! configurationFile.exists()) {
 				String confirmText = "A repository configuration file was not found at the given location.\n\nClick OK to initialize a new Jackrabbit repository at the given location.";
@@ -535,7 +535,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 				if (selectedValue != JOptionPane.OK_OPTION)
 					return;
 			}
-			JDialog modalDialog = new JDialog(findParentFrame(), "Opening Repository Session", ModalityType.DOCUMENT_MODAL);
+			final JDialog modalDialog = new JDialog(findParentFrame(), "Opening Repository Session", ModalityType.DOCUMENT_MODAL);
 			modalDialog.setSize(300, 75);
 			modalDialog.setLocationRelativeTo(findParentFrame());
 			modalDialog.add(BorderLayout.CENTER, new JLabel("This may take several seconds.\n\nPlease wait."));
