@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node;
+package com.uttama.jcr.workbench.model.node;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,7 +24,7 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.version.VersionException;
 
-import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.com.uttama.jcr.workbench.model.node.properties.NodePropertiesModel;
+import com.uttama.jcr.workbench.model.node.properties.NodePropertiesModel;
 import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.RepositoryModelException;

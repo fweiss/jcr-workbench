@@ -1,6 +1,4 @@
-package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.repository;
-
-import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.repository.RepositoryModel;
+package com.uttama.jcr.workbench.model.repository;
 
 public class RepositoryModelEvent {
 	private final RepositoryModel repositoryModel;

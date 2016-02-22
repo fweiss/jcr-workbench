@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
-import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.NodeModel;
+import com.uttama.jcr.workbench.model.node.NodeModel;
 /**
  * This is a registry of views corresponding to various node types displayed in the repository
  * navigator. For example, the root node in the repository navigator is of type jcr:root and should 

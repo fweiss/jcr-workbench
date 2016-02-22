@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
-import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.SearchNodeParameters;
+import com.uttama.jcr.workbench.model.node.SearchNodeParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 

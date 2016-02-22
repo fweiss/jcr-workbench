@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.repository;
+package com.uttama.jcr.workbench.model.repository;
 
 import java.util.EventListener;
 

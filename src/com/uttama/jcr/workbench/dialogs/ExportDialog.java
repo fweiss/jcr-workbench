@@ -14,7 +14,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 
-import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.ExportNodeParameters;
+import com.uttama.jcr.workbench.model.node.ExportNodeParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 

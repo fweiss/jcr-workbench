@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
-import com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node.NewNodeParameters;
+import com.uttama.jcr.workbench.model.node.NewNodeParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 

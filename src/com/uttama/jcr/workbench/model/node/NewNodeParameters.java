@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.model.com.uttama.jcr.workbench.model.node;
+package com.uttama.jcr.workbench.model.node;
 
 public class NewNodeParameters {
 	public String parent;
