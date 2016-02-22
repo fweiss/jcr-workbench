@@ -32,74 +32,74 @@ import javax.swing.border.MatteBorder;
  */
 public abstract class CustomJDialog
 extends JDialog {
-	final static Dialog.ModalityType modal = Dialog.ModalityType.APPLICATION_MODAL;
-	protected JPanel buttonPanel;
-	private Action dialogOkAction;
-	private Action dialogCancelAction;
-	public CustomJDialog(Frame owner, String title, ModalityType modal) {
-		super(owner, title, modal);
-		
-		JPanel contentPanel = new JPanel();
-		BorderLayout layout = new BorderLayout();
-		layout.setVgap(8);
-		contentPanel.setLayout(layout);
-		Color background = UIManager.getColor("Panel.background");
-		contentPanel.setBorder(new MatteBorder(8, 8, 8, 8, background));
-		setContentPane(contentPanel);
+    final static Dialog.ModalityType modal = Dialog.ModalityType.APPLICATION_MODAL;
+    protected JPanel buttonPanel;
+    private Action dialogOkAction;
+    private Action dialogCancelAction;
+    public CustomJDialog(Frame owner, String title, ModalityType modal) {
+        super(owner, title, modal);
 
-		buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        JPanel contentPanel = new JPanel();
+        BorderLayout layout = new BorderLayout();
+        layout.setVgap(8);
+        contentPanel.setLayout(layout);
+        Color background = UIManager.getColor("Panel.background");
+        contentPanel.setBorder(new MatteBorder(8, 8, 8, 8, background));
+        setContentPane(contentPanel);
 
-		addFields();
-		addButtons();
-		setSize(owner);
-	}
-	public CustomJDialog(Frame owner, String title) {
-		this(owner, title, modal);
-	}
-	protected abstract void addFields();
-	protected void setSize(Frame frame) {
-		//setSize(500, 150);
-		setSize(getPreferredSize());
-		Dimension dd = getSize();
-		Dimension fd = frame.getSize();
-		Dimension sd = getToolkit().getScreenSize();
-		Point l = frame.getLocation();
-		l.translate((fd.width-dd.width)/2, (fd.height-dd.height)/2);
-		l.x = Math.max(0, Math.min(l.x, sd.width-dd.width));
-		l.y = Math.max(0, Math.min(l.y, sd.height-dd.height));
-		setLocation(l.x, l.y);
-	}
-	protected void addButtons() {
-		JButton defaultButton;
-		dialogOkAction = new DialogOkAction("OK");
-		dialogCancelAction = new DialogCancelAction("Cancel");
-		buttonPanel.add(defaultButton = new JButton(dialogOkAction));
-		buttonPanel.add(new JButton(dialogCancelAction));
-		getRootPane().setDefaultButton(defaultButton);
-	}
-	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(500, 150);
-	}
-	protected abstract void okAction(ActionEvent ae);
-	class DialogOkAction
-	extends AbstractAction {
-		public DialogOkAction(String label) {
-			super(label);
-		}
-		public void actionPerformed(ActionEvent ae) {
-			okAction(ae);
-		}
-	}
-	class DialogCancelAction
-	extends AbstractAction {
-		public DialogCancelAction(String label) {
-			super(label);
-		}
-		public void actionPerformed(ActionEvent ae) {
-			setVisible(false);
-		}
-	}
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+        addFields();
+        addButtons();
+        setSize(owner);
+    }
+    public CustomJDialog(Frame owner, String title) {
+        this(owner, title, modal);
+    }
+    protected abstract void addFields();
+    protected void setSize(Frame frame) {
+        //setSize(500, 150);
+        setSize(getPreferredSize());
+        Dimension dd = getSize();
+        Dimension fd = frame.getSize();
+        Dimension sd = getToolkit().getScreenSize();
+        Point l = frame.getLocation();
+        l.translate((fd.width-dd.width)/2, (fd.height-dd.height)/2);
+        l.x = Math.max(0, Math.min(l.x, sd.width-dd.width));
+        l.y = Math.max(0, Math.min(l.y, sd.height-dd.height));
+        setLocation(l.x, l.y);
+    }
+    protected void addButtons() {
+        JButton defaultButton;
+        dialogOkAction = new DialogOkAction("OK");
+        dialogCancelAction = new DialogCancelAction("Cancel");
+        buttonPanel.add(defaultButton = new JButton(dialogOkAction));
+        buttonPanel.add(new JButton(dialogCancelAction));
+        getRootPane().setDefaultButton(defaultButton);
+    }
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(500, 150);
+    }
+    protected abstract void okAction(ActionEvent ae);
+    class DialogOkAction
+    extends AbstractAction {
+        public DialogOkAction(String label) {
+            super(label);
+        }
+        public void actionPerformed(ActionEvent ae) {
+            okAction(ae);
+        }
+    }
+    class DialogCancelAction
+    extends AbstractAction {
+        public DialogCancelAction(String label) {
+            super(label);
+        }
+        public void actionPerformed(ActionEvent ae) {
+            setVisible(false);
+        }
+    }
 }

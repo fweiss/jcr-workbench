@@ -20,24 +20,24 @@ import org.apache.log4j.Logger;
 public class PropertyTable
 extends JTable
 implements TableModelListener {
-	private final static Logger log = Logger.getLogger(PropertyTable.class);
-	private final static PropertyTableCellRenderer tableCellRenderer = new PropertyTableCellRenderer();
+    private final static Logger log = Logger.getLogger(PropertyTable.class);
+    private final static PropertyTableCellRenderer tableCellRenderer = new PropertyTableCellRenderer();
 
-	public PropertyTable(TableModel dataModel, TableColumnModel columnModel) {
-		super(dataModel, columnModel);
-	}
-	@Override
-	public TableCellRenderer getCellRenderer(int row, int column) {
-		TableCellRenderer renderer = super.getCellRenderer(row, column);
-		if (column == 2) {
-			Object value = getModel().getValueAt(row, 1);
-			if (value instanceof String && value.toString().equals("Boolean"))
-				renderer =  tableCellRenderer;
-		}
-		return renderer;
-	}
-	@Override
-	public TableCellEditor getCellEditor(int row, int column) {
-		return super.getCellEditor(row, column);
-	}
+    public PropertyTable(TableModel dataModel, TableColumnModel columnModel) {
+        super(dataModel, columnModel);
+    }
+    @Override
+    public TableCellRenderer getCellRenderer(int row, int column) {
+        TableCellRenderer renderer = super.getCellRenderer(row, column);
+        if (column == 2) {
+            Object value = getModel().getValueAt(row, 1);
+            if (value instanceof String && value.toString().equals("Boolean"))
+                renderer =  tableCellRenderer;
+        }
+        return renderer;
+    }
+    @Override
+    public TableCellEditor getCellEditor(int row, int column) {
+        return super.getCellEditor(row, column);
+    }
 }

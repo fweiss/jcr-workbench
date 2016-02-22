@@ -53,225 +53,225 @@ import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 public class NodePropertyDialog
 extends CustomJDialog
 implements ActionListener, ListSelectionListener {
-	private static final Logger log = Logger.getLogger(NodePropertyDialog.class);
-	static final Dimension preferredSize = new Dimension(800, 450);
-	NodePropertyParameters nodePropertyParameters;
-	private JTextField name;
-	private JCheckBox isMulti;
-	private JList type;
-	private JTextField value;
-	private JTextArea errorValueFormat;
-	public Action okAction;
-	ButtonGroup group;
-	ValueCardPanel valueCardPanel;
-	private static Properties getLabels() {
-		Properties labels = new Properties();
-		labels.put("name", "Name");
-		labels.put("multi", "Multi");
-		labels.put("type", "Type");
-		labels.put("value", "Value");
-		labels.put("error", "Error");
-		return labels;
-	}
-	@Override
-	public Dimension getPreferredSize() {
-		return preferredSize;
-	}
-	public NodePropertyDialog(Frame owner, NodePropertyParameters nodePropertyParameters) {
-		super(owner, "Node Property");
-		this.nodePropertyParameters = nodePropertyParameters;
-		
-	}
-	@Override
-	protected void addFields() {
-		name = new JTextField(30);
-		isMulti = new JCheckBox();
-		createPropertyTypeList();
-		type.addListSelectionListener(this);
-		value = new JTextField(30);
-		errorValueFormat = new JTextArea(); //JTextField(60);
-		
-		valueCardPanel = new ValueCardPanel();
-		
-		LabeledGrid grid1 = new LabeledGrid(getLabels());
-		grid1.addNLabeledComponent("name", name);
-		grid1.addNLabeledComponent("type", new JScrollPane(type));
+    private static final Logger log = Logger.getLogger(NodePropertyDialog.class);
+    static final Dimension preferredSize = new Dimension(800, 450);
+    NodePropertyParameters nodePropertyParameters;
+    private JTextField name;
+    private JCheckBox isMulti;
+    private JList type;
+    private JTextField value;
+    private JTextArea errorValueFormat;
+    public Action okAction;
+    ButtonGroup group;
+    ValueCardPanel valueCardPanel;
+    private static Properties getLabels() {
+        Properties labels = new Properties();
+        labels.put("name", "Name");
+        labels.put("multi", "Multi");
+        labels.put("type", "Type");
+        labels.put("value", "Value");
+        labels.put("error", "Error");
+        return labels;
+    }
+    @Override
+    public Dimension getPreferredSize() {
+        return preferredSize;
+    }
+    public NodePropertyDialog(Frame owner, NodePropertyParameters nodePropertyParameters) {
+        super(owner, "Node Property");
+        this.nodePropertyParameters = nodePropertyParameters;
+
+    }
+    @Override
+    protected void addFields() {
+        name = new JTextField(30);
+        isMulti = new JCheckBox();
+        createPropertyTypeList();
+        type.addListSelectionListener(this);
+        value = new JTextField(30);
+        errorValueFormat = new JTextArea(); //JTextField(60);
+
+        valueCardPanel = new ValueCardPanel();
+
+        LabeledGrid grid1 = new LabeledGrid(getLabels());
+        grid1.addNLabeledComponent("name", name);
+        grid1.addNLabeledComponent("type", new JScrollPane(type));
 //		grid1.addNLabeledComponent("type", createPropertyTypePanel());
-		grid1.addNLabeledComponent("value", valueCardPanel);
-		grid1.addNLabeledComponent("multi", isMulti);
-		//getContentPane().add(grid1, BorderLayout.NORTH);
-		
-		//LabeledGrid grid2 = new LabeledGrid(getLabels());
-		//grid2.addNLabeledComponent("error", errorValueFormat);
-		//getContentPane().add(grid2, BorderLayout.CENTER);
+        grid1.addNLabeledComponent("value", valueCardPanel);
+        grid1.addNLabeledComponent("multi", isMulti);
+        //getContentPane().add(grid1, BorderLayout.NORTH);
 
-		//getContentPane().add(new JScrollPane(type), BorderLayout.WEST);
-		JPanel leftJustify = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		leftJustify.add(grid1);
-		JSplitPane splitPane = createSplitPane(leftJustify, errorValueFormat);
-		getContentPane().add(splitPane, BorderLayout.CENTER);
+        //LabeledGrid grid2 = new LabeledGrid(getLabels());
+        //grid2.addNLabeledComponent("error", errorValueFormat);
+        //getContentPane().add(grid2, BorderLayout.CENTER);
 
-		
-	}
-	private JSplitPane createSplitPane(Component leftPane, Component rightPane) {
-		JSplitPane splitPane;
+        //getContentPane().add(new JScrollPane(type), BorderLayout.WEST);
+        JPanel leftJustify = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftJustify.add(grid1);
+        JSplitPane splitPane = createSplitPane(leftJustify, errorValueFormat);
+        getContentPane().add(splitPane, BorderLayout.CENTER);
+
+
+    }
+    private JSplitPane createSplitPane(Component leftPane, Component rightPane) {
+        JSplitPane splitPane;
         int orientation = JSplitPane.VERTICAL_SPLIT;
         boolean continuousLayout = true;
         Component left = new JScrollPane(leftPane);
         Component right = new JScrollPane(rightPane);
         splitPane = new JSplitPane(orientation, continuousLayout, left, right);
-    	splitPane.setDividerLocation(260);
-		return splitPane;
-	}
+        splitPane.setDividerLocation(260);
+        return splitPane;
+    }
 
-	/**
-	 * Create a radio button-type list with a compact layout.
-	 */
-	private void createPropertyTypeList() {
-		type = new JList(getPropertyTypes());
-		type.setPreferredSize(new Dimension(260, 40));
-		type.setVisibleRowCount(0);
-		type.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		type.setSelectedIndex(0);
-	}
-	/**
-	 * Create a radio button property type selector.
-	 * @return
-	 */
-	private JPanel createPropertyTypePanel() {
-		JPanel panel = new JPanel(new FlowLayout());
-		group = new ButtonGroup();
-		for (String label : getPropertyTypes()) {
-			JRadioButton button = new JRadioButton(label);
-			panel.add(button);
-			group.add(button);
-			button.addActionListener(this);
-		}
-		return panel;
-	}
-	@Override
-	protected void okAction(ActionEvent ae) {
-		try {
-			saveFields();
-			okAction.actionPerformed(ae);
-		} catch (Exception e) {
-			errorValueFormat.setText(e.toString());
-		}
-	}
-	private void saveFields()
-	throws Exception {
-		nodePropertyParameters.name = name.getText();
-		nodePropertyParameters.propertyType = PropertyType.valueFromName((String) type.getSelectedValue());
-		nodePropertyParameters.value = valueCardPanel.getValueFromField(nodePropertyParameters.propertyType);
-	}
-	private void updateFields() {
-		name.setText(nodePropertyParameters.name);
-		String propertyTypeName = PropertyType.nameFromValue(nodePropertyParameters.propertyType);
-		List<String> typeNames = Arrays.asList(getPropertyTypes());
-		int index = typeNames.indexOf(propertyTypeName);
-		log.trace("property type: " + propertyTypeName + " index: " + index);
-		type.setSelectedIndex(index);
-		valueCardPanel.show(propertyTypeName);
-		errorValueFormat.setText(nodePropertyParameters.errorMessage);
-	}
-	@Override
-	public void setVisible(boolean visible) {
-		updateFields();
-		super.setVisible(visible);
-	}
-	public void clearErrors() {
-		nodePropertyParameters.errorMessage = null;
-	}
-	public String[] getPropertyTypes() {
-		return new String[] {
-			"String",
-			"Double",
-			"Long",
-			"Boolean",
-			"Date",
-			"Name",
-			"Binary",
-			"Path",
-			"Reference"
-		};
-	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() instanceof JRadioButton) {
-			JRadioButton button = (JRadioButton) e.getSource();
-			String typeName = button.getText();
-			nodePropertyParameters.propertyType = PropertyType.valueFromName(typeName);
-			valueCardPanel.show(typeName);
-		}
-	}
-	class ValueCardPanel
-	extends JPanel {
-		private CardLayout cardLayout = new CardLayout();
-		private JTextArea stringValue = new JTextArea();
-		private JTextField longValue = new JTextField(40);
-		private JTextField doubleValue = new JTextField(40);
-		private JCheckBox booleanValue = new JCheckBox();
-		private JTextField dateValue = new JTextField(40);
-		private JTextField nameValue = new JTextField(40);
-		private JTextField binaryValue = new JTextField(40);
-		private JTextField pathValue = new JTextField(40);
-		private JTextField referenceValue = new JTextField(40);
-		public ValueCardPanel() {
-			super();
-			setLayout(cardLayout);
-			add(stringValue, "String");
-			add(doubleValue, "Double");
-			add(longValue, "Long");
-			add(booleanValue, "Boolean");
-			add(dateValue, "Date");
-			add(nameValue, "Name");
-			add(binaryValue, "Binary");
-			add(pathValue, "Path");
-			add(referenceValue, "Reference");
-		}
-		public void show(String name) {
-			cardLayout.show(this, name);
-		}
-		private Object getValueFromField(int propertyType)
-		throws ParseException {
-			switch (nodePropertyParameters.propertyType) {
-			case PropertyType.BINARY:
-				return null;
-			case PropertyType.BOOLEAN:
-				return booleanValue.isSelected();
-			case PropertyType.DATE:
-				SimpleDateFormat dateFormat = new SimpleDateFormat();
-				dateFormat.setLenient(true);
-				dateFormat.parse(dateValue.getText());
-				return dateFormat.getCalendar();
-			case PropertyType.DOUBLE:
-				return Double.parseDouble(doubleValue.getText());
-			case PropertyType.LONG:
-				return Long.parseLong(longValue.getText());
-			case PropertyType.NAME:
-				return nameValue.getText();
-			case PropertyType.PATH:
-				return pathValue.getText();
-			case PropertyType.REFERENCE:
-				return referenceValue.getText();
-			case PropertyType.STRING:
-				return stringValue.getText();
-			default:
-				return null;
-			}
-		}
-	}
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (e.getSource() instanceof JList) {
-			JList list = (JList) e.getSource();
-			String typeName = (String) list.getSelectedValue();
-			nodePropertyParameters.propertyType = PropertyType.valueFromName(typeName);
-			valueCardPanel.show(typeName);
-		}
-	}
-	public void valueChanged(NodePropertyParameters parameters) {
-		nodePropertyParameters = parameters;
-		updateFields();
-	}
+    /**
+     * Create a radio button-type list with a compact layout.
+     */
+    private void createPropertyTypeList() {
+        type = new JList(getPropertyTypes());
+        type.setPreferredSize(new Dimension(260, 40));
+        type.setVisibleRowCount(0);
+        type.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        type.setSelectedIndex(0);
+    }
+    /**
+     * Create a radio button property type selector.
+     * @return
+     */
+    private JPanel createPropertyTypePanel() {
+        JPanel panel = new JPanel(new FlowLayout());
+        group = new ButtonGroup();
+        for (String label : getPropertyTypes()) {
+            JRadioButton button = new JRadioButton(label);
+            panel.add(button);
+            group.add(button);
+            button.addActionListener(this);
+        }
+        return panel;
+    }
+    @Override
+    protected void okAction(ActionEvent ae) {
+        try {
+            saveFields();
+            okAction.actionPerformed(ae);
+        } catch (Exception e) {
+            errorValueFormat.setText(e.toString());
+        }
+    }
+    private void saveFields()
+    throws Exception {
+        nodePropertyParameters.name = name.getText();
+        nodePropertyParameters.propertyType = PropertyType.valueFromName((String) type.getSelectedValue());
+        nodePropertyParameters.value = valueCardPanel.getValueFromField(nodePropertyParameters.propertyType);
+    }
+    private void updateFields() {
+        name.setText(nodePropertyParameters.name);
+        String propertyTypeName = PropertyType.nameFromValue(nodePropertyParameters.propertyType);
+        List<String> typeNames = Arrays.asList(getPropertyTypes());
+        int index = typeNames.indexOf(propertyTypeName);
+        log.trace("property type: " + propertyTypeName + " index: " + index);
+        type.setSelectedIndex(index);
+        valueCardPanel.show(propertyTypeName);
+        errorValueFormat.setText(nodePropertyParameters.errorMessage);
+    }
+    @Override
+    public void setVisible(boolean visible) {
+        updateFields();
+        super.setVisible(visible);
+    }
+    public void clearErrors() {
+        nodePropertyParameters.errorMessage = null;
+    }
+    public String[] getPropertyTypes() {
+        return new String[] {
+            "String",
+            "Double",
+            "Long",
+            "Boolean",
+            "Date",
+            "Name",
+            "Binary",
+            "Path",
+            "Reference"
+        };
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof JRadioButton) {
+            JRadioButton button = (JRadioButton) e.getSource();
+            String typeName = button.getText();
+            nodePropertyParameters.propertyType = PropertyType.valueFromName(typeName);
+            valueCardPanel.show(typeName);
+        }
+    }
+    class ValueCardPanel
+    extends JPanel {
+        private CardLayout cardLayout = new CardLayout();
+        private JTextArea stringValue = new JTextArea();
+        private JTextField longValue = new JTextField(40);
+        private JTextField doubleValue = new JTextField(40);
+        private JCheckBox booleanValue = new JCheckBox();
+        private JTextField dateValue = new JTextField(40);
+        private JTextField nameValue = new JTextField(40);
+        private JTextField binaryValue = new JTextField(40);
+        private JTextField pathValue = new JTextField(40);
+        private JTextField referenceValue = new JTextField(40);
+        public ValueCardPanel() {
+            super();
+            setLayout(cardLayout);
+            add(stringValue, "String");
+            add(doubleValue, "Double");
+            add(longValue, "Long");
+            add(booleanValue, "Boolean");
+            add(dateValue, "Date");
+            add(nameValue, "Name");
+            add(binaryValue, "Binary");
+            add(pathValue, "Path");
+            add(referenceValue, "Reference");
+        }
+        public void show(String name) {
+            cardLayout.show(this, name);
+        }
+        private Object getValueFromField(int propertyType)
+        throws ParseException {
+            switch (nodePropertyParameters.propertyType) {
+            case PropertyType.BINARY:
+                return null;
+            case PropertyType.BOOLEAN:
+                return booleanValue.isSelected();
+            case PropertyType.DATE:
+                SimpleDateFormat dateFormat = new SimpleDateFormat();
+                dateFormat.setLenient(true);
+                dateFormat.parse(dateValue.getText());
+                return dateFormat.getCalendar();
+            case PropertyType.DOUBLE:
+                return Double.parseDouble(doubleValue.getText());
+            case PropertyType.LONG:
+                return Long.parseLong(longValue.getText());
+            case PropertyType.NAME:
+                return nameValue.getText();
+            case PropertyType.PATH:
+                return pathValue.getText();
+            case PropertyType.REFERENCE:
+                return referenceValue.getText();
+            case PropertyType.STRING:
+                return stringValue.getText();
+            default:
+                return null;
+            }
+        }
+    }
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        if (e.getSource() instanceof JList) {
+            JList list = (JList) e.getSource();
+            String typeName = (String) list.getSelectedValue();
+            nodePropertyParameters.propertyType = PropertyType.valueFromName(typeName);
+            valueCardPanel.show(typeName);
+        }
+    }
+    public void valueChanged(NodePropertyParameters parameters) {
+        nodePropertyParameters = parameters;
+        updateFields();
+    }
 }
