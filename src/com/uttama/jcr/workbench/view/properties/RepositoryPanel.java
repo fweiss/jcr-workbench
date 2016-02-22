@@ -123,4 +123,9 @@ implements ModelChangeListener, RepositoryModelListener {
     public void nodeStatusChanged(RepositoryModelEvent rpe) {
         /* ignored */
     }
+    @Override
+    public void configurationChanged(RepositoryModelEvent rpe) {
+        this.repositoryModel = (RepositoryModel) rpe.getModel();
+        updateFields();
+    }
 }

@@ -195,7 +195,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
     	newNodeDialog = new NewNodeDialog(owner, newNodeParameters);
     	exportDialog = new ExportDialog(owner);
     	searchNodeDialog = new SearchNodeDialog(owner, searchNodeParameters);
-    	
+
+        // FIXME move to createActions
     	Action setNodePropertyAction = new SetNodePropertyAction("Set Property");
     	nodePropertyDialog = new NodePropertyDialog(owner, nodePropertyParameters);
     	nodePropertyDialog.okAction = setNodePropertyAction;
@@ -225,6 +226,15 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
         tree.setCellRenderer(new JCRTreeCellRenderer());
 		return tree;
 	}
+    public JSplitPane createSplitPane(Component leftPane, Component rightPane) {
+        int orientation = JSplitPane.HORIZONTAL_SPLIT;
+        boolean continuousLayout = true;
+        Component left = new JScrollPane(leftPane);
+        Component right = new JScrollPane(rightPane);
+        splitPane = new JSplitPane(orientation, continuousLayout, left, right);
+        splitPane.setDividerLocation(260);
+        return splitPane;
+    }
 	/**
 	 * Create the stack of property panels and teir associated models.
 	 * @return a JPanel with the stack of property panels.
@@ -233,6 +243,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		JPanel propertyPanel = new JPanel();
 		propertyCardLayout = new CardLayout();
 		propertyPanel.setLayout(propertyCardLayout);
+
 		nodeTypePanel = new NodeTypeHierarchyPanel("nodeType");
 		nodeTypePanel.setModel(nodeTypeModel);
 		
@@ -249,21 +260,12 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		propertyPanel.add(nodePanel, "node");
 		propertyPanel.add(newNodePanel, "newNode");
 		propertyPanel.add(nodeTypePanel, "nodeType");
-		
 		propertyPanel.add(nodeTabbedPanel, "nodeTabbedPanel");
+
 		return propertyPanel;
 	}
 	protected void showPropertyPanel(String key) {
 		propertyCardLayout.show(propertyPanel, key);
-	}
-	public JSplitPane createSplitPane(Component leftPane, Component rightPane) {
-        int orientation = JSplitPane.HORIZONTAL_SPLIT;
-        boolean continuousLayout = true;
-        Component left = new JScrollPane(leftPane);
-        Component right = new JScrollPane(rightPane);
-        splitPane = new JSplitPane(orientation, continuousLayout, left, right);
-    	splitPane.setDividerLocation(260);
-		return splitPane;
 	}
 	/**
 	 * Currently, this controller only listens for view events from the navigator tree.
@@ -588,8 +590,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 		repositoryModel.setUsername(username);
 		repositoryModel.setPassword(password);
 		
-		ModelChangeEvent mce = new ModelChangeEvent(repositoryModel);
-		repositoryPanel.modelChanged(mce);
+        repositoryModel.fireConfigurationChanged();
 	}
 	// FIXME: refactor for actions
 	@Override
@@ -623,6 +624,9 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
 			}
 		}
 	}
+
+    // TreeSelectionListener
+
 	@Override
 	public void valueChanged(TreeSelectionEvent tse) {
 		NodeModel nodeModel = (NodeModel) tse.getPath().getLastPathComponent();

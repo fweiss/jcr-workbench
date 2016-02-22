@@ -275,6 +275,11 @@ implements TreeModel, NodeChangedListener {
             listener.namespacesChanged(new RepositoryModelEvent(this));
         }
     }
+    public void fireConfigurationChanged() {
+        for (RepositoryModelListener listener : repositoryModelListeners) {
+            listener.configurationChanged(new RepositoryModelEvent(this));
+        }
+    }
     // TODO remove listener
 
 	@Override
