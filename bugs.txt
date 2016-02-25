@@ -1,3 +1,9 @@
+2016-02-23
+Mac OS
+New node
+then name field is too narrow
+2016-02-24 Fixed
+
 2016-02-21
 open repository
 then namespaces panel is not updated

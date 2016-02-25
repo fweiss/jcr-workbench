@@ -307,6 +307,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
         popup.add(importNodeAction);
         popup.add(searchNodeAction);
 
+        tree.setComponentPopupMenu(popup);
+
         tree.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent me) {

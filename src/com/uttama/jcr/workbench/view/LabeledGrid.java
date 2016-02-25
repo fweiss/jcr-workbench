@@ -21,6 +21,8 @@ extends JPanel {
 
         c0.anchor = GridBagConstraints.NORTHWEST;
         c0.ipadx = 5;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.weightx = 10.0;
         c1.gridwidth = GridBagConstraints.REMAINDER;
         c1.anchor = GridBagConstraints.WEST;
         c1.ipadx = 5;
