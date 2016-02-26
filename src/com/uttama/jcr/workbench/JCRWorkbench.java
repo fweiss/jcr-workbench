@@ -27,10 +27,12 @@ import javax.jcr.ValueFactory;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.uttama.jcr.workbench.view.help.HelpAction;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
 
@@ -96,6 +98,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
     protected Action searchNodeAction;
     protected Action openSessionAction;
     protected Action closeSessionAction;
+    protected Action helpAction;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -143,13 +146,13 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
     public void buildGui() {
         try {
             setLookAndFeel();
-            createMenus();
             createModels();
             createDialogs();
             createTopViews();
             createViewListeners();
             createModelListeners();
             createActions();
+            createMenus();
             createNodeContextMenu();
             createListeners();
             defaultConfiguration();
@@ -176,6 +179,8 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
     }
     private void createMenus() {
         JMenu helpMenu = new JMenu("Help");
+        JMenuItem helpMenuItem = new JMenuItem(helpAction);
+        helpMenu.add(helpMenuItem);
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
@@ -297,6 +302,7 @@ implements ActionListener, TreeSelectionListener, NodeChangedListener {
         importNodeAction = new ImportNodeAction("Import Node");
         searchNodeAction = new SearchNodeAction("Search Node");
         openSessionAction = new OpenSessionAction("Open");
+        helpAction = new HelpAction("Quick Start");
     }
     private void createNodeContextMenu() {
         final JPopupMenu popup = new JPopupMenu();
