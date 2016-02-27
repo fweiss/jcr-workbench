@@ -33,8 +33,8 @@ import org.apache.log4j.Logger;
 import com.uttama.jcr.workbench.dialogs.NodePropertyDialog;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
-import com.uttama.jcr.workbench.model.node.NodeChangedEvent;
-import com.uttama.jcr.workbench.model.node.NodeChangedListener;
+import com.uttama.jcr.workbench.model.node.NodeModelEvent;
+import com.uttama.jcr.workbench.model.node.NodeModelListener;
 import com.uttama.jcr.workbench.model.node.NodeModel;
 import com.uttama.jcr.workbench.model.node.properties.NodePropertiesModel;
 import com.uttama.jcr.workbench.model.node.properties.NodePropertyParameters;
@@ -52,7 +52,7 @@ import com.uttama.jcr.workbench.view.swing.PropertyTable;
  */
 public class NodeDataPanel
 extends PropertyPanel
-implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListener {
+implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener {
     private static final long serialVersionUID = 1L;
     static Logger log = Logger.getLogger(NodeDataPanel.class);
     private NodeModel nodeModel;
@@ -222,7 +222,7 @@ implements NodeChangedListener, ActionListener, FocusListener, ModelChangeListen
         return null;
     }
     @Override
-    public void valueChanged(NodeChangedEvent nce) {
+    public void valueChanged(NodeModelEvent nce) {
         Node node = nce.getNodeModel().getNode();
         try {
             String nt = node.getPrimaryNodeType().getName();

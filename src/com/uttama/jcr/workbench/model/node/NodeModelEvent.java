@@ -1,9 +1,9 @@
 package com.uttama.jcr.workbench.model.node;
 
-public class NodeChangedEvent {
+public class NodeModelEvent {
     private final NodeModel nodeModel;
     private boolean nameChanged;
-    public NodeChangedEvent(NodeModel nodeModel) {
+    public NodeModelEvent(NodeModel nodeModel) {
         this.nodeModel = nodeModel;
         this.nameChanged = false;
     }

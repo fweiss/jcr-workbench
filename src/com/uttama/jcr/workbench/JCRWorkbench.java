@@ -48,8 +48,8 @@ import com.uttama.jcr.workbench.dialogs.NewNodeDialog;
 import com.uttama.jcr.workbench.dialogs.NodePropertyDialog;
 import com.uttama.jcr.workbench.dialogs.SearchNodeDialog;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.model.node.NodeChangedEvent;
-import com.uttama.jcr.workbench.model.node.NodeChangedListener;
+import com.uttama.jcr.workbench.model.node.NodeModelEvent;
+import com.uttama.jcr.workbench.model.node.NodeModelListener;
 import com.uttama.jcr.workbench.model.node.ExportNodeParameters;
 import com.uttama.jcr.workbench.model.node.NewNodeParameters;
 import com.uttama.jcr.workbench.model.node.properties.NodePropertyParameters;
@@ -67,7 +67,7 @@ import com.uttama.jcr.workbench.view.swing.JCRTreeCellRenderer;
 
 public class JCRWorkbench
 extends JApplet
-implements TreeSelectionListener, NodeChangedListener {
+implements TreeSelectionListener, NodeModelListener {
     private static final Logger log = Logger.getLogger(JCRWorkbench.class);
     private static final long serialVersionUID = 9004058156389836075L;
     private static Dimension defaultAppletSize = new Dimension(1200, 500);
@@ -598,7 +598,7 @@ implements TreeSelectionListener, NodeChangedListener {
             }
     }
     @Override
-    public void valueChanged(NodeChangedEvent nce) {
+    public void valueChanged(NodeModelEvent nce) {
         if (nce.isNameChanged()) {
             try {
                 NodeModel node = nce.getNodeModel();

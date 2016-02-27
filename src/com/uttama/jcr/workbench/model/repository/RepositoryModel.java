@@ -24,8 +24,8 @@ import javax.swing.tree.TreePath;
 
 import com.uttama.jcr.workbench.model.node.ExportNodeParameters;
 import com.uttama.jcr.workbench.model.node.NodeModel;
-import com.uttama.jcr.workbench.model.node.NodeChangedEvent;
-import com.uttama.jcr.workbench.model.node.NodeChangedListener;
+import com.uttama.jcr.workbench.model.node.NodeModelEvent;
+import com.uttama.jcr.workbench.model.node.NodeModelListener;
 import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.RepositoryModelException;
@@ -39,7 +39,7 @@ import com.uttama.jcr.workbench.RepositoryModelException;
  *
  */
 public class RepositoryModel
-implements TreeModel, NodeChangedListener {
+implements TreeModel, NodeModelListener {
     private final static Logger log = Logger.getLogger(RepositoryModel.class);
 
     private String configurationPath;
@@ -286,7 +286,7 @@ implements TreeModel, NodeChangedListener {
     // TODO remove listener
 
     @Override
-    public void valueChanged(NodeChangedEvent nce) {
+    public void valueChanged(NodeModelEvent nce) {
         NodeModel nodeModel = nce.getNodeModel();
         try {
             TreePath treePath = getTreePath(nodeModel.getNodePath());

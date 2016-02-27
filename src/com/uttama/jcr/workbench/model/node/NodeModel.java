@@ -33,7 +33,7 @@ public class NodeModel {
     private NodePropertiesModel nodePropertiesModel;
     DeletedNodeModel deletedNode = new DeletedNodeModel();
 
-    private Set<NodeChangedListener> listeners = new HashSet<NodeChangedListener>();
+    private Set<NodeModelListener> listeners = new HashSet<NodeModelListener>();
 
     public NodeModel() {
         nodePropertiesModel = new NodePropertiesModel();
@@ -49,7 +49,7 @@ public class NodeModel {
     }
     public void setNode(Node node) {
         this.node = node;
-        NodeChangedEvent nce = new NodeChangedEvent(this);
+        NodeModelEvent nce = new NodeModelEvent(this);
         fireNodeChangedEvent(nce);
         nodePropertiesModel.setNode(node);
     }
@@ -111,7 +111,7 @@ public class NodeModel {
                     break;
             }
             node.setProperty(name, value, propertyType);
-            NodeChangedEvent nce = new NodeChangedEvent(this);
+            NodeModelEvent nce = new NodeModelEvent(this);
             fireNodeChangedEvent(nce);
             nodePropertiesModel.fireTableDataChanged();
         } catch (RepositoryException e) {
@@ -262,7 +262,7 @@ public class NodeModel {
             if (this.node.getName().equals(newName))
                 return;
             node.getSession().move(node.getPath(), node.getParent().getPath() + "/" + newName);
-            NodeChangedEvent nce = new NodeChangedEvent(this);
+            NodeModelEvent nce = new NodeModelEvent(this);
             nce.setNameChanged(true);
             fireNodeChangedEvent(nce);
         } catch (ItemExistsException e) {
@@ -291,15 +291,15 @@ public class NodeModel {
             e.printStackTrace();
         }
     }
-    protected void fireNodeChangedEvent(final NodeChangedEvent nce) {
-        for (NodeChangedListener listener : listeners) {
+    protected void fireNodeChangedEvent(final NodeModelEvent nce) {
+        for (NodeModelListener listener : listeners) {
             listener.valueChanged(nce);
         }
     }
-    public void addNodeChangedListener(NodeChangedListener listener) {
+    public void addNodeChangedListener(NodeModelListener listener) {
         listeners.add(listener);
     }
-    public void removeNodeChangedListener(NodeChangedListener listener) {
+    public void removeNodeChangedListener(NodeModelListener listener) {
         listeners.remove(listener);
     }
     class DeletedNodeModel {
