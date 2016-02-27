@@ -143,7 +143,7 @@ implements TreeModel, NodeChangedListener {
         }
         return node;
     }
-    public Node addNode(TreePath treePath, String name, String primaryNodeTypeName)
+    public NodeModel addNode(TreePath treePath, String name, String primaryNodeTypeName)
     throws RepositoryModelException {
         log.trace("newNode: " + name);
         Node parentNode = getNode(treePath);
@@ -154,7 +154,7 @@ implements TreeModel, NodeChangedListener {
             TreeModelEvent tme = new TreeModelEvent(this, treePath, childIndices, children);
             log.trace("treePath: " + treePath.toString() + " index: " + childIndices[0] + " new: " + children[0].getName());
             fireTreeNodesInserted(tme);
-            return newNode;
+            return new NodeModel(newNode);
         } catch (RepositoryException e) {
             throw new RepositoryModelException("addNode: " + e.toString());
         }

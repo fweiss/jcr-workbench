@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
-import javax.jcr.Node;
 import javax.jcr.PropertyType;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -375,8 +374,8 @@ implements TreeSelectionListener, NodeChangedListener {
             String nodeName = newNodeParameters.name;
             String primaryNodeTypeName = newNodeParameters.primaryNodeTypeName;
             try {
-                Node node = repositoryModel.addNode(treePath, nodeName, primaryNodeTypeName);
-                tree.setSelectionPath(treePath.pathByAddingChild(new NodeModel(node)));
+                NodeModel node = repositoryModel.addNode(treePath, nodeName, primaryNodeTypeName);
+                tree.setSelectionPath(treePath.pathByAddingChild(node));
             }
             catch (RepositoryModelException e) {
                 log.error("NewNodeAction: " + e.toString());
@@ -620,9 +619,9 @@ implements TreeSelectionListener, NodeChangedListener {
     public void valueChanged(NodeChangedEvent nce) {
         if (nce.isNameChanged()) {
             try {
-                Node node = nce.getNodeModel().getNode();
-                log.trace("node name changed: " + node.getPath() + ":" + nce.getNodeModel().getNode().getName());
-                TreePath treePath = repositoryModel.getTreePath(node.getPath());
+                NodeModel node = nce.getNodeModel();
+                log.trace("node name changed: " + node.getNodePath() + ":" + nce.getNodeModel().getNode().getName());
+                TreePath treePath = repositoryModel.getTreePath(node.getNodePath());
                 repositoryModel.valueForPathChanged(treePath, node.getName());
             } catch (RepositoryException e) {
                 // TODO Auto-generated catch block

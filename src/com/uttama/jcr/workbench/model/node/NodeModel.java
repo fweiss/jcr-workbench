@@ -34,8 +34,9 @@ import com.uttama.jcr.workbench.RepositoryModelException;
  * 
  * 1. MVC event model
  * 2. Deleted node info
+ * 3. Sorting by name
  * 
- *
+ * TODO Should this implement node or extend AbstractNode?
  */
 public class NodeModel {
     private static final Logger log = Logger.getLogger(NodeModel.class);
