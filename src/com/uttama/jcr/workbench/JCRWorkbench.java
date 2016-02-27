@@ -12,22 +12,34 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Calendar;
 
-import javax.jcr.PropertyType;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
-import javax.jcr.Value;
 import javax.jcr.ValueFactory;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JApplet;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.uttama.jcr.workbench.view.help.HelpAction;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
 
@@ -45,6 +57,7 @@ import com.uttama.jcr.workbench.model.node.NodeTypeModel;
 import com.uttama.jcr.workbench.model.repository.RepositoryModel;
 import com.uttama.jcr.workbench.model.node.NodeModel;
 import com.uttama.jcr.workbench.model.node.SearchNodeParameters;
+import com.uttama.jcr.workbench.view.help.HelpAction;
 import com.uttama.jcr.workbench.view.NodePanel;
 import com.uttama.jcr.workbench.view.NodeTypeHierarchyPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
@@ -431,38 +444,7 @@ implements TreeSelectionListener, NodeChangedListener {
 
             try {
                 ValueFactory valueFactory = repositoryModel.getValueFactory();
-                Value value = null;
-                switch (nodePropertyParameters.propertyType) {
-                    case PropertyType.BINARY:
-                        value = valueFactory.createValue((InputStream) nodePropertyParameters.value);
-                        break;
-                    case PropertyType.BOOLEAN:
-                        value = valueFactory.createValue((Boolean) nodePropertyParameters.value);
-                        break;
-                    case PropertyType.DATE:
-                        value = valueFactory.createValue((Calendar) nodePropertyParameters.value);
-                        break;
-                    case PropertyType.DOUBLE:
-                        value = valueFactory.createValue((Double) nodePropertyParameters.value);
-                        break;
-                    case PropertyType.LONG:
-                        value = valueFactory.createValue((Long) nodePropertyParameters.value);
-                        break;
-                    case PropertyType.NAME:
-                        value = valueFactory.createValue((String) nodePropertyParameters.value, PropertyType.NAME);
-                        break;
-                    case PropertyType.PATH:
-                        value = valueFactory.createValue((String) nodePropertyParameters.value, PropertyType.PATH);
-                        break;
-                    case PropertyType.REFERENCE:
-                        value = valueFactory.createValue((String) nodePropertyParameters.value, PropertyType.REFERENCE);
-                        break;
-                    case PropertyType.STRING:
-                        value = valueFactory.createValue((String) nodePropertyParameters.value);
-                        break;
-
-                }
-                nodeModel.setProperty(name, value, propertyType);
+                nodeModel.setProperty(valueFactory, name, propertyType, nodePropertyParameters.value);
                 nodePropertyDialog.setVisible(false);
             } catch (Exception e) {
                 Throwable t = e;

@@ -1,24 +1,9 @@
 package com.uttama.jcr.workbench.model.node;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
+import java.io.InputStream;
+import java.util.*;
 
-import javax.jcr.AccessDeniedException;
-import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.Value;
+import javax.jcr.*;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeDefinition;
@@ -93,27 +78,42 @@ public class NodeModel {
         }
         return primaryType;
     }
-    public void setProperty(String name, Value value, int type)
-    throws RepositoryModelException {
+    public void setProperty(ValueFactory valueFactory, String name, int propertyType, Object object) throws RepositoryModelException {
         try {
-            node.setProperty(name, value);
+            Value value = null;
+            switch (propertyType) {
+                case PropertyType.BINARY:
+                    value = valueFactory.createValue((InputStream) object);
+                    break;
+                case PropertyType.BOOLEAN:
+                    value = valueFactory.createValue((Boolean) object);
+                    break;
+                case PropertyType.DATE:
+                    value = valueFactory.createValue((Calendar) object);
+                    break;
+                case PropertyType.DOUBLE:
+                    value = valueFactory.createValue((Double) object);
+                    break;
+                case PropertyType.LONG:
+                    value = valueFactory.createValue((Long) object);
+                    break;
+                case PropertyType.NAME:
+                    value = valueFactory.createValue((String) object, PropertyType.NAME);
+                    break;
+                case PropertyType.PATH:
+                    value = valueFactory.createValue((String) object, PropertyType.PATH);
+                    break;
+                case PropertyType.REFERENCE:
+                    value = valueFactory.createValue((String) object, PropertyType.REFERENCE);
+                    break;
+                case PropertyType.STRING:
+                    value = valueFactory.createValue((String) object);
+                    break;
+            }
+            node.setProperty(name, value, propertyType);
             NodeChangedEvent nce = new NodeChangedEvent(this);
             fireNodeChangedEvent(nce);
-            //TableModelEvent tme = new TableModelEvent(nodePropertiesModel);
             nodePropertiesModel.fireTableDataChanged();
-
-//		} catch (ValueFormatException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (VersionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (LockException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ConstraintViolationException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
         } catch (RepositoryException e) {
             throw new RepositoryModelException("error setting property " + name + ":", e);
         }

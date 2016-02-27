@@ -1,3 +1,12 @@
+2016-02-27
+    new node properties date parse
+    fails on 4/5/2016
+
+2016-02-26
+    mac right click node in tree
+    then NPE
+    OK if selected
+
 2016-02-23
 Mac OS
 New node

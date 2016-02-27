@@ -242,7 +242,8 @@ implements ActionListener, ListSelectionListener {
             case PropertyType.DATE:
                 SimpleDateFormat dateFormat = new SimpleDateFormat();
                 dateFormat.setLenient(true);
-                dateFormat.parse(dateValue.getText());
+                String fieldText = dateValue.getText();
+                dateFormat.parse(fieldText);
                 return dateFormat.getCalendar();
             case PropertyType.DOUBLE:
                 return Double.parseDouble(doubleValue.getText());
