@@ -53,7 +53,7 @@ import com.uttama.jcr.workbench.model.node.NodeChangedListener;
 import com.uttama.jcr.workbench.model.node.ExportNodeParameters;
 import com.uttama.jcr.workbench.model.node.NewNodeParameters;
 import com.uttama.jcr.workbench.model.node.properties.NodePropertyParameters;
-import com.uttama.jcr.workbench.model.node.NodeTypeModel;
+import com.uttama.jcr.workbench.model.nodetype.NodeTypeModel;
 import com.uttama.jcr.workbench.model.repository.RepositoryModel;
 import com.uttama.jcr.workbench.model.node.NodeModel;
 import com.uttama.jcr.workbench.model.node.SearchNodeParameters;

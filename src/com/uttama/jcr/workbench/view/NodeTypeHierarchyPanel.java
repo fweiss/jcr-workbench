@@ -9,7 +9,7 @@ import javax.swing.tree.TreeSelectionModel;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NodeModel;
-import com.uttama.jcr.workbench.model.node.NodeTypeModel;
+import com.uttama.jcr.workbench.model.nodetype.NodeTypeModel;
 import com.uttama.jcr.workbench.view.swing.CustomJTree;
 import com.uttama.jcr.workbench.view.swing.JCRTreeCellRenderer;
 

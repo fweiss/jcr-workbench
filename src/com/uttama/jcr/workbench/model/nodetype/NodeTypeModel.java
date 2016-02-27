@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.model.node;
+package com.uttama.jcr.workbench.model.nodetype;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +14,7 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import com.uttama.jcr.workbench.model.node.NodeModel;
 import org.apache.log4j.Logger;
 
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
