@@ -13,6 +13,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.SimpleCredentials;
 import javax.jcr.ValueFactory;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -52,10 +53,11 @@ implements TreeModel, NodeChangedListener {
     public RepositoryModel() {
         treeModelListeners = new  Vector<TreeModelListener>();
     }
-    public void openSession(Repository repository, Credentials credentials)
+    public void openSession(Repository repository)
     throws RepositoryModelException {
         try {
             this.repository = repository;
+            Credentials credentials = new SimpleCredentials(username, password.toCharArray());
             // TODO: workspace
             jcrSession = this.repository.login(credentials);
             root = jcrSession.getRootNode();
