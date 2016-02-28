@@ -1,5 +1,7 @@
 /.idea
+/.gradle
 /.settings
-/repository/*
+/jackrabbit/*
 /out
 /*.iml
+/derby.log
