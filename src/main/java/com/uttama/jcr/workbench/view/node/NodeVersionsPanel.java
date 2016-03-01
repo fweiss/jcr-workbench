@@ -1,17 +1,12 @@
-package com.uttama.jcr.workbench.view.properties;
+package com.uttama.jcr.workbench.view.node;
 
 import java.util.Properties;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.swing.*;
-import javax.swing.table.TableModel;
 
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NodeModel;
-import com.uttama.jcr.workbench.model.node.NodeModelEvent;
-import com.uttama.jcr.workbench.model.node.NodeModelListener;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModel;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModelEvent;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModelListener;

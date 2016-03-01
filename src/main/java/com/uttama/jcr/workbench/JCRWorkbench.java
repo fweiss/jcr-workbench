@@ -59,10 +59,10 @@ import com.uttama.jcr.workbench.model.repository.RepositoryModel;
 import com.uttama.jcr.workbench.model.node.NodeModel;
 import com.uttama.jcr.workbench.model.node.SearchNodeParameters;
 import com.uttama.jcr.workbench.view.help.HelpAction;
-import com.uttama.jcr.workbench.view.NodePanel;
-import com.uttama.jcr.workbench.view.NodeTypeHierarchyPanel;
-import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
-import com.uttama.jcr.workbench.view.properties.RepositoryPanel;
+import com.uttama.jcr.workbench.view.node.NodePanel;
+import com.uttama.jcr.workbench.view.nodetype.NodeTypeHierarchyPanel;
+import com.uttama.jcr.workbench.view.node.NodeDataPanel;
+import com.uttama.jcr.workbench.view.repository.RepositoryPanel;
 import com.uttama.jcr.workbench.view.swing.CustomJTree;
 import com.uttama.jcr.workbench.view.swing.JCRTreeCellRenderer;
 

@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.view.properties;
+package com.uttama.jcr.workbench.view.repository;
 
 import java.awt.BorderLayout;
 import java.util.Properties;

@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.view;
+package com.uttama.jcr.workbench.view.node;
 
 import javax.swing.JTabbedPane;
 
@@ -6,9 +6,6 @@ import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModelEvent;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModelListener;
-import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
-import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
-import com.uttama.jcr.workbench.view.properties.NodeVersionsPanel;
 
 /**
  * The NodePanel composes the node's data into tabbed panels to reduce UI clutter.

@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.view;
+package com.uttama.jcr.workbench.view.nodetype;
 
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;

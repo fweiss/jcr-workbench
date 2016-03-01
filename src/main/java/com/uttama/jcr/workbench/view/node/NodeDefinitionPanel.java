@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.view.properties;
+package com.uttama.jcr.workbench.view.node;
 
 import java.util.LinkedList;
 import java.util.List;
