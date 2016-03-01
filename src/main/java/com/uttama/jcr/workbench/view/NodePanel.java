@@ -4,6 +4,8 @@ import javax.swing.JTabbedPane;
 
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.model.node.version.NodeVersionModelEvent;
+import com.uttama.jcr.workbench.model.node.version.NodeVersionModelListener;
 import com.uttama.jcr.workbench.view.properties.NodeDataPanel;
 import com.uttama.jcr.workbench.view.properties.NodeDefinitionPanel;
 import com.uttama.jcr.workbench.view.properties.NodeVersionsPanel;
@@ -13,7 +15,7 @@ import com.uttama.jcr.workbench.view.properties.NodeVersionsPanel;
  */
 public class NodePanel
 extends JTabbedPane
-implements ModelChangeListener {
+implements ModelChangeListener, NodeVersionModelListener {
     public NodeDataPanel nodeDataPanel;
     private NodeDefinitionPanel nodeDefinitionPanel;
     private NodeVersionsPanel nodeVersionsPanel;
@@ -28,6 +30,21 @@ implements ModelChangeListener {
         add("Definition", nodeDefinitionPanel);
         add("Versions", nodeVersionsPanel);
     }
+    public NodeVersionsPanel getNodeVersionPanel() {
+        return nodeVersionsPanel;
+    }
+    public NodeDataPanel getNodeDataPanel() {
+        return nodeDataPanel;
+    }
+
+    /* NodeVersionModelListener */
+
+    @Override // delegate
+    public void versionsChanged(NodeVersionModelEvent nvme) {
+        nodeVersionsPanel.versionsChanged(nvme);
+    }
+
+    // ModelChangeListener
 
     @Override
     public void modelChanged(ModelChangeEvent mce) {

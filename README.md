@@ -68,6 +68,4 @@ some JCR features such as versioning and ACLs.
 
 [Wikipedia JCR](https://en.wikipedia.org/wiki/Content_repository_API_for_Java)
 
-
-
-
+[https://www.jahia.com/get-started/for-developers/developers-techwiki/content-manipulation/restful-jcr-access]

@@ -29,8 +29,10 @@ extends AbstractTableModel {
     private final static int TYPE_COLUMN = 1;
     private final static int VALUE_COLUMN = 2;
     static String columnNames[] = { "Name", "Type", "Value" };
+
     Node node;
     Vector<Property> properties;
+
     public static TableColumnModel getTableColumnModel() {
         TableColumnModel tableColumnModel = new DefaultTableColumnModel();
         for (int i=0; i<columnNames.length; i++) {
@@ -63,11 +65,13 @@ extends AbstractTableModel {
         }
         return properties;
     }
+
+    // TableModel
+
     @Override
     public int getColumnCount() {
         return 3;
     }
-
     @Override
     public int getRowCount() {
         try {

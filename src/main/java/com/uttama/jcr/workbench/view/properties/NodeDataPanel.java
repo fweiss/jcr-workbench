@@ -54,8 +54,8 @@ import com.uttama.jcr.workbench.view.swing.PropertyTable;
 public class NodeDataPanel
 extends PropertyPanel
 implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener {
-    private static final long serialVersionUID = 1L;
     final static Logger log = LoggerFactory.getLogger(NodeDataPanel.class);
+
     private NodeModel nodeModel;
     JTextField name;
     JTextField primaryType;
@@ -222,6 +222,9 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
         }
         return null;
     }
+
+    /* NodeModelListener */
+
     @Override
     public void valueChanged(NodeModelEvent nce) {
         Node node = nce.getNodeModel().getNode();
@@ -235,6 +238,11 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
             e.printStackTrace();
         }
     }
+    @Override
+    public void versionHistoryChanged(NodeModelEvent nme) {
+        /* ignored */
+    }
+
     @Override
     public void actionPerformed(ActionEvent ae) {
         log.trace("actionevent: " + ae.toString());

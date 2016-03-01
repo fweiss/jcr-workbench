@@ -54,6 +54,9 @@ implements TreeModel, NodeModelListener {
     public RepositoryModel() {
         treeModelListeners = new  Vector<TreeModelListener>();
     }
+    public Session getSession() {
+        return jcrSession;
+    }
     public void openSession(Repository repository)
     throws RepositoryModelException {
         try {
@@ -150,6 +153,8 @@ implements TreeModel, NodeModelListener {
         Node parentNode = getNode(treePath);
         try {
             Node newNode = parentNode.addNode(name, primaryNodeTypeName);
+            newNode.addMixin("mix:versionable");
+            newNode.addMixin("mix:referenceable");
             int childIndices[] = { (int) parentNode.getNodes().getSize() - 1 };
             Node children[] = { newNode };
             TreeModelEvent tme = new TreeModelEvent(this, treePath, childIndices, children);
@@ -286,6 +291,8 @@ implements TreeModel, NodeModelListener {
     }
     // TODO remove listener
 
+    /* NodeModelListener */
+
     @Override
     public void valueChanged(NodeModelEvent nce) {
         NodeModel nodeModel = nce.getNodeModel();
@@ -297,6 +304,12 @@ implements TreeModel, NodeModelListener {
             e.printStackTrace();
         }
     }
+    @Override
+    public void versionHistoryChanged(NodeModelEvent nme) {
+        /* ignored */
+    }
+
+
     public String getConfigurationPath() {
         return configurationPath;
     }

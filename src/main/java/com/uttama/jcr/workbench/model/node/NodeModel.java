@@ -7,9 +7,14 @@ import javax.jcr.*;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeDefinition;
+import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
+import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionManager;
 
+import com.google.common.collect.Lists;
 import com.uttama.jcr.workbench.model.node.properties.NodePropertiesModel;
+import com.uttama.jcr.workbench.model.node.version.NodeVersionModel;
 import org.slf4j.Logger;
 
 import com.uttama.jcr.workbench.RepositoryModelException;
@@ -26,6 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public class NodeModel {
     private static final Logger log = LoggerFactory.getLogger(NodeModel.class);
+
     private Node node;
     private boolean isDeleted;
     // N.B. sorting causes issue with insertion
@@ -33,8 +39,8 @@ public class NodeModel {
 
     private NodePropertiesModel nodePropertiesModel;
     DeletedNodeModel deletedNode = new DeletedNodeModel();
-
-    private Set<NodeModelListener> listeners = new HashSet<NodeModelListener>();
+    private List<Version> versions;
+    private NodeVersionModel nodeVersionModel = new NodeVersionModel();
 
     public NodeModel() {
         nodePropertiesModel = new NodePropertiesModel();
@@ -175,7 +181,25 @@ public class NodeModel {
         }
         return false;
     }
+    public NodeVersionModel getNodeVersionModel() {
+        return nodeVersionModel;
+    }
+    public void getVersionHistory(Session session) throws RepositoryException {
+        // FIXME guard isVersionable
+        List<Version> v = new ArrayList<Version>();
+        if (isVersionable()) {
+            VersionManager vm = session.getWorkspace().getVersionManager();
+            VersionHistory vh = vm.getVersionHistory(getNodePath());
+            v = Lists.newArrayList(vh.getAllVersions());
+        }
+        log.trace("versions: " + v.size());
+        getNodeVersionModel().setVersions(v);
+        fireVersionHistoryChanged(new NodeModelEvent(this));
+    }
     public String[] getAllVersionLabels() {
+        return new String[] {};
+    }
+    public String[] xgetAllVersionLabels() {
         try {
             if (isVersionable()) {
                 return node.getVersionHistory().getVersionLabels();
@@ -292,17 +316,35 @@ public class NodeModel {
             e.printStackTrace();
         }
     }
+
+    /* NodeModelListener */
+
+    private Set<NodeModelListener> nodeModelChangedListeners = new HashSet<NodeModelListener>();
+    public void addNodeChangedListener(NodeModelListener listener) {
+        nodeModelChangedListeners.add(listener);
+    }
+    public void removeNodeChangedListener(NodeModelListener listener) {
+        nodeModelChangedListeners.remove(listener);
+    }
     protected void fireNodeChangedEvent(final NodeModelEvent nce) {
-        for (NodeModelListener listener : listeners) {
+        for (NodeModelListener listener : nodeModelChangedListeners) {
             listener.valueChanged(nce);
         }
     }
-    public void addNodeChangedListener(NodeModelListener listener) {
-        listeners.add(listener);
+    private Set<NodeModelListener> versionHistorylChangedListeners = new HashSet<NodeModelListener>();
+    public void addVersionHistoryChangedListener(NodeModelListener listener) {
+        versionHistorylChangedListeners.add(listener);
     }
-    public void removeNodeChangedListener(NodeModelListener listener) {
-        listeners.remove(listener);
+    public void removeVersionHistoryChangedListener(NodeModelListener listener) {
+        versionHistorylChangedListeners.remove(listener);
     }
+    protected void fireVersionHistoryChanged(final NodeModelEvent nce) {
+        for (NodeModelListener listener : versionHistorylChangedListeners) {
+            listener.valueChanged(nce);
+        }
+    }
+
+
     class DeletedNodeModel {
         public String name;
         public boolean isLeaf;

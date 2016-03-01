@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -78,7 +77,7 @@ implements TreeSelectionListener, NodeModelListener {
     private JSplitPane splitPane;
     private CardLayout propertyCardLayout;
     private JPanel propertyPanel;
-    private NodeDataPanel nodePanel;
+    private NodePanel nodePanel;
     private NodeDataPanel newNodePanel;
     private RepositoryPanel repositoryPanel;
     private NodeTypeHierarchyPanel nodeTypePanel;
@@ -265,7 +264,7 @@ implements TreeSelectionListener, NodeModelListener {
         repositoryPanel = new RepositoryPanel("repository");
 
         // FIXME: these are all in nodetabbedpanel
-        nodePanel = new NodeDataPanel(nodeModel);
+        nodePanel = new NodePanel("Node Panel");
         newNodePanel = new NodeDataPanel(nodeModel);
 
         nodeTabbedPanel = new NodePanel("nodeTabbedPanel");
@@ -303,6 +302,7 @@ implements TreeSelectionListener, NodeModelListener {
     private void createModelListeners() {
         repositoryModel.addRepositoryModelListener(repositoryPanel);
         nodeModel.addNodeChangedListener(this);
+        nodeModel.getNodeVersionModel().addNodeVersionModelListener(nodePanel.getNodeVersionPanel());
     }
     private void createActions() {
         saveNodeAction = new SaveNodeAction("Save Node");
@@ -338,7 +338,7 @@ implements TreeSelectionListener, NodeModelListener {
         //repositoryPanel.openButton.addActionListener(this);
         repositoryPanel.openButton.setAction(openSessionAction);
         //saveNodeAction.setEnabled(false);
-        nodePanel.setSaveButtonAction(saveNodeAction);
+        nodePanel.getNodeDataPanel().setSaveButtonAction(saveNodeAction);
         newNodePanel.setSaveButtonAction(saveNodeAction);
     }
     // FIXME: pull up the popup menu launching or refactor the popup
@@ -368,6 +368,7 @@ implements TreeSelectionListener, NodeModelListener {
         }
         public void actionPerformed(ActionEvent ae) {
             log.trace("new node action: " + ae.getSource());
+            // FIXME handles both showing dialog and adding the node
             if (ae.getSource().getClass().getName().startsWith("javax.swing.JPopupMenu")) {
                 try {
                     newNodeParameters.parent = "/" + RepositoryModel.getRelPath(tree.getSelectionPath());
@@ -381,10 +382,10 @@ implements TreeSelectionListener, NodeModelListener {
                 newNodeDialog.show(this);
             } else {
                 newNodeDialog.setVisible(false);
-                xactionPerformed(ae);
+                completeAction(ae);
             }
         }
-        public void xactionPerformed(ActionEvent ae) {
+        public void completeAction(ActionEvent ae) {
             TreePath treePath = tree.getSelectionPath();
             String nodeName = newNodeParameters.name;
             String primaryNodeTypeName = newNodeParameters.primaryNodeTypeName;
@@ -583,21 +584,29 @@ implements TreeSelectionListener, NodeModelListener {
     @Override
     public void valueChanged(TreeSelectionEvent tse) {
         NodeModel nodeModel = (NodeModel) tse.getPath().getLastPathComponent();
+        try {
+            nodeModel.getVersionHistory(repositoryModel.getSession());
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }
         viewModelMap.switchView(nodeModel);
     }
-    public void xvalueChanged(TreeSelectionEvent tse) {
-        log.trace("valueChanged");
-        NodeModel nodeModel = (NodeModel) tse.getPath().getLastPathComponent();
-            String nt = nodeModel.getPrimaryNodeType();
-            //log.debug(nodeModel.getNode().getPrimaryNodeType().getName());
-            if (nt.equals("rep:root")) {
-                propertyCardLayout.show(propertyPanel, "repository");
-            } else {
-                //nodeModel.setNode(node);
-                nodePanel.setModel(nodeModel);
-                propertyCardLayout.show(propertyPanel, "node");
-            }
-    }
+//    public void xvalueChanged(TreeSelectionEvent tse) {
+//        log.trace("valueChanged");
+//        NodeModel nodeModel = (NodeModel) tse.getPath().getLastPathComponent();
+//            String nt = nodeModel.getPrimaryNodeType();
+//            //log.debug(nodeModel.getNode().getPrimaryNodeType().getName());
+//            if (nt.equals("rep:root")) {
+//                propertyCardLayout.show(propertyPanel, "repository");
+//            } else {
+//                //nodeModel.setNode(node);
+//                nodePanel.setModel(nodeModel);
+//                propertyCardLayout.show(propertyPanel, "node");
+//            }
+//    }
+
+    /* NodeModelListener */
+
     @Override
     public void valueChanged(NodeModelEvent nce) {
         if (nce.isNameChanged()) {
@@ -614,6 +623,10 @@ implements TreeSelectionListener, NodeModelListener {
                 e.printStackTrace();
             }
         }
+    }
+    @Override
+    public void versionHistoryChanged(NodeModelEvent nme) {
+        /* ignored */
     }
 
 }

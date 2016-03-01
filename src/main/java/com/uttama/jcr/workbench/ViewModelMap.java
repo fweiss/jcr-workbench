@@ -28,6 +28,7 @@ import com.uttama.jcr.workbench.model.node.NodeModel;
  */
 public class ViewModelMap {
     private final static Logger log = LoggerFactory.getLogger(ViewModelMap.class);
+    
     static class Link {
         public Object model;
         public Component view;
