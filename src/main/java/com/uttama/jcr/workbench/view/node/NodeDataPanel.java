@@ -9,9 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
@@ -139,7 +137,22 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
             }
         });
     }
+    private static final Map<Integer, Integer> widths = new HashMap<Integer, Integer>() {{
+        put(NodePropertiesModel.NAME_COLUMN, 160);
+        put(NodePropertiesModel.TYPE_COLUMN, 60);
+        put(NodePropertiesModel.MULTI_COLUMN, 40);
+        put(NodePropertiesModel.VALUE_COLUMN, 550);
+    }};
     private PropertyTable createPropertiesTable() {
+        TableColumnModel tableColumnModel = NodePropertiesModel.getTableColumnModel();
+        PropertyTable table = new PropertyTable(new DefaultTableModel(), tableColumnModel);
+        for (Map.Entry<Integer, Integer> entry : widths.entrySet()) {
+            table.getColumnModel().getColumn(entry.getKey()).setPreferredWidth(entry.getValue());
+        }
+        return table;
+    }
+
+    private PropertyTable xcreatePropertiesTable() {
         TableColumnModel tableColumnModel = NodePropertiesModel.getTableColumnModel();
         PropertyTable table = new PropertyTable(new DefaultTableModel(), tableColumnModel);
         table.getColumnModel().getColumn(NodePropertiesModel.NAME_COLUMN).setPreferredWidth(160);
