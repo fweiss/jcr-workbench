@@ -40,7 +40,7 @@ import com.uttama.jcr.workbench.model.node.properties.NodePropertiesModel;
 import com.uttama.jcr.workbench.model.node.properties.NodePropertyParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
-import com.uttama.jcr.workbench.view.swing.PropertyTable;
+import com.uttama.jcr.workbench.view.node.properties.PropertyTable;
 
 /**
  * The node data panel provides read/write access to a node's data. The data is divided into
@@ -86,6 +86,7 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
     public NodeDataPanel(NodeModel nodeModel) {
         setName("node");
         this.nodeModel = nodeModel;
+
         LabeledGrid group = new LabeledGrid();
         group.setLabels(getLabels());
         group.addNLabeledComponent("name", name = new JTextField(30));
@@ -141,8 +142,8 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
     private PropertyTable createPropertiesTable() {
         TableColumnModel tableColumnModel = NodePropertiesModel.getTableColumnModel();
         PropertyTable table = new PropertyTable(new DefaultTableModel(), tableColumnModel);
-        table.getColumnModel().getColumn(0).setPreferredWidth(160);
-        table.getColumnModel().getColumn(2).setPreferredWidth(550);
+        table.getColumnModel().getColumn(NodePropertiesModel.NAME_COLUMN).setPreferredWidth(160);
+        table.getColumnModel().getColumn(NodePropertiesModel.VALUE_COLUMN).setPreferredWidth(550);
         return table;
     }
     public void setModel(NodeModel nodeModel) {

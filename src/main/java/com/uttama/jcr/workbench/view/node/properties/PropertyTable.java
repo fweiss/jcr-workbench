@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.view.swing;
+package com.uttama.jcr.workbench.view.node.properties;
 
 import javax.swing.JTable;
 import javax.swing.event.TableModelListener;
@@ -30,7 +30,8 @@ implements TableModelListener {
     @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
         TableCellRenderer renderer = super.getCellRenderer(row, column);
-        if (column == 2) {
+        // FIXME this is too tightly bound to the model
+        if (column == 3) {
             Object value = getModel().getValueAt(row, 1);
             if (value instanceof String && value.toString().equals("Boolean"))
                 renderer =  tableCellRenderer;

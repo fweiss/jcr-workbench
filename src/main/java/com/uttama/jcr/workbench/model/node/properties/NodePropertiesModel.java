@@ -25,10 +25,11 @@ import javax.swing.table.TableColumnModel;
  */
 public class NodePropertiesModel
 extends AbstractTableModel {
-    private final static int NAME_COLUMN = 0;
-    private final static int TYPE_COLUMN = 1;
-    private final static int VALUE_COLUMN = 2;
-    static String columnNames[] = { "Name", "Type", "Value" };
+    public final static int NAME_COLUMN = 0;
+    public final static int TYPE_COLUMN = 1;
+    public final static int MULTI_COLUMN = 2;
+    public final static int VALUE_COLUMN = 3;
+    static String columnNames[] = { "Name", "Type", "Multi", "Value" };
 
     Node node;
     Vector<Property> properties;
@@ -70,7 +71,8 @@ extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 3;
+        // FIXME use enum to ket in sync
+        return 4;
     }
     @Override
     public int getRowCount() {
@@ -104,6 +106,8 @@ extends AbstractTableModel {
                 return property.getName();
             case TYPE_COLUMN:
                 return PropertyType.nameFromValue(property.getType());
+            case MULTI_COLUMN:
+                return property.isMultiple() ? "M" : "S";
             case VALUE_COLUMN:
                 PropertyDefinition definition = property.getDefinition();
                 boolean isMultiple = definition.isMultiple();

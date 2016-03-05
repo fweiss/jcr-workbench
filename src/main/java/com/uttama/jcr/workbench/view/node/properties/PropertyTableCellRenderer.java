@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.view.swing;
+package com.uttama.jcr.workbench.view.node.properties;
 
 import java.awt.Component;
 
