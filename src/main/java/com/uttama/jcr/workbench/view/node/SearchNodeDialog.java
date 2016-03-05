@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.dialogs;
+package com.uttama.jcr.workbench.view.node;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

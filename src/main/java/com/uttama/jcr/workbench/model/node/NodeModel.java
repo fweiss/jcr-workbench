@@ -185,7 +185,7 @@ public class NodeModel {
         return nodeVersionModel;
     }
     public void getVersionHistory(Session session) throws RepositoryException {
-        // FIXME guard isVersionable
+        log.trace("get version history: " + getNodePath());
         List<Version> v = new ArrayList<Version>();
         if (isVersionable()) {
             VersionManager vm = session.getWorkspace().getVersionManager();

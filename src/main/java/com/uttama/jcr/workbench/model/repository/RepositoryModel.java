@@ -147,14 +147,16 @@ implements TreeModel, NodeModelListener {
         }
         return node;
     }
-    public NodeModel addNode(TreePath treePath, String name, String primaryNodeTypeName)
+    public NodeModel addNode(TreePath treePath, String name, String primaryNodeTypeName, String[] mixinNodeTypes)
     throws RepositoryModelException {
         log.trace("newNode: " + name);
         Node parentNode = getNode(treePath);
         try {
             Node newNode = parentNode.addNode(name, primaryNodeTypeName);
-            newNode.addMixin("mix:versionable");
-            newNode.addMixin("mix:referenceable");
+            for (String mixinNodeType : mixinNodeTypes) {
+                log.trace("new node: " + treePath + ": add mixin: " + mixinNodeType);
+                newNode.addMixin("mix:versionable");
+            }
             int childIndices[] = { (int) parentNode.getNodes().getSize() - 1 };
             Node children[] = { newNode };
             TreeModelEvent tme = new TreeModelEvent(this, treePath, childIndices, children);

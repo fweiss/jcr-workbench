@@ -1,15 +1,17 @@
-package com.uttama.jcr.workbench.dialogs;
+package com.uttama.jcr.workbench.view.node;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 
 import javax.swing.Action;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import com.sun.deploy.util.StringUtils;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NewNodeParameters;
@@ -20,14 +22,18 @@ public class NewNodeDialog
 extends CustomJDialog
 implements ModelChangeListener {
     private NewNodeParameters parameters;
-    private JLabel parent;
+
+    private JLabel parentPath;
     private JTextField name;
     private JTextField primaryNodeTypeName;
+    private JTextField mixinNodeTypes;
+
     Action okAction;
     Action localOkAction;
     Action cancelAction;
     final static String title = "New Node Parameters";
     final static Dialog.ModalityType modal = Dialog.ModalityType.APPLICATION_MODAL;
+
     public NewNodeDialog(Frame owner, NewNodeParameters parameters) {
         super(owner, title, modal);
         this.parameters = parameters;
@@ -35,13 +41,16 @@ implements ModelChangeListener {
     // FIXME: use addNLabeledComponent
     @Override
     protected void addFields() {
-        parent = new JLabel();
+        parentPath = new JLabel();
         name = new JTextField(30);
         primaryNodeTypeName = new JTextField(30);
+        mixinNodeTypes = new JTextField(30);
+
         LabeledGrid grid = new LabeledGrid();
-        grid.addLabeledComponent("Parent", parent);
+        grid.addLabeledComponent("Parent", parentPath);
         grid.addLabeledComponent("Name", name);
         grid.addLabeledComponent("Primary node type", primaryNodeTypeName);
+        grid.addLabeledComponent("Mixin node types", mixinNodeTypes);
         this.getContentPane().add(grid, BorderLayout.CENTER);
     }
     public void show(Action okAction) {
@@ -51,18 +60,20 @@ implements ModelChangeListener {
     @Override
     public void modelChanged(ModelChangeEvent mce) {
         NewNodeParameters p = (NewNodeParameters) mce.getSource();
-        parent.setText(p.parent);
+        parentPath.setText(p.parent);
         name.setText(p.name);
         primaryNodeTypeName.setText(p.primaryNodeTypeName);
+        mixinNodeTypes.setText(StringUtils.join(Arrays.asList(p.mixinNodeTypes), ","));
     }
     @Override
     protected void okAction(ActionEvent ae) {
         parameters.name = name.getText();
         parameters.primaryNodeTypeName = primaryNodeTypeName.getText();
+        parameters.mixinNodeTypes = new String[] { mixinNodeTypes.getText() };
         okAction.actionPerformed(ae);
     }
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(390, 180);
+        return new Dimension(390, 200);
     }
 }

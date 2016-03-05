@@ -4,6 +4,7 @@ public class NewNodeParameters {
     public String parent;
     public String name;
     public String primaryNodeTypeName;
+    public String[] mixinNodeTypes;
     public String getRequiredType() {
         return "";
     }

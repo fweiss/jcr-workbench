@@ -44,10 +44,10 @@ import org.apache.jackrabbit.commons.JcrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.uttama.jcr.workbench.dialogs.ExportDialog;
-import com.uttama.jcr.workbench.dialogs.NewNodeDialog;
-import com.uttama.jcr.workbench.dialogs.NodePropertyDialog;
-import com.uttama.jcr.workbench.dialogs.SearchNodeDialog;
+import com.uttama.jcr.workbench.view.node.ExportDialog;
+import com.uttama.jcr.workbench.view.node.NewNodeDialog;
+import com.uttama.jcr.workbench.view.node.NodePropertyDialog;
+import com.uttama.jcr.workbench.view.node.SearchNodeDialog;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.model.node.NodeModelEvent;
 import com.uttama.jcr.workbench.model.node.NodeModelListener;
@@ -377,6 +377,7 @@ implements TreeSelectionListener, NodeModelListener {
                     e.printStackTrace();
                 }
                 newNodeParameters.primaryNodeTypeName = "nt:unstructured";
+                newNodeParameters.mixinNodeTypes = new String[] { };
                 ModelChangeEvent mce = new ModelChangeEvent(newNodeParameters);
                 newNodeDialog.modelChanged(mce);
                 newNodeDialog.show(this);
@@ -389,8 +390,9 @@ implements TreeSelectionListener, NodeModelListener {
             TreePath treePath = tree.getSelectionPath();
             String nodeName = newNodeParameters.name;
             String primaryNodeTypeName = newNodeParameters.primaryNodeTypeName;
+            String[] mixinNodeTypes = newNodeParameters.mixinNodeTypes;
             try {
-                NodeModel node = repositoryModel.addNode(treePath, nodeName, primaryNodeTypeName);
+                NodeModel node = repositoryModel.addNode(treePath, nodeName, primaryNodeTypeName, mixinNodeTypes);
                 tree.setSelectionPath(treePath.pathByAddingChild(node));
             }
             catch (RepositoryModelException e) {
