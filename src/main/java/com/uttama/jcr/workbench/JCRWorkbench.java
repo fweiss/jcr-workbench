@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 
 import com.uttama.jcr.workbench.view.node.ExportDialog;
 import com.uttama.jcr.workbench.view.node.NewNodeDialog;
-import com.uttama.jcr.workbench.view.node.NodePropertyDialog;
+import com.uttama.jcr.workbench.view.node.properties.NodePropertyDialog;
 import com.uttama.jcr.workbench.view.node.SearchNodeDialog;
 import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.model.node.NodeModelEvent;

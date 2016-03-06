@@ -26,6 +26,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import com.uttama.jcr.workbench.view.node.properties.NodePropertyDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench.view.node;
+package com.uttama.jcr.workbench.view.node.properties;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
