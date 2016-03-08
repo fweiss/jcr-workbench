@@ -22,7 +22,7 @@ import com.uttama.jcr.workbench.events.ModelChangeEvent;
 import com.uttama.jcr.workbench.events.ModelChangeListener;
 
 public class NodeTypeModel
-implements TreeModel, ModelChangeListener {
+implements TreeModel {
     private final static Logger log = LoggerFactory.getLogger(NodeTypeModel.class);
     private Node jcrNodeTypes;
     public NodeTypeModel() {
@@ -141,12 +141,6 @@ implements TreeModel, ModelChangeListener {
     @Override
     public void valueForPathChanged(TreePath arg0, Object arg1) {
         // TODO Auto-generated method stub
-
-    }
-    @Override
-    public void modelChanged(ModelChangeEvent mce) {
-        NodeModel nodeModel = (NodeModel) mce.getSource();
-        setRootNode(nodeModel.getNode());
 
     }
 

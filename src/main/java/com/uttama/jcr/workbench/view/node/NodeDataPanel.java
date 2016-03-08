@@ -23,6 +23,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -112,6 +114,7 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
         name.addActionListener(this);
         name.setActionCommand("foo");
         name.addFocusListener(this);
+
         properties.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
@@ -127,8 +130,9 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
                             NodePropertyParameters parameters = new NodePropertyParameters();
                             parameters.name = property.getName();
                             parameters.propertyType = property.getType();
-                            nodePropertyDialog.valueChanged(parameters);
-                            nodePropertyDialog.setVisible(true);
+//                            nodePropertyDialog.valueChanged(parameters);
+//                            nodePropertyDialog.setVisible(true);
+                            editPropertyAction.actionPerformed(new ActionEvent(property, 1, ""));
                         } catch (RepositoryException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -142,7 +146,7 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
         put(NodePropertiesModel.NAME_COLUMN, 160);
         put(NodePropertiesModel.TYPE_COLUMN, 60);
         put(NodePropertiesModel.MULTI_COLUMN, 40);
-        put(NodePropertiesModel.VALUE_COLUMN, 550);
+        put(NodePropertiesModel.VALUE_COLUMN, 500);
     }};
     private PropertyTable createPropertiesTable() {
         TableColumnModel tableColumnModel = NodePropertiesModel.getTableColumnModel();
@@ -184,6 +188,20 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
             public void actionPerformed(ActionEvent ae) {
                 if (nodePropertyDialog != null) {
                     nodePropertyDialog.clearErrors();
+
+                    Property property = (Property) ae.getSource();
+                    NodePropertyParameters parameters = new NodePropertyParameters();
+                    try {
+                        parameters.name = property.getName();
+                        parameters.propertyType = property.getType();
+                        parameters.isMulti = property.isMultiple();
+                        parameters.value = property.getString();
+                        nodePropertyDialog.valueChanged(parameters);
+//                        nodePropertyDialog.setParameters(parameters);
+                    } catch (RepositoryException e) {
+                        e.printStackTrace();
+                    }
+
                     nodePropertyDialog.setVisible(true);
                 }
             }

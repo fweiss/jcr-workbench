@@ -55,16 +55,19 @@ public class NodePropertyDialog
 extends CustomJDialog
 implements ActionListener, ListSelectionListener {
     private static final Logger log = LoggerFactory.getLogger(NodePropertyDialog.class);
-    static final Dimension preferredSize = new Dimension(800, 450);
-    NodePropertyParameters nodePropertyParameters;
+
     private JTextField name;
     private JCheckBox isMulti;
     private JList type;
     private JTextField value;
+    ValueCardPanel valueCardPanel;
     private JTextArea errorValueFormat;
+
+    NodePropertyParameters nodePropertyParameters;
+
     public Action okAction;
     ButtonGroup group;
-    ValueCardPanel valueCardPanel;
+
     private static Properties getLabels() {
         Properties labels = new Properties();
         labels.put("name", "Name");
@@ -76,7 +79,7 @@ implements ActionListener, ListSelectionListener {
     }
     @Override
     public Dimension getPreferredSize() {
-        return preferredSize;
+        return new Dimension(800, 450);
     }
     public NodePropertyDialog(Frame owner, NodePropertyParameters nodePropertyParameters) {
         super(owner, "Node Property");
@@ -87,7 +90,7 @@ implements ActionListener, ListSelectionListener {
     protected void addFields() {
         name = new JTextField(30);
         isMulti = new JCheckBox();
-        createPropertyTypeList();
+        type = createPropertyTypeList();
         type.addListSelectionListener(this);
         value = new JTextField(30);
         errorValueFormat = new JTextArea(); //JTextField(60);
@@ -128,12 +131,13 @@ implements ActionListener, ListSelectionListener {
     /**
      * Create a radio button-type list with a compact layout.
      */
-    private void createPropertyTypeList() {
-        type = new JList(getPropertyTypes());
-        type.setPreferredSize(new Dimension(260, 40));
-        type.setVisibleRowCount(0);
-        type.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        type.setSelectedIndex(0);
+    private JList createPropertyTypeList() {
+        JList list = new JList(getPropertyTypes());
+        list.setPreferredSize(new Dimension(260, 40));
+        list.setVisibleRowCount(0);
+        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        list.setSelectedIndex(0);
+        return list;
     }
     /**
      * Create a radio button property type selector.
@@ -172,6 +176,8 @@ implements ActionListener, ListSelectionListener {
         int index = typeNames.indexOf(propertyTypeName);
         log.trace("property type: " + propertyTypeName + " index: " + index);
         type.setSelectedIndex(index);
+        value.setText((String) nodePropertyParameters.value);
+        valueCardPanel.setFieldFromValue(nodePropertyParameters.value, nodePropertyParameters.propertyType);
         valueCardPanel.show(propertyTypeName);
         errorValueFormat.setText(nodePropertyParameters.errorMessage);
     }
@@ -205,6 +211,11 @@ implements ActionListener, ListSelectionListener {
             valueCardPanel.show(typeName);
         }
     }
+
+    /**
+     * A panel with card layout to multiplex different types of input fields for each of the JCR property
+     * types.
+     */
     class ValueCardPanel
     extends JPanel {
         private CardLayout cardLayout = new CardLayout();
@@ -260,6 +271,40 @@ implements ActionListener, ListSelectionListener {
                 return stringValue.getText();
             default:
                 return null;
+            }
+        }
+        public void setFieldFromValue(Object value, int propertyType) {
+            switch (propertyType) {
+                case PropertyType.BINARY:
+                    binaryValue.setText("NA");
+                    break;
+                case PropertyType.BOOLEAN:
+                    booleanValue.setSelected(true);
+                    break;
+                case PropertyType.DATE:
+                    SimpleDateFormat dateFormat = new SimpleDateFormat();
+                    dateValue.setText(dateFormat.format(value));
+                    break;
+                case PropertyType.DOUBLE:
+                    doubleValue.setText(((Double) value).toString());
+                    break;
+                case PropertyType.LONG:
+                    longValue.setText(((Long) value).toString());
+                    break;
+                case PropertyType.NAME:
+                    nameValue.setText((String) value);
+                    break;
+                case PropertyType.PATH:
+                    pathValue.setText((String) value);
+                    break;
+                case PropertyType.REFERENCE:
+                    referenceValue.setText((String) value);
+                    break;
+                case PropertyType.STRING:
+                    stringValue.setText((String) value);
+                    break;
+                default:
+
             }
         }
     }
