@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.view.ViewModelChangeEvent;
+import com.uttama.jcr.workbench.view.ViewModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NodeModel;
 import com.uttama.jcr.workbench.model.nodetype.NodeTypeModel;
 import com.uttama.jcr.workbench.view.swing.CustomJTree;
@@ -18,7 +18,7 @@ import com.uttama.jcr.workbench.view.swing.JCRTreeCellRenderer;
  */
 public class NodeTypeHierarchyPanel
 extends JPanel
-implements ModelChangeListener {
+implements ViewModelChangeListener {
     private JTree typeTree;
     NodeTypeModel nodeTypeModel;
     public NodeTypeHierarchyPanel(String name) {
@@ -39,7 +39,7 @@ implements ModelChangeListener {
         add(typeTree);
     }
     @Override
-    public void modelChanged(ModelChangeEvent mce) {
+    public void modelChanged(ViewModelChangeEvent mce) {
         NodeModel nodeModel = (NodeModel) mce.getSource();
         try {
             nodeTypeModel.setRootNode(nodeModel.getNode().getSession().getRootNode());

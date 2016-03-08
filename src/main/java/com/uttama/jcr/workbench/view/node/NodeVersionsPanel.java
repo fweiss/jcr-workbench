@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import javax.swing.*;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.view.ViewModelChangeEvent;
+import com.uttama.jcr.workbench.view.ViewModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NodeModel;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModel;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModelEvent;
@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 public class NodeVersionsPanel
 extends PropertyPanel
-implements ModelChangeListener, NodeVersionModelListener {
+implements ViewModelChangeListener, NodeVersionModelListener {
     static Logger log = LoggerFactory.getLogger(NodeVersionsPanel.class);
 
     private JCheckBox isVersionable = new JCheckBox();
@@ -62,7 +62,7 @@ implements ModelChangeListener, NodeVersionModelListener {
     // ModelChangeListener
 
     @Override
-    public void modelChanged(ModelChangeEvent mce) {
+    public void modelChanged(ViewModelChangeEvent mce) {
         NodeModel nodeModel = ((NodeModel) mce.getSource());
         versionTable.setModel(nodeModel.getNodeVersionModel());
         updateFields(nodeModel);

@@ -1,4 +1,4 @@
-package com.uttama.jcr.workbench;
+package com.uttama.jcr.workbench.view;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -9,8 +9,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NodeModel;
 /**
  * This is a registry of views corresponding to various node types displayed in the repository
@@ -32,7 +30,7 @@ public class ViewModelMap {
     static class Link {
         public Object model;
         public Component view;
-        public ModelChangeListener modelChangeListener;
+        public ViewModelChangeListener viewModelChangeListener;
     }
     private CardLayout cardLayout;
     private Map<String,Link> map;
@@ -43,17 +41,17 @@ public class ViewModelMap {
         this.cardLayout = cardLayout;
         map = new HashMap<String,Link>();
     }
-    public void putDefault(Object model, Component view, ModelChangeListener modelChangeListener) {
+    public void putDefault(Object model, Component view, ViewModelChangeListener viewModelChangeListener) {
         defaultLink = new Link();
         defaultLink.model = model;
         defaultLink.view = view;
-        defaultLink.modelChangeListener = modelChangeListener;
+        defaultLink.viewModelChangeListener = viewModelChangeListener;
     }
-    public void put(String nodeTypeName, Object model, Component view, ModelChangeListener modelChangeListener) {
+    public void put(String nodeTypeName, Object model, Component view, ViewModelChangeListener viewModelChangeListener) {
         Link link = new Link();
         link.view = view;
         link.model = model;
-        link.modelChangeListener = modelChangeListener;
+        link.viewModelChangeListener = viewModelChangeListener;
         map.put(nodeTypeName, link);
     }
     /**
@@ -69,13 +67,13 @@ public class ViewModelMap {
         Component view = link.view;
         String viewName = view.getName();
         // FIXME: awkward, rep:root is repositoryModel, others are the selection's nodeModel
-        ModelChangeEvent mce;
+        ViewModelChangeEvent mce;
         if (nodeTypeName.equals("rep:root")) {
-            mce = new ModelChangeEvent(link.model);
+            mce = new ViewModelChangeEvent(link.model);
         } else {
-            mce = new ModelChangeEvent(nodeModel);
+            mce = new ViewModelChangeEvent(nodeModel);
         }
         cardLayout.show(parent, viewName);
-        link.modelChangeListener.modelChanged(mce);
+        link.viewModelChangeListener.modelChanged(mce);
     }
 }

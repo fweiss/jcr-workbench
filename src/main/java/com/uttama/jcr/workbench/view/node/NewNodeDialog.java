@@ -12,15 +12,15 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.sun.deploy.util.StringUtils;
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.view.ViewModelChangeEvent;
+import com.uttama.jcr.workbench.view.ViewModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NewNodeParameters;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.swing.CustomJDialog;
 
 public class NewNodeDialog
 extends CustomJDialog
-implements ModelChangeListener {
+implements ViewModelChangeListener {
     private NewNodeParameters parameters;
 
     private JLabel parentPath;
@@ -58,7 +58,7 @@ implements ModelChangeListener {
         super.setVisible(true);
     }
     @Override
-    public void modelChanged(ModelChangeEvent mce) {
+    public void modelChanged(ViewModelChangeEvent mce) {
         NewNodeParameters p = (NewNodeParameters) mce.getSource();
         parentPath.setText(p.parent);
         name.setText(p.name);

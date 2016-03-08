@@ -39,6 +39,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.uttama.jcr.workbench.view.ViewModelMap;
 import org.apache.jackrabbit.commons.JcrUtils;
 //import org.apache.jackrabbit.core.TransientRepository;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ import com.uttama.jcr.workbench.view.node.ExportDialog;
 import com.uttama.jcr.workbench.view.node.NewNodeDialog;
 import com.uttama.jcr.workbench.view.node.properties.NodePropertyDialog;
 import com.uttama.jcr.workbench.view.node.SearchNodeDialog;
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
+import com.uttama.jcr.workbench.view.ViewModelChangeEvent;
 import com.uttama.jcr.workbench.model.node.NodeModelEvent;
 import com.uttama.jcr.workbench.model.node.NodeModelListener;
 import com.uttama.jcr.workbench.model.node.ExportNodeParameters;
@@ -378,7 +379,7 @@ implements TreeSelectionListener, NodeModelListener {
                 }
                 newNodeParameters.primaryNodeTypeName = "nt:unstructured";
                 newNodeParameters.mixinNodeTypes = new String[] { };
-                ModelChangeEvent mce = new ModelChangeEvent(newNodeParameters);
+                ViewModelChangeEvent mce = new ViewModelChangeEvent(newNodeParameters);
                 newNodeDialog.modelChanged(mce);
                 newNodeDialog.show(this);
             } else {

@@ -2,8 +2,8 @@ package com.uttama.jcr.workbench.view.node;
 
 import javax.swing.JTabbedPane;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.view.ViewModelChangeEvent;
+import com.uttama.jcr.workbench.view.ViewModelChangeListener;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModelEvent;
 import com.uttama.jcr.workbench.model.node.version.NodeVersionModelListener;
 
@@ -12,7 +12,7 @@ import com.uttama.jcr.workbench.model.node.version.NodeVersionModelListener;
  */
 public class NodePanel
 extends JTabbedPane
-implements ModelChangeListener, NodeVersionModelListener {
+implements ViewModelChangeListener, NodeVersionModelListener {
     public NodeDataPanel nodeDataPanel;
     private NodeDefinitionPanel nodeDefinitionPanel;
     private NodeVersionsPanel nodeVersionsPanel;
@@ -44,7 +44,7 @@ implements ModelChangeListener, NodeVersionModelListener {
     // ModelChangeListener
 
     @Override
-    public void modelChanged(ModelChangeEvent mce) {
+    public void modelChanged(ViewModelChangeEvent mce) {
         stopEditing();
         nodeDataPanel.modelChanged(mce);
         nodeDefinitionPanel.modelChanged(mce);

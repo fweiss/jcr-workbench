@@ -14,8 +14,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.view.ViewModelChangeEvent;
+import com.uttama.jcr.workbench.view.ViewModelChangeListener;
 import com.uttama.jcr.workbench.model.repository.RepositoryModelEvent;
 import com.uttama.jcr.workbench.model.repository.RepositoryModelListener;
 import com.uttama.jcr.workbench.model.repository.RepositoryModel;
@@ -24,7 +24,7 @@ import com.uttama.jcr.workbench.view.PropertyPanel;
 
 public class RepositoryPanel
 extends PropertyPanel
-implements ModelChangeListener, RepositoryModelListener {
+implements ViewModelChangeListener, RepositoryModelListener {
     private RepositoryModel repositoryModel;
     private JTextField configuration;
     private JTextField repository;
@@ -108,7 +108,7 @@ implements ModelChangeListener, RepositoryModelListener {
         repositoryModel.setUsername(username.getText());
         repositoryModel.setPassword(password.getText());
     }
-    public void modelChanged(ModelChangeEvent mce) {
+    public void modelChanged(ViewModelChangeEvent mce) {
         this.repositoryModel = (RepositoryModel) mce.getSource();
         updateFields();
     }

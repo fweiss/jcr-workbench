@@ -18,9 +18,6 @@ import com.uttama.jcr.workbench.model.node.NodeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
-
 public class NodeTypeModel
 implements TreeModel {
     private final static Logger log = LoggerFactory.getLogger(NodeTypeModel.class);

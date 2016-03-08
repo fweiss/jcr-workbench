@@ -23,8 +23,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -32,8 +30,8 @@ import com.uttama.jcr.workbench.view.node.properties.NodePropertyDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.view.ViewModelChangeEvent;
+import com.uttama.jcr.workbench.view.ViewModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NodeModelEvent;
 import com.uttama.jcr.workbench.model.node.NodeModelListener;
 import com.uttama.jcr.workbench.model.node.NodeModel;
@@ -53,7 +51,7 @@ import com.uttama.jcr.workbench.view.node.properties.PropertyTable;
  */
 public class NodeDataPanel
 extends PropertyPanel
-implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener {
+implements NodeModelListener, ActionListener, FocusListener, ViewModelChangeListener {
     final static Logger log = LoggerFactory.getLogger(NodeDataPanel.class);
 
     private NodeModel nodeModel;
@@ -289,7 +287,7 @@ implements NodeModelListener, ActionListener, FocusListener, ModelChangeListener
         log.trace("focus lost: " + fe.getComponent().getName());
         nodeModel.setName(name.getText());
     }
-    public void modelChanged(ModelChangeEvent mce) {
+    public void modelChanged(ViewModelChangeEvent mce) {
         NodeModel nodeModel = (NodeModel) mce.getSource();
         setModel(nodeModel);
         if ( ! nodeModel.isDeleted())

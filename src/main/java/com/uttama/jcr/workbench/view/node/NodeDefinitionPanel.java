@@ -11,15 +11,15 @@ import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
-import com.uttama.jcr.workbench.events.ModelChangeEvent;
-import com.uttama.jcr.workbench.events.ModelChangeListener;
+import com.uttama.jcr.workbench.view.ViewModelChangeEvent;
+import com.uttama.jcr.workbench.view.ViewModelChangeListener;
 import com.uttama.jcr.workbench.model.node.NodeModel;
 import com.uttama.jcr.workbench.view.LabeledGrid;
 import com.uttama.jcr.workbench.view.PropertyPanel;
 
 public class NodeDefinitionPanel
 extends PropertyPanel
-implements ModelChangeListener {
+implements ViewModelChangeListener {
     private JTextField onParentVersion = new JTextField(8);
     private JCheckBox isAutoCreated = new JCheckBox();
     private JCheckBox isMandatory = new JCheckBox();
@@ -72,7 +72,7 @@ implements ModelChangeListener {
         return names.toArray(new String[]{ });
     }
     @Override
-    public void modelChanged(ModelChangeEvent mce) {
+    public void modelChanged(ViewModelChangeEvent mce) {
         NodeModel nm = (NodeModel) mce.getSource();
         updateFields(nm.getDefinition());
     }
