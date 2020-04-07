@@ -187,7 +187,7 @@ public class NodeModel {
     public void getVersionHistory(Session session) throws RepositoryException {
         log.trace("get version history: " + getNodePath());
         List<Version> v = new ArrayList<Version>();
-        if (isVersionable()) {
+        if (isVersionable() && ! node.isNew()) {
             VersionManager vm = session.getWorkspace().getVersionManager();
             VersionHistory vh = vm.getVersionHistory(getNodePath());
             v = Lists.newArrayList(vh.getAllVersions());
